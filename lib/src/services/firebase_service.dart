@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:core';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../models/notification.dart';
 import 'package:http/http.dart' as http;
@@ -9,8 +8,8 @@ class FirebaseService {
   final String baseUrl = "https://actualizer-fb7e8-default-rtdb.europe-west1.firebasedatabase.app";
   final String notificationsEndpoint = "/notifications.json";
 
-  void uploadNotification(String category, String text) async {
-    NotificationItem notificationItem = NotificationItem(category: category, text: text);
+  void uploadNotification(String category, String text, String details) async {
+    NotificationItem notificationItem = NotificationItem(category: category, title: text, details: details);
     final String firebaseUrl = '$baseUrl$notificationsEndpoint';
 
     try {
@@ -41,7 +40,7 @@ class FirebaseService {
         final data = List.from(json.decode(response.body).values);
         for (var item in data) {
           print(item);
-          items.add(NotificationItem(category: (item['category']), text: item['text']));
+          items.add(NotificationItem(category: (item['category']), title: item['text'], details: item['details']));
         }
         return items;
       } else {

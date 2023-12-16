@@ -42,15 +42,17 @@ class MyApp extends StatelessWidget {
 
   final FirebaseService firebaseService;
   final TextEditingController categoryController = TextEditingController();
-  final TextEditingController textController = TextEditingController();
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController detailsController = TextEditingController();
 
   MyApp({required this.notificationService, required this.firebaseService, Key? key}) : super(key: key);
 
   void sendToFirebase() {
     final String category = categoryController.text;
-    final String text = textController.text;
+    final String title = titleController.text;
+    final String details = detailsController.text;
 
-    firebaseService.uploadNotification(category, text);
+    firebaseService.uploadNotification(category, title, details);
   }
 
   @override
@@ -62,10 +64,6 @@ class MyApp extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ElevatedButton(
-                onPressed: notificationService.showNotification,
-                child: const Text('Show Notification'),
-              ),
               const SizedBox(height: 16), // Add some spacing
               ElevatedButton(
                 onPressed: notificationService.scheduleNotification,
@@ -77,7 +75,11 @@ class MyApp extends StatelessWidget {
                 decoration: const InputDecoration(labelText: 'Category'),
               ),
               TextField(
-                controller: textController,
+                controller: detailsController,
+                decoration: const InputDecoration(labelText: 'Category'),
+              ),
+              TextField(
+                controller: titleController,
                 decoration: const InputDecoration(labelText: 'Text'),
               ),
               const SizedBox(height: 16.0),

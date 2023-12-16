@@ -1,13 +1,15 @@
 class NotificationItem {
   String category;
-  String text;
+  String title;
+  String details;
 
-  NotificationItem({required this.category, required this.text});
+  NotificationItem({required this.category, required this.title, required this.details});
 
   Map<String, dynamic> toMap() {
     return {
       'category': category,
-      'text': text,
+      'text': title,
+      'details': details
     };
   }
 }

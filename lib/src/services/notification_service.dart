@@ -38,7 +38,7 @@ class NotificationService {
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
-  Future<void> showNotification() async {
+  Future<void> showNotification(int notificationId, String notificationTitle, String notificationText) async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
     AndroidNotificationDetails(
       channelId,
@@ -49,9 +49,9 @@ class NotificationService {
     NotificationDetails(android: androidPlatformChannelSpecifics);
 
     await flutterLocalNotificationsPlugin.show(
-      channelIdNum,
-      channelName,
-      channelDescription,
+      notificationId,
+      notificationTitle,
+      notificationText,
       platformChannelSpecifics,
     );
   }
@@ -61,25 +61,7 @@ class NotificationService {
       final random = DateTime.now().microsecondsSinceEpoch % notifications.length;
       final randomNotification = notifications[random];
 
-      const AndroidNotificationDetails androidPlatformChannelSpecifics =
-      AndroidNotificationDetails(
-        'your_channel_id', // replace with your own channel ID
-        'your_channel_name', // replace with your own channel name
-        channelDescription: 'your_channel_description',
-        // replace with your own channel description
-        importance: Importance.high,
-        priority: Priority.high,
-      );
-
-      const NotificationDetails platformChannelSpecifics =
-      NotificationDetails(android: androidPlatformChannelSpecifics);
-
-      await flutterLocalNotificationsPlugin.show(
-        randomNotification.text.hashCode,
-        randomNotification.category,
-        randomNotification.text,
-        platformChannelSpecifics
-      );
+      await showNotification(randomNotification.title.hashCode, randomNotification.category, randomNotification.title);
     }
   }
 
