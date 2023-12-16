@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart' hide PermissionStatus;
 import 'package:permission_handler/permission_handler.dart';
 
 class MapsView extends StatefulWidget {
@@ -10,17 +11,41 @@ class MapsView extends StatefulWidget {
 }
 
 class _MapsViewState extends State<MapsView> {
-  late GoogleMapController mapController;
-  final LatLng _center = const LatLng(45.521563, -122.677433);
+  late GoogleMapController _mapController;
+  final LatLng _center = const LatLng(44.813178422472525, 20.461723719360762);
 
   late Future<PermissionStatus> _locationPermissionStatus;
+  LocationData? _currentLocation;
 
   Future<PermissionStatus> getPermissionStatus() async {
     PermissionStatus status = await Permission.location.status;
     if (!status.isGranted) {
       status = await Permission.location.request();
     }
+    if (status.isGranted) {
+      getCurrentLocation();
+    }
     return status;
+  }
+
+  Future<void> getCurrentLocation() async {
+    Location location = Location();
+    try {
+      _currentLocation = await location.getLocation();
+      _mapController.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            target: LatLng(
+              _currentLocation!.latitude!,
+              _currentLocation!.longitude!,
+            ),
+            zoom: 15.0,
+          ),
+        ),
+      );
+    } catch (e) {
+      _currentLocation = null;
+    }
   }
 
   @override
@@ -41,9 +66,9 @@ class _MapsViewState extends State<MapsView> {
               final status = snapshot.data!;
               if (status == PermissionStatus.granted) {
                 return GoogleMap(
-                  onMapCreated: (controller) => mapController = controller,
+                  onMapCreated: (controller) => _mapController = controller,
                   initialCameraPosition: CameraPosition(
-                    target: _center,
+                    target: _currentLocation != null ? LatLng(_currentLocation!.latitude!, _currentLocation!.longitude!):  _center,
                     zoom: 11.0,
                   ),
                   myLocationEnabled: true,
