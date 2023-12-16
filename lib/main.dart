@@ -1,6 +1,11 @@
+import 'package:devfest_hackathon_2023/src/views/maps_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_config/flutter_config.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await FlutterConfig.loadEnvVariables();
+
   runApp(const MyApp());
 }
 
@@ -58,7 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
   final List<Widget> _views = [
     const Text('Home'),
-    const Text('Locations'),
+    const MapsView(),
     const Text('Settings'),
   ];
 
