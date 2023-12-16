@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' hide PermissionStatus;
 import 'package:permission_handler/permission_handler.dart';
+import 'dart:io' show Platform;
 
 class MapsView extends StatefulWidget {
   const MapsView({super.key});
@@ -20,16 +21,21 @@ class _MapsViewState extends State<MapsView> {
   LocationData? _currentLocation;
 
   Future<PermissionStatus> getPermissionStatus() async {
-    PermissionStatus status = await Permission.location.status;
-    if (!status.isGranted) {
-      status = await Permission.location.request();
+    if (Platform.isAndroid || Platform.isIOS) {
+      // Check if the platform is Android or iOS
+      PermissionStatus status = await Permission.location.status;
+      if (!status.isGranted) {
+        status = await Permission.location.request();
+      }
+      if (status.isGranted) {
+        getCurrentLocation();
+      }
+      return status;
+    } else {
+      // If the platform is not Android or iOS, return PermissionStatus.granted
+      return PermissionStatus.granted;
     }
-    if (status.isGranted) {
-      getCurrentLocation();
-    }
-    return status;
   }
-
   Future<void> getCurrentLocation() async {
     Location location = Location();
     try {

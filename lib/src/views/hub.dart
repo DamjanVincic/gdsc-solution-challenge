@@ -2,6 +2,7 @@ import 'package:devfest_hackathon_2023/src/services/firebase_service.dart';
 import 'package:devfest_hackathon_2023/src/services/notification_service.dart';
 import 'package:devfest_hackathon_2023/src/views/habit_list_screen.dart';
 import 'package:devfest_hackathon_2023/src/views/notification_list_screen.dart';
+import 'package:devfest_hackathon_2023/src/views/self_examination_list.dart';
 import 'package:flutter/material.dart';
 
 class Hub extends StatelessWidget {
@@ -70,6 +71,16 @@ class Hub extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) => const HabitListScreen()),
+                );
+              },
+              child: const Text('View habits'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => SelfExaminationScreen()),
                 );
               },
               child: const Text('View habits'),

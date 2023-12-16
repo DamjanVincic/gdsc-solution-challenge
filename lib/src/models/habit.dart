@@ -1,12 +1,13 @@
 import 'dart:convert';
 import 'dart:collection';
+import 'dart:core';
 
 class Habit {
   String name;
   int streakLength = 0;
-  SplayTreeSet<String> daysChecked = SplayTreeSet<String>();
+  SplayTreeSet<String> daysChecked;
 
-  Habit({required this.name});
+  Habit({required this.name}) : daysChecked = SplayTreeSet<String>((a, b) => b.compareTo(a));
 
   void markCompleted(bool isChecked) {
     String currentDate = DateTime.now().toLocal().toString().split(' ')[0];
@@ -49,12 +50,10 @@ class Habit {
 
   String toJson() {
     final jsonString = '{"name": "$name", "streakLength": $streakLength, "daysChecked": ${jsonEncode(daysChecked.toList())}}';
-    print('Saving JSON: $jsonString');
     return jsonString;
   }
 
   factory Habit.fromJson(String json) {
-    print('Loading JSON: $json');
     final Map<String, dynamic> data = Map<String, dynamic>.from(jsonDecode(json));
     SplayTreeSet<String> daysChecked = SplayTreeSet<String>.from(data['daysChecked'] ?? []);
     return Habit(
