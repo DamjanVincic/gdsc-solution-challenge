@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:devfest_hackathon_2023/src/models/notification.dart';
 import 'package:devfest_hackathon_2023/src/services/firebase_service.dart';
-import 'package:devfest_hackathon_2023/src/views/habit_screen.dart';
+import 'package:devfest_hackathon_2023/src/views/habit_list_screen.dart';
 import 'package:devfest_hackathon_2023/src/views/notification_list_screen.dart';
 
 import 'src/services/notification_service.dart';
@@ -102,7 +102,7 @@ class MyApp extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const HabitScreen()
+                      builder: (context) => const HabitListScreen()
                     ),
                   );
                 },
