@@ -1,16 +1,48 @@
 import 'package:devfest_hackathon_2023/src/views/maps_view.dart';
-import 'package:flutter/material.dart';
+import 'package:devfest_hackathon_2023/src/views/hub.dart';
 import 'package:flutter_config/flutter_config.dart';
 
-void main() async {
+import 'dart:async';
+import 'package:devfest_hackathon_2023/src/models/notification.dart';
+import 'package:devfest_hackathon_2023/src/services/firebase_service.dart';
+import 'package:devfest_hackathon_2023/src/views/habit_list_screen.dart';
+import 'package:devfest_hackathon_2023/src/views/notification_list_screen.dart';
+
+import 'src/services/notification_service.dart';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/data/latest.dart' as tzdata;
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+FlutterLocalNotificationsPlugin();
+final NotificationService notificationService = NotificationService();
+
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await FlutterConfig.loadEnvVariables();
+  await notificationService.initializeNotifications();
+  runApp(MaterialApp(home: MyApp(notificationService: notificationService)));
+}
 
-  runApp(const MyApp());
+Future<void> initializeNotifications() async {
+  tzdata.initializeTimeZones();
+  const AndroidInitializationSettings initializationSettingsAndroid =
+  AndroidInitializationSettings('@mipmap/ic_launcher');
+
+  // Linux-specific settings
+  const LinuxInitializationSettings initializationSettingsLinux =
+  LinuxInitializationSettings(defaultActionName: 'View quote');
+
+  const InitializationSettings initializationSettings =
+  InitializationSettings(android: initializationSettingsAndroid, linux: initializationSettingsLinux);
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final NotificationService notificationService;
+
+  MyApp({super.key, required this.notificationService});
 
   @override
   Widget build(BuildContext context) {
@@ -40,10 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
+      appBar: AppBar(title: const Text('Local Notifications')),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -62,11 +91,11 @@ class _MyHomePageState extends State<MyHomePage> {
         currentIndex: _selectedIndex,
         onTap: (index) => setState(() => _selectedIndex = index),
       ),
-      body: const <Widget>[
-        Text('Home'),
+      body: <Widget>[
+        Hub(notificationService: notificationService),
         MapsView(),
         Text('Settings'),
       ][_selectedIndex],
-    );
+      );
   }
 }
