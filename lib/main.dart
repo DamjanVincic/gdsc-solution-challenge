@@ -1,5 +1,6 @@
 import 'package:devfest_hackathon_2023/src/views/maps_view.dart';
 import 'package:devfest_hackathon_2023/src/views/hub.dart';
+import 'package:devfest_hackathon_2023/src/views/settings_screen.dart';
 import 'package:flutter_config/flutter_config.dart';
 import 'dart:async';
 import 'package:devfest_hackathon_2023/src/services/firebase_service.dart';
@@ -12,8 +13,8 @@ import 'package:timezone/data/latest.dart' as tzdata;
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
-final NotificationService notificationService = NotificationService();
 final FirebaseService firebaseService = FirebaseService();
+final NotificationService notificationService = NotificationService(firebaseService: firebaseService);
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -62,9 +63,9 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         body: <Widget>[
-          Hub(notificationService: widget.notificationService),
+          Hub(firebaseService: widget.firebaseService),
           const MapsView(),
-          const Text('Settings'),
+          SettingsScreen(notificationService: widget.notificationService, firebaseService: widget.firebaseService,),
         ][_selectedIndex],
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[
