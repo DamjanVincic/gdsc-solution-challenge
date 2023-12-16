@@ -68,7 +68,10 @@ class _MapsViewState extends State<MapsView> {
                 return GoogleMap(
                   onMapCreated: (controller) => _mapController = controller,
                   initialCameraPosition: CameraPosition(
-                    target: _currentLocation != null ? LatLng(_currentLocation!.latitude!, _currentLocation!.longitude!):  _center,
+                    target: _currentLocation != null
+                        ? LatLng(_currentLocation!.latitude!,
+                            _currentLocation!.longitude!)
+                        : _center,
                     zoom: 11.0,
                   ),
                   myLocationEnabled: true,
