@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/habit.dart';
+import '../utils/habit_data_handler.dart';
 import 'habit_details_screen.dart';
 
 class HabitListScreen extends StatefulWidget {
@@ -15,30 +16,25 @@ class HabitListScreen extends StatefulWidget {
 
 class _HabitListScreenState extends State<HabitListScreen> {
   List<Habit> habits = [];
+  final HabitDataHandler dataHandler = HabitDataHandler();
   TextEditingController habitController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    loadHabits();
+    loadData();
   }
 
-  void loadHabits() async {
-    log("loading");
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String>? habitList = prefs.getStringList('habits');
-
-    if (habitList != null) {
-      setState(() {
-        habits = habitList.map((json) => Habit.fromJson(json)).toList();
-      });
-    }
+  Future<void> loadData() async {
+    List<Habit> loadedData = await dataHandler.loadData();
+    setState(() {
+      habits = loadedData;
+    });
   }
 
-  void saveHabits() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> habitList = habits.map((habit) => habit.toJson()).toList();
-    prefs.setStringList('habits', habitList);
+  Future<void> saveData() async {
+    await dataHandler.saveData(habits);
+    print("saved data handler");
   }
 
   @override
@@ -79,6 +75,10 @@ class _HabitListScreenState extends State<HabitListScreen> {
               itemBuilder: (context, index) {
                 return HabitListItem(
                   habit: habits[index],
+                  onSaveCallback: () {
+                    // Update the state of the parent widget
+                    setState(() {});
+                  },
                 );
               },
             ),
@@ -91,14 +91,42 @@ class _HabitListScreenState extends State<HabitListScreen> {
 
 class HabitListItem extends StatelessWidget {
   final Habit habit;
+  final VoidCallback onSaveCallback;
 
-  const HabitListItem({Key? key, required this.habit}) : super(key: key);
+  const HabitListItem({Key? key, required this.habit, required this.onSaveCallback}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    // Get the current date
+    String currentDate = DateTime.now().toLocal().toString().split(' ')[0];
+
     return ListTile(
       title: Text(habit.name),
       subtitle: Text('Streak Length: ${habit.streakLength}'),
+      trailing: Checkbox(
+        // Enable the checkbox only if it's not completed for today
+        onChanged: habit.isCompleted(currentDate)
+            ? null
+            : (bool? isChecked) {
+          // Mark the habit as completed if the checkbox is checked
+          if (isChecked != null) {
+            print("checking not checked");
+            habit.markCompleted(isChecked);
+            // Save habits to SharedPreferences or update your state management as needed
+            onSaveCallback();
+            // Update the UI
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(isChecked
+                    ? 'Habit marked as completed!'
+                    : 'Habit marked as not completed.'),
+              ),
+            );
+          }
+        },
+        // Set the checkbox state based on whether the habit is completed for today
+        value: habit.isCompleted(currentDate),
+      ),
       onTap: () {
         Navigator.push(
           context,

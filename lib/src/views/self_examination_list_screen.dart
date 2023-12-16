@@ -7,12 +7,12 @@ import '../models/examination_result.dart';
 import '../utils/self_examination_data_handler.dart';
 import 'self_examination_input_screen.dart';
 
-class SelfExaminationScreen extends StatefulWidget {
+class SelfExaminationListScreen extends StatefulWidget {
   @override
-  _SelfExaminationScreenState createState() => _SelfExaminationScreenState();
+  _SelfExaminationListScreenState createState() => _SelfExaminationListScreenState();
 }
 
-class _SelfExaminationScreenState extends State<SelfExaminationScreen> {
+class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
   List<ExaminationResult> items = [];
   final ExaminationDataHandler dataHandler = ExaminationDataHandler();
   bool showLineChart = true; // Track the selected chart type
