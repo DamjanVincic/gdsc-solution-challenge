@@ -1,9 +1,9 @@
-class NotificationItem {
+class Quote {
   String category;
   String title;
   String details;
 
-  NotificationItem({required this.category, required this.title, required this.details});
+  Quote({required this.category, required this.title, required this.details});
 
   Map<String, dynamic> toMap() {
     return {

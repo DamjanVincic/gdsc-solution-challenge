@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import '../models/notification.dart';
-import '../services/firebase_service.dart';
+import '../models/quote.dart';
+import '../services/quote_service.dart';
 import 'notification_screen.dart';
 
 class NotificationListScreen extends StatefulWidget {
-  final FirebaseService firebaseService;
+  final QuoteService quoteService;
 
-  const NotificationListScreen({Key? key, required this.firebaseService}) : super(key: key);
+  const NotificationListScreen({Key? key, required this.quoteService}) : super(key: key);
 
   @override
   _NotificationListScreenState createState() => _NotificationListScreenState();
 }
 
 class _NotificationListScreenState extends State<NotificationListScreen> {
-  late List<NotificationItem> notifications;
+  late List<Quote> notifications;
   String selectedCategory = 'All'; // Default category is 'All'
 
   @override
@@ -24,7 +24,7 @@ class _NotificationListScreenState extends State<NotificationListScreen> {
 
   Future<void> fetchData() async {
     // Fetch notifications asynchronously
-    notifications = await widget.firebaseService.fetchNotifications();
+    notifications = await widget.quoteService.fetchQuotes();
     // Call setState to rebuild the widget with the new data
     setState(() {});
   }
@@ -35,7 +35,7 @@ class _NotificationListScreenState extends State<NotificationListScreen> {
     return ['All', ...uniqueCategories.toList()];
   }
 
-  List<NotificationItem> getFilteredNotifications() {
+  List<Quote> getFilteredNotifications() {
     // Filter notifications based on the selected category
     if (selectedCategory == 'All') {
       return notifications;

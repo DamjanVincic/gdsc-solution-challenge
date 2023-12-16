@@ -5,22 +5,22 @@ import 'dart:developer';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tzdata;
 
-import '../models/notification.dart';
-import 'firebase_service.dart';
+import '../models/quote.dart';
+import 'quote_service.dart';
 
 class NotificationService {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
   FlutterLocalNotificationsPlugin();
-  final FirebaseService firebaseService;
+  final QuoteService quoteService;
   static const channelId = "1";
   static const channelIdNum = 1;
   static const channelName = 'Actualizer';
   static const channelDescription = 'Shows actualizer notifications';
 
-  List<NotificationItem> notifications = [];
+  List<Quote> notifications = [];
   Timer? notificationTimer;
 
-  NotificationService({required this.firebaseService}) {
+  NotificationService({required this.quoteService}) {
     fetchAndSetNotifications();
   }
 
@@ -40,7 +40,7 @@ class NotificationService {
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
-  Future<void> showNotification(NotificationItem notificationItem) async {
+  Future<void> showNotification(Quote notificationItem) async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
     AndroidNotificationDetails(
       channelId,
@@ -89,6 +89,6 @@ class NotificationService {
 
   Future<void> fetchAndSetNotifications() async {
     // Fetch notifications from Firebase and store them in the list
-    notifications = await firebaseService.fetchNotifications();
+    notifications = await quoteService.fetchQuotes();
   }
 }

@@ -1,11 +1,11 @@
-class Marker {
+class MapMarker {
   final String id;
   final double latitude;
   final double longitude;
   final String title;
   final String snippet;
 
-  const Marker({
+  const MapMarker({
     required this.id,
     required this.latitude,
     required this.longitude,
@@ -13,13 +13,23 @@ class Marker {
     required this.snippet,
   });
 
-  factory Marker.fromJson(Map<String, dynamic> json) {
-    return Marker(
+  factory MapMarker.fromJson(Map<String, dynamic> json) {
+    return MapMarker(
       id: json['id'],
       latitude: json['latitude'],
       longitude: json['longitude'],
       title: json['title'],
       snippet: json['snippet'],
     );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'latitude': latitude,
+      'longitude': longitude,
+      'title': title,
+      'snippet': snippet,
+    };
   }
 }

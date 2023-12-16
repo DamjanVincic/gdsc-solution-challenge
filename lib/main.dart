@@ -1,11 +1,11 @@
-import 'package:devfest_hackathon_2023/src/models/marker.dart';
-import 'package:devfest_hackathon_2023/src/services/marker_service.dart';
+import 'package:devfest_hackathon_2023/src/models/map_marker.dart';
+import 'package:devfest_hackathon_2023/src/services/map_marker_service.dart';
 import 'package:devfest_hackathon_2023/src/views/maps_view.dart';
 import 'package:devfest_hackathon_2023/src/views/hub.dart';
 import 'package:devfest_hackathon_2023/src/views/settings_screen.dart';
 import 'package:flutter_config/flutter_config.dart';
 import 'dart:async';
-import 'package:devfest_hackathon_2023/src/services/firebase_service.dart';
+import 'package:devfest_hackathon_2023/src/services/quote_service.dart';
 
 import 'src/services/notification_service.dart';
 
@@ -15,9 +15,9 @@ import 'package:timezone/data/latest.dart' as tzdata;
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
-final FirebaseService firebaseService = FirebaseService();
-final MarkerService markerService = MarkerService();
-final NotificationService notificationService = NotificationService(firebaseService: firebaseService);
+final QuoteService quoteService = QuoteService();
+final MapMarkerService mapMarkerService = MapMarkerService();
+final NotificationService notificationService = NotificationService(quoteService: quoteService);
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,8 +26,8 @@ Future<void> main() async {
   runApp(MaterialApp(
       home: MyApp(
         notificationService: notificationService,
-        firebaseService: firebaseService,
-        markerService: markerService,
+        quoteService: quoteService,
+        mapMarkerService: mapMarkerService,
       )));
 }
 
@@ -47,10 +47,10 @@ Future<void> initializeNotifications() async {
 
 class MyApp extends StatefulWidget {
   final NotificationService notificationService;
-  final FirebaseService firebaseService;
-  final MarkerService markerService;
+  final QuoteService quoteService;
+  final MapMarkerService mapMarkerService;
 
-  MyApp({super.key, required this.notificationService, required this.firebaseService, required this.markerService});
+  MyApp({super.key, required this.notificationService, required this.quoteService, required this.mapMarkerService});
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -64,9 +64,9 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         body: <Widget>[
-          Hub(firebaseService: widget.firebaseService),
-          MapsView(markerService: widget.markerService),
-          SettingsScreen(notificationService: widget.notificationService, firebaseService: widget.firebaseService)
+          Hub(quoteService: widget.quoteService),
+          MapsView(mapMarkerService: widget.mapMarkerService),
+          SettingsScreen(notificationService: widget.notificationService, quoteService: widget.quoteService, mapMarkerService: widget.mapMarkerService)
         ][_selectedIndex],
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[

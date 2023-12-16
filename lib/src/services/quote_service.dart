@@ -1,15 +1,15 @@
 import 'dart:convert';
 import 'dart:core';
 
-import '../models/notification.dart';
+import '../models/quote.dart';
 import 'package:http/http.dart' as http;
 
-class FirebaseService {
+class QuoteService {
   final String baseUrl = "https://actualizer-fb7e8-default-rtdb.europe-west1.firebasedatabase.app";
   final String notificationsEndpoint = "/notifications.json";
 
-  void uploadNotification(String category, String text, String details) async {
-    NotificationItem notificationItem = NotificationItem(category: category, title: text, details: details);
+  void uploadQuote(String category, String text, String details) async {
+    Quote notificationItem = Quote(category: category, title: text, details: details);
     final String firebaseUrl = '$baseUrl$notificationsEndpoint';
 
     try {
@@ -31,16 +31,16 @@ class FirebaseService {
     }
   }
 
-  Future<List<NotificationItem>> fetchNotifications() async {
+  Future<List<Quote>> fetchQuotes() async {
     final String firebaseUrl = '$baseUrl$notificationsEndpoint';
     try {
       final response = await http.get(Uri.parse(firebaseUrl));
       if (response.statusCode == 200) {
-        List<NotificationItem> items = [];
+        List<Quote> items = [];
         final data = List.from(json.decode(response.body).values);
         for (var item in data) {
           print(item);
-          items.add(NotificationItem(category: (item['category']), title: item['text'], details: item['details']));
+          items.add(Quote(category: (item['category']), title: item['text'], details: item['details']));
         }
         return items;
       } else {

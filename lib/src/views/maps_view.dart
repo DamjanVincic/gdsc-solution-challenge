@@ -5,12 +5,12 @@ import 'package:location/location.dart' hide PermissionStatus;
 import 'package:permission_handler/permission_handler.dart';
 import 'dart:io' show Platform;
 
-import '../services/marker_service.dart';
+import '../services/map_marker_service.dart';
 
 class MapsView extends StatefulWidget {
-  const MapsView({super.key, required this.markerService});
+  const MapsView({super.key, required this.mapMarkerService});
 
-  final MarkerService markerService;
+  final MapMarkerService mapMarkerService;
 
   @override
   State<MapsView> createState() => _MapsViewState();
@@ -63,13 +63,13 @@ class _MapsViewState extends State<MapsView> {
   }
 
   @override
-  void initState() {
+  void initState() async {
     super.initState();
     _locationPermissionStatus = getPermissionStatus();
     rootBundle.loadString('assets/map_style.txt').then((string) {
       _mapStyle = string;
     });
-    _markers = widget.markerService.getMarkers();
+    _markers = await widget.mapMarkerService.fetchMapMarkers();
   }
 
   @override

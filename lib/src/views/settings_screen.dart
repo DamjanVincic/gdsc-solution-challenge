@@ -1,14 +1,17 @@
-import 'package:devfest_hackathon_2023/src/services/notification_service.dart';
 import 'package:flutter/material.dart';
-import '../services/firebase_service.dart';
+import '../services/notification_service.dart';
+import '../services/quote_service.dart';
+import '../services/map_marker_service.dart'; // Import your map marker service
 
 class SettingsScreen extends StatefulWidget {
   final NotificationService notificationService;
-  final FirebaseService firebaseService;
+  final QuoteService quoteService;
+  final MapMarkerService mapMarkerService; // Add your map marker service
 
   SettingsScreen({
     required this.notificationService,
-    required this.firebaseService,
+    required this.quoteService,
+    required this.mapMarkerService,
   });
 
   @override
@@ -19,6 +22,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
   final TextEditingController categoryController = TextEditingController();
   final TextEditingController titleController = TextEditingController();
   final TextEditingController detailsController = TextEditingController();
+  final TextEditingController mapMarkerLatitudeController = TextEditingController();
+  final TextEditingController mapMarkerLongitudeController = TextEditingController();
+  final TextEditingController mapMarkerTitleController = TextEditingController();
+  final TextEditingController mapMarkerSnippetController = TextEditingController();
 
   bool isNotificationScheduled = false;
 
@@ -28,12 +35,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
     isNotificationScheduled = false; // Set the initial state
   }
 
-  void sendToFirebase() {
+  void uploadQuote() {
     final String category = categoryController.text;
     final String title = titleController.text;
     final String details = detailsController.text;
 
-    widget.firebaseService.uploadNotification(category, title, details);
+    widget.quoteService.uploadQuote(category, title, details);
+  }
+
+  void uploadMapMarker() {
+    double latitude = double.parse(mapMarkerLatitudeController.text);
+    double longitude = double.parse(mapMarkerLongitudeController.text);
+    String title = mapMarkerTitleController.text;
+    String snippet = mapMarkerSnippetController.text;
+
+    widget.mapMarkerService.uploadMapMarker(latitude, longitude, title, snippet);
   }
 
   void toggleNotification() {
@@ -97,10 +113,33 @@ class _SettingsScreenState extends State<SettingsScreen> {
             decoration: const InputDecoration(labelText: 'Details'),
           ),
           const SizedBox(height: 16.0),
+          TextField(
+            controller: mapMarkerLatitudeController,
+            keyboardType: TextInputType.number,
+            decoration: const InputDecoration(labelText: 'Map Marker Latitude'),
+          ),
+          TextField(
+            controller: mapMarkerLongitudeController,
+            keyboardType: TextInputType.number,
+            decoration: const InputDecoration(labelText: 'Map Marker Longitude'),
+          ),
+          TextField(
+            controller: mapMarkerTitleController,
+            decoration: const InputDecoration(labelText: 'Map Marker Title'),
+          ),
+          TextField(
+            controller: mapMarkerSnippetController,
+            decoration: const InputDecoration(labelText: 'Map Marker Snippet'),
+          ),
+          const SizedBox(height: 16.0),
           ElevatedButton(
-            onPressed: sendToFirebase,
+            onPressed: uploadQuote,
             child: const Text('Send to Firebase'),
-          )
+          ),
+          ElevatedButton(
+            onPressed: uploadMapMarker,
+            child: const Text('Upload Map Marker'),
+          ),
         ],
       ),
     );

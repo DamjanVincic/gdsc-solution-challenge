@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../models/notification.dart';
+import '../models/quote.dart';
 
 class NotificationScreen extends StatelessWidget {
-  final NotificationItem notificationItem;
+  final Quote notificationItem;
 
   const NotificationScreen({super.key, required this.notificationItem});
 
