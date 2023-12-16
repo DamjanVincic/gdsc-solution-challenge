@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:devfest_hackathon_2023/src/services/firebase_service.dart';
 import 'package:devfest_hackathon_2023/src/views/habit_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'src/services/notification_service.dart';
 
@@ -51,7 +50,7 @@ class MyApp extends StatelessWidget {
     final String category = categoryController.text;
     final String text = textController.text;
 
-    firebaseService.pushNotification(category, text);
+    firebaseService.uploadNotification(category, text);
   }
 
   @override
@@ -88,7 +87,7 @@ class MyApp extends StatelessWidget {
               ),
               const SizedBox(height: 16.0),
               ElevatedButton(
-                onPressed: firebaseService.getNotifications,
+                onPressed: firebaseService.fetchNotifications,
                 child: const Text('Get Items by Category'),
               ),
               ElevatedButton(
