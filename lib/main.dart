@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'package:devfest_hackathon_2023/src/models/notification.dart';
 import 'package:devfest_hackathon_2023/src/services/firebase_service.dart';
 import 'package:devfest_hackathon_2023/src/views/habit_screen.dart';
+import 'package:devfest_hackathon_2023/src/views/notification_list_screen.dart';
 
 import 'src/services/notification_service.dart';
 
@@ -10,15 +12,11 @@ import 'package:timezone/data/latest.dart' as tzdata;
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 FlutterLocalNotificationsPlugin();
+final FirebaseService firebaseService = FirebaseService();
+final NotificationService notificationService = NotificationService();
 
 Future<void> main() async {
-  // SharedPreferences prefs = await SharedPreferences.getInstance();
-  // await prefs.clear();
-
   WidgetsFlutterBinding.ensureInitialized();
-  final FirebaseService firebaseService = FirebaseService();
-  //await firebaseService.initialize();
-  final NotificationService notificationService = NotificationService();
   await notificationService.initializeNotifications();
   runApp(MaterialApp(home: MyApp(notificationService: notificationService, firebaseService: firebaseService)));
 }
@@ -89,18 +87,26 @@ class MyApp extends StatelessWidget {
               ),
               const SizedBox(height: 16.0),
               ElevatedButton(
-                onPressed: firebaseService.fetchNotifications,
-                child: const Text('Get Items by Category'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  // Navigate to the HabitScreen
+                onPressed: () async {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => HabitScreen()),
+                    MaterialPageRoute(
+                      builder: (context) => NotificationListScreen(firebaseService: firebaseService)
+                    ),
                   );
                 },
-                child: Text('View Habit Screen'),
+                child: const Text('View notification list'),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const HabitScreen()
+                    ),
+                  );
+                },
+                child: const Text('View habits'),
               ),
             ],
           ),
