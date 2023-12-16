@@ -36,7 +36,7 @@ Future<void> initializeNotifications() async {
 class MyApp extends StatelessWidget {
   final NotificationService notificationService;
 
-  MyApp({super.key, required this.notificationService});
+  const MyApp({super.key, required this.notificationService});
 
   @override
   Widget build(BuildContext context) {
@@ -87,8 +87,8 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: <Widget>[
         Hub(notificationService: notificationService),
-        MapsView(),
-        Text('Settings'),
+        const MapsView(),
+        const Text('Settings'),
       ][_selectedIndex],
     );
   }
