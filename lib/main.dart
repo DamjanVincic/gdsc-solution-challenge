@@ -1,3 +1,6 @@
+import 'package:devfest_hackathon_2023/src/views/maps_view.dart';
+import 'package:devfest_hackathon_2023/src/views/hub.dart';
+import 'package:flutter_config/flutter_config.dart';
 import 'dart:async';
 import 'package:devfest_hackathon_2023/src/services/firebase_service.dart';
 import 'package:devfest_hackathon_2023/src/views/habit_list_screen.dart';
@@ -9,17 +12,17 @@ import 'src/services/notification_service.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/data/latest.dart' as tzdata;
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-FlutterLocalNotificationsPlugin();
-final FirebaseService firebaseService = FirebaseService();
+    FlutterLocalNotificationsPlugin();
 final NotificationService notificationService = NotificationService();
 
 Future<void> main() async {
-  // SharedPreferences prefs = await SharedPreferences.getInstance();
-  // await prefs.clear();
   WidgetsFlutterBinding.ensureInitialized();
+  await FlutterConfig.loadEnvVariables();
   await notificationService.initializeNotifications();
+  runApp(MaterialApp(home: MyApp(notificationService: notificationService)));
   runApp(MaterialApp(
       home: MyApp(
         notificationService: notificationService,
@@ -28,6 +31,7 @@ Future<void> main() async {
 }
 
 Future<void> initializeNotifications() async {
+  tzdata.initializeTimeZones();
   const AndroidInitializationSettings initializationSettingsAndroid =
   AndroidInitializationSettings('@mipmap/ic_launcher');
 
@@ -113,21 +117,15 @@ class MyApp extends StatelessWidget {
                 },
                 child: const Text('View habits'),
               ),
-              ElevatedButton(
-                onPressed: () async {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => SelfExaminationScreen(),
-                    ),
-                  );
-                },
-                child: const Text('View Self Examination'),
-              ),
             ],
           ),
         ),
       ),
+      body: <Widget>[
+        Hub(notificationService: notificationService),
+        const MapsView(),
+        const Text('Settings'),
+      ][_selectedIndex],
     );
   }
 }

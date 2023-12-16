@@ -18,11 +18,14 @@ class NotificationScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Category: ${notificationItem.category}', style: const TextStyle(fontSize: 18)),
+            Text('Category: ${notificationItem.category}',
+                style: const TextStyle(fontSize: 18)),
             const SizedBox(height: 8),
-            Text('Title: ${notificationItem.title}', style: const TextStyle(fontSize: 18)),
+            Text('Title: ${notificationItem.title}',
+                style: const TextStyle(fontSize: 18)),
             const SizedBox(height: 8),
-            Text('Details: ${notificationItem.details}', style: const TextStyle(fontSize: 18)),
+            Text('Details: ${notificationItem.details}',
+                style: const TextStyle(fontSize: 18)),
           ],
         ),
       ),

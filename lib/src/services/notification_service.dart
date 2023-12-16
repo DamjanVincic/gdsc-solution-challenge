@@ -11,7 +11,7 @@ import 'firebase_service.dart';
 
 class NotificationService {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-  FlutterLocalNotificationsPlugin();
+      FlutterLocalNotificationsPlugin();
   final FirebaseService firebaseService = FirebaseService();
   static const channelId = "1";
   static const channelIdNum = 1;
@@ -27,38 +27,40 @@ class NotificationService {
   Future<void> initializeNotifications() async {
     tzdata.initializeTimeZones();
     const AndroidInitializationSettings initializationSettingsAndroid =
-    AndroidInitializationSettings('@mipmap/ic_launcher');
+        AndroidInitializationSettings('@mipmap/ic_launcher');
 
     // Linux-specific settings
     const LinuxInitializationSettings initializationSettingsLinux =
-    LinuxInitializationSettings(defaultActionName: 'View quote');
+        LinuxInitializationSettings(defaultActionName: 'View quote');
 
-    const InitializationSettings initializationSettings = InitializationSettings(
-        android: initializationSettingsAndroid, linux: initializationSettingsLinux);
+    const InitializationSettings initializationSettings =
+        InitializationSettings(
+            android: initializationSettingsAndroid,
+            linux: initializationSettingsLinux);
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
   Future<void> showNotification(NotificationItem notificationItem) async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
-    AndroidNotificationDetails(
+        AndroidNotificationDetails(
       channelId,
       channelName,
       channelDescription: channelDescription,
     );
     const NotificationDetails platformChannelSpecifics =
-    NotificationDetails(android: androidPlatformChannelSpecifics);
+        NotificationDetails(android: androidPlatformChannelSpecifics);
 
     await flutterLocalNotificationsPlugin.show(
-      notificationItem.title.hashCode,
-      notificationItem.category,
-      notificationItem.title,
-      platformChannelSpecifics
-    );
+        notificationItem.title.hashCode,
+        notificationItem.category,
+        notificationItem.title,
+        platformChannelSpecifics);
   }
 
   Future<void> showRandomNotification() async {
     if (notifications.isNotEmpty) {
-      final random = DateTime.now().microsecondsSinceEpoch % notifications.length;
+      final random =
+          DateTime.now().microsecondsSinceEpoch % notifications.length;
       final randomNotification = notifications[random];
 
       await showNotification(randomNotification);

@@ -6,10 +6,10 @@ import '../models/habit.dart';
 class HabitDetailsScreen extends StatefulWidget {
   final Habit habit;
 
-  const HabitDetailsScreen({Key? key, required this.habit}) : super(key: key);
+  const HabitDetailsScreen({super.key, required this.habit});
 
   @override
-  _HabitDetailsScreenState createState() => _HabitDetailsScreenState();
+  State<HabitDetailsScreen> createState() => _HabitDetailsScreenState();
 }
 
 class _HabitDetailsScreenState extends State<HabitDetailsScreen> {
@@ -48,18 +48,18 @@ class _HabitDetailsScreenState extends State<HabitDetailsScreen> {
             padding: const EdgeInsets.all(16.0),
             child: Text(
               'Habit: ${widget.habit.name}',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Text(
               'Streak Length: ${widget.habit.streakLength}',
-              style: TextStyle(fontSize: 16),
+              style: const TextStyle(fontSize: 16),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
+          const Padding(
+            padding: EdgeInsets.all(16.0),
             child: Text(
               'Habit completion for the week:',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),

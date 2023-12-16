@@ -10,7 +10,7 @@ class HabitListScreen extends StatefulWidget {
   const HabitListScreen({super.key});
 
   @override
-  _HabitListScreenState createState() => _HabitListScreenState();
+  State<HabitListScreen> createState() => _HabitListScreenState();
 }
 
 class _HabitListScreenState extends State<HabitListScreen> {
