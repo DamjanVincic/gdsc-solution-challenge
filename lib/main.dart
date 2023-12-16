@@ -1,14 +1,14 @@
 import 'dart:async';
-import 'package:devfest_hackathon_2023/src/models/notification.dart';
 import 'package:devfest_hackathon_2023/src/services/firebase_service.dart';
 import 'package:devfest_hackathon_2023/src/views/habit_list_screen.dart';
 import 'package:devfest_hackathon_2023/src/views/notification_list_screen.dart';
+import 'package:devfest_hackathon_2023/src/views/self_examination_list.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'src/services/notification_service.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:timezone/data/latest.dart' as tzdata;
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 FlutterLocalNotificationsPlugin();
@@ -16,13 +16,18 @@ final FirebaseService firebaseService = FirebaseService();
 final NotificationService notificationService = NotificationService();
 
 Future<void> main() async {
+  // SharedPreferences prefs = await SharedPreferences.getInstance();
+  // await prefs.clear();
   WidgetsFlutterBinding.ensureInitialized();
   await notificationService.initializeNotifications();
-  runApp(MaterialApp(home: MyApp(notificationService: notificationService, firebaseService: firebaseService)));
+  runApp(MaterialApp(
+      home: MyApp(
+        notificationService: notificationService,
+        firebaseService: firebaseService,
+      )));
 }
 
 Future<void> initializeNotifications() async {
-  tzdata.initializeTimeZones();
   const AndroidInitializationSettings initializationSettingsAndroid =
   AndroidInitializationSettings('@mipmap/ic_launcher');
 
@@ -107,6 +112,17 @@ class MyApp extends StatelessWidget {
                   );
                 },
                 child: const Text('View habits'),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SelfExaminationScreen(),
+                    ),
+                  );
+                },
+                child: const Text('View Self Examination'),
               ),
             ],
           ),

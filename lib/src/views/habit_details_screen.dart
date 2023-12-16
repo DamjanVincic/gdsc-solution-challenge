@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 import '../models/habit.dart';
 
@@ -17,15 +18,17 @@ class _HabitDetailsScreenState extends State<HabitDetailsScreen> {
   @override
   void initState() {
     super.initState();
-    // Generate a list of the past 7 days
+    // Generate a list of the past 7 days starting from the 7th day ago
     pastWeekDates = generatePastWeekDates();
   }
 
   List<String> generatePastWeekDates() {
     DateTime currentDate = DateTime.now();
+    DateTime startDate = currentDate.subtract(Duration(days: 6));
+
     List<String> pastWeekDates = [];
     for (int i = 0; i < 7; i++) {
-      DateTime date = currentDate.subtract(Duration(days: i));
+      DateTime date = startDate.add(Duration(days: i));
       pastWeekDates.add(date.toLocal().toString().split(' ')[0]);
     }
     return pastWeekDates;
@@ -62,23 +65,43 @@ class _HabitDetailsScreenState extends State<HabitDetailsScreen> {
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ),
-          // Display habit completion status for each day in the week
-          Column(
-            children: List.generate(pastWeekDates.length, (index) {
+          // Display habit completion status for each day in the week using a graph
+          Expanded(
+            child: LineChart(
+              LineChartData(
+                gridData: FlGridData(show: false),
+                titlesData: FlTitlesData(show: false),
+                borderData: FlBorderData(show: false),
+                lineBarsData: [
+                  LineChartBarData(
+                    spots: List.generate(pastWeekDates.length, (index) {
+                      String currentDate = pastWeekDates[index];
+                      bool isCompleted = widget.habit.isCompleted(currentDate);
+
+                      return FlSpot(index.toDouble(), isCompleted ? 1.0 : 0.0);
+                    }),
+                    isCurved: true,
+                    belowBarData: BarAreaData(show: false),
+                    colors: [Colors.blue],
+                  ),
+                ],
+              ),
+            ),
+          ),
+          // Display a table with habit completion status for each day in the week
+          DataTable(
+            columns: [
+              DataColumn(label: Text('Date')),
+              DataColumn(label: Text('Completed')),
+            ],
+            rows: List.generate(pastWeekDates.length, (index) {
               String currentDate = pastWeekDates[index];
               bool isCompleted = widget.habit.isCompleted(currentDate);
 
-              return CheckboxListTile(
-                title: Text(currentDate),
-                value: isCompleted,
-                onChanged: (isChecked) {
-                  setState(() {
-                    widget.habit.markCompleted(isChecked ?? false);
-                    // Update the UI
-                    widget.habit.updateStreakLength();
-                  });
-                },
-              );
+              return DataRow(cells: [
+                DataCell(Text(currentDate)),
+                DataCell(Text(isCompleted ? 'Yes' : 'No')),
+              ]);
             }),
           ),
         ],

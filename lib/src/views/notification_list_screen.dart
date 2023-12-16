@@ -69,7 +69,7 @@ class _NotificationListScreenState extends State<NotificationListScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: notifications != null
+        child: notifications.isNotEmpty
             ? ListView.builder(
           itemCount: getFilteredNotifications().length,
           itemBuilder: (context, index) {
@@ -100,7 +100,7 @@ class _NotificationListScreenState extends State<NotificationListScreen> {
             );
           },
         )
-            : Center(
+            : const Center(
           child: CircularProgressIndicator(), // Show a loading indicator while fetching data
         ),
       ),
