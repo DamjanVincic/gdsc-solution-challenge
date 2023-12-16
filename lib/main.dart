@@ -1,19 +1,27 @@
 import 'dart:async';
-import 'dart:developer';
+import 'package:devfest_hackathon_2023/src/services/firebase_service.dart';
+import 'package:devfest_hackathon_2023/src/views/habit_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import 'src/services/notification_service.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tzdata;
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 FlutterLocalNotificationsPlugin();
 
 Future<void> main() async {
+  // SharedPreferences prefs = await SharedPreferences.getInstance();
+  // await prefs.clear();
+
   WidgetsFlutterBinding.ensureInitialized();
-  await initializeNotifications();
-  runApp(MyApp());
+  final FirebaseService firebaseService = FirebaseService();
+  //await firebaseService.initialize();
+  final NotificationService notificationService = NotificationService();
+  await notificationService.initializeNotifications();
+  runApp(MaterialApp(home: MyApp(notificationService: notificationService, firebaseService: firebaseService)));
 }
 
 Future<void> initializeNotifications() async {
@@ -31,59 +39,19 @@ Future<void> initializeNotifications() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final NotificationService notificationService;
 
-  Future<void> showNotification() async {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-    AndroidNotificationDetails(
-      '1', // Change this to a unique ID
-      'Actualizer notification channel',
-      channelDescription: 'Shows actualizer notifications',
-    );
-    const NotificationDetails platformChannelSpecifics =
-    NotificationDetails(android: androidPlatformChannelSpecifics);
+  final FirebaseService firebaseService;
+  final TextEditingController categoryController = TextEditingController();
+  final TextEditingController textController = TextEditingController();
 
-    await flutterLocalNotificationsPlugin.show(
-      0,
-      'Hello, Flutter!',
-      'This is your first local notification.',
-      platformChannelSpecifics,
-    );
-  }
+  MyApp({required this.notificationService, required this.firebaseService, Key? key}) : super(key: key);
 
-  Future<void> showRandomNotification() async {
-    //final Random random = Random();
-    //final int notificationId = random.nextInt(100);
-    final int notificationId = 3;
+  void sendToFirebase() {
+    final String category = categoryController.text;
+    final String text = textController.text;
 
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-    AndroidNotificationDetails(
-      'your_channel_id', // replace with your own channel ID
-      'your_channel_name', // replace with your own channel name
-      channelDescription: 'your_channel_description', // replace with your own channel description
-      importance: Importance.high,
-      priority: Priority.high,
-    );
-
-    const NotificationDetails platformChannelSpecifics =
-    NotificationDetails(android: androidPlatformChannelSpecifics);
-
-    await flutterLocalNotificationsPlugin.show(
-      notificationId,
-      'Random Notification',
-      'This is a random notification message.',
-      platformChannelSpecifics,
-      payload: 'item x',
-    );
-  }
-
-  Future<void> scheduleNotification() async {
-    const int intervalSeconds = 5;
-
-    Timer.periodic(const Duration(seconds: intervalSeconds), (Timer timer) {
-      log("Scheduling notification");
-      showRandomNotification();
-    });
+    firebaseService.pushNotification(category, text);
   }
 
   @override
@@ -96,13 +64,42 @@ class MyApp extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
-                onPressed: showNotification,
+                onPressed: notificationService.showNotification,
                 child: const Text('Show Notification'),
               ),
               const SizedBox(height: 16), // Add some spacing
               ElevatedButton(
-                onPressed: scheduleNotification,
+                onPressed: notificationService.scheduleNotification,
                 child: const Text('Schedule Notification'),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: categoryController,
+                decoration: const InputDecoration(labelText: 'Category'),
+              ),
+              TextField(
+                controller: textController,
+                decoration: const InputDecoration(labelText: 'Text'),
+              ),
+              const SizedBox(height: 16.0),
+              ElevatedButton(
+                onPressed: sendToFirebase,
+                child: const Text('Send to Firebase'),
+              ),
+              const SizedBox(height: 16.0),
+              ElevatedButton(
+                onPressed: firebaseService.getNotifications,
+                child: const Text('Get Items by Category'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  // Navigate to the HabitScreen
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => HabitScreen()),
+                  );
+                },
+                child: Text('View Habit Screen'),
               ),
             ],
           ),
