@@ -1,3 +1,5 @@
+import 'package:devfest_hackathon_2023/src/models/marker.dart';
+import 'package:devfest_hackathon_2023/src/services/marker_service.dart';
 import 'package:devfest_hackathon_2023/src/views/maps_view.dart';
 import 'package:devfest_hackathon_2023/src/views/hub.dart';
 import 'package:flutter_config/flutter_config.dart';
@@ -14,15 +16,17 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 final NotificationService notificationService = NotificationService();
 final FirebaseService firebaseService = FirebaseService();
+final MarkerService markerService = MarkerService();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  //await FlutterConfig.loadEnvVariables();
+  await FlutterConfig.loadEnvVariables();
   await notificationService.initializeNotifications();
   runApp(MaterialApp(
       home: MyApp(
         notificationService: notificationService,
         firebaseService: firebaseService,
+        markerService: markerService,
       )));
 }
 
@@ -43,15 +47,17 @@ Future<void> initializeNotifications() async {
 class MyApp extends StatefulWidget {
   final NotificationService notificationService;
   final FirebaseService firebaseService;
+  final MarkerService markerService;
 
-  MyApp({
-    required this.notificationService,
-    required this.firebaseService,
-    Key? key,
-  }) : super(key: key);
+  MyApp({super.key, required this.notificationService, required this.firebaseService, required this.markerService});
+  // MyApp({
+  //   required this.notificationService,
+  //   required this.firebaseService,
+  //   Key? key,
+  // }) : super(key: key);
 
   @override
-  _MyAppState createState() => _MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
@@ -63,7 +69,7 @@ class _MyAppState extends State<MyApp> {
       home: Scaffold(
         body: <Widget>[
           Hub(notificationService: widget.notificationService),
-          const MapsView(),
+          MapsView(markerService: widget.markerService),
           const Text('Settings'),
         ][_selectedIndex],
         bottomNavigationBar: BottomNavigationBar(
