@@ -21,7 +21,7 @@ final NotificationService notificationService = NotificationService(firebaseServ
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await FlutterConfig.loadEnvVariables();
+  //await FlutterConfig.loadEnvVariables();
   await notificationService.initializeNotifications();
   runApp(MaterialApp(
       home: MyApp(
@@ -51,11 +51,6 @@ class MyApp extends StatefulWidget {
   final MarkerService markerService;
 
   MyApp({super.key, required this.notificationService, required this.firebaseService, required this.markerService});
-  // MyApp({
-  //   required this.notificationService,
-  //   required this.firebaseService,
-  //   Key? key,
-  // }) : super(key: key);
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -70,8 +65,8 @@ class _MyAppState extends State<MyApp> {
       home: Scaffold(
         body: <Widget>[
           Hub(firebaseService: widget.firebaseService),
-          SettingsScreen(notificationService: widget.notificationService, firebaseService: widget.firebaseService,),
           MapsView(markerService: widget.markerService),
+          SettingsScreen(notificationService: widget.notificationService, firebaseService: widget.firebaseService)
         ][_selectedIndex],
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[
