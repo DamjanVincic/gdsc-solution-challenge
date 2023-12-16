@@ -6,10 +6,10 @@ import 'notification_screen.dart';
 class NotificationListScreen extends StatefulWidget {
   final FirebaseService firebaseService;
 
-  const NotificationListScreen({Key? key, required this.firebaseService}) : super(key: key);
+  const NotificationListScreen({super.key, required this.firebaseService});
 
   @override
-  _NotificationListScreenState createState() => _NotificationListScreenState();
+  State<NotificationListScreen> createState() => _NotificationListScreenState();
 }
 
 class _NotificationListScreenState extends State<NotificationListScreen> {
@@ -69,8 +69,7 @@ class _NotificationListScreenState extends State<NotificationListScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: notifications != null
-            ? ListView.builder(
+        child: ListView.builder(
           itemCount: getFilteredNotifications().length,
           itemBuilder: (context, index) {
             final notificationItem = getFilteredNotifications()[index];
@@ -99,9 +98,6 @@ class _NotificationListScreenState extends State<NotificationListScreen> {
               ),
             );
           },
-        )
-            : Center(
-          child: CircularProgressIndicator(), // Show a loading indicator while fetching data
         ),
       ),
     );

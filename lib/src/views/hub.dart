@@ -26,58 +26,57 @@ class Hub extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const SizedBox(height: 16), // Add some spacing
-              ElevatedButton(
-                onPressed: notificationService.scheduleNotification,
-                child: const Text('Schedule Notification'),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: categoryController,
-                decoration: const InputDecoration(labelText: 'Category'),
-              ),
-              TextField(
-                controller: detailsController,
-                decoration: const InputDecoration(labelText: 'Category'),
-              ),
-              TextField(
-                controller: titleController,
-                decoration: const InputDecoration(labelText: 'Text'),
-              ),
-              const SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: sendToFirebase,
-                child: const Text('Send to Firebase'),
-              ),
-              const SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: () async {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => NotificationListScreen(firebaseService: firebaseService)
-                    ),
-                  );
-                },
-                child: const Text('View notification list'),
-              ),
-              ElevatedButton(
-                onPressed: () async {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const HabitListScreen()
-                    ),
-                  );
-                },
-                child: const Text('View habits'),
-              ),
-            ],
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(height: 16), // Add some spacing
+            ElevatedButton(
+              onPressed: notificationService.scheduleNotification,
+              child: const Text('Schedule Notification'),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: categoryController,
+              decoration: const InputDecoration(labelText: 'Category'),
+            ),
+            TextField(
+              controller: detailsController,
+              decoration: const InputDecoration(labelText: 'Category'),
+            ),
+            TextField(
+              controller: titleController,
+              decoration: const InputDecoration(labelText: 'Text'),
+            ),
+            const SizedBox(height: 16.0),
+            ElevatedButton(
+              onPressed: sendToFirebase,
+              child: const Text('Send to Firebase'),
+            ),
+            const SizedBox(height: 16.0),
+            ElevatedButton(
+              onPressed: () async {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => NotificationListScreen(
+                          firebaseService: firebaseService)),
+                );
+              },
+              child: const Text('View notification list'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const HabitListScreen()),
+                );
+              },
+              child: const Text('View habits'),
+            ),
+          ],
         ),
+      ),
     );
   }
 }

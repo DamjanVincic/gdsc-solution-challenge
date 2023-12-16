@@ -1,21 +1,14 @@
 import 'package:devfest_hackathon_2023/src/views/maps_view.dart';
 import 'package:devfest_hackathon_2023/src/views/hub.dart';
 import 'package:flutter_config/flutter_config.dart';
-
 import 'dart:async';
-import 'package:devfest_hackathon_2023/src/models/notification.dart';
-import 'package:devfest_hackathon_2023/src/services/firebase_service.dart';
-import 'package:devfest_hackathon_2023/src/views/habit_list_screen.dart';
-import 'package:devfest_hackathon_2023/src/views/notification_list_screen.dart';
-
 import 'src/services/notification_service.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tzdata;
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-FlutterLocalNotificationsPlugin();
+    FlutterLocalNotificationsPlugin();
 final NotificationService notificationService = NotificationService();
 
 Future<void> main() async {
@@ -28,14 +21,15 @@ Future<void> main() async {
 Future<void> initializeNotifications() async {
   tzdata.initializeTimeZones();
   const AndroidInitializationSettings initializationSettingsAndroid =
-  AndroidInitializationSettings('@mipmap/ic_launcher');
+      AndroidInitializationSettings('@mipmap/ic_launcher');
 
   // Linux-specific settings
   const LinuxInitializationSettings initializationSettingsLinux =
-  LinuxInitializationSettings(defaultActionName: 'View quote');
+      LinuxInitializationSettings(defaultActionName: 'View quote');
 
-  const InitializationSettings initializationSettings =
-  InitializationSettings(android: initializationSettingsAndroid, linux: initializationSettingsLinux);
+  const InitializationSettings initializationSettings = InitializationSettings(
+      android: initializationSettingsAndroid,
+      linux: initializationSettingsLinux);
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 }
 
@@ -96,6 +90,6 @@ class _MyHomePageState extends State<MyHomePage> {
         MapsView(),
         Text('Settings'),
       ][_selectedIndex],
-      );
+    );
   }
 }
