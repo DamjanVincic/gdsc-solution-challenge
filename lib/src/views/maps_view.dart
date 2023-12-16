@@ -1,19 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' hide PermissionStatus;
 import 'package:permission_handler/permission_handler.dart';
 import 'dart:io' show Platform;
 
+import '../services/marker_service.dart';
+
 class MapsView extends StatefulWidget {
-  const MapsView({super.key});
+  const MapsView({super.key, required this.markerService});
+
+  final MarkerService markerService;
 
   @override
   State<MapsView> createState() => _MapsViewState();
 }
 
 class _MapsViewState extends State<MapsView> {
+  String? _mapStyle;
   late GoogleMapController _mapController;
   final LatLng _center = const LatLng(44.813178422472525, 20.461723719360762);
+  late Set<Marker> _markers; // Fetch markers
 
   late Future<PermissionStatus> _locationPermissionStatus;
   LocationData? _currentLocation;
@@ -34,6 +41,7 @@ class _MapsViewState extends State<MapsView> {
       return PermissionStatus.granted;
     }
   }
+
   Future<void> getCurrentLocation() async {
     Location location = Location();
     try {
@@ -58,6 +66,10 @@ class _MapsViewState extends State<MapsView> {
   void initState() {
     super.initState();
     _locationPermissionStatus = getPermissionStatus();
+    rootBundle.loadString('assets/map_style.txt').then((string) {
+      _mapStyle = string;
+    });
+    _markers = widget.markerService.getMarkers();
   }
 
   @override
@@ -72,7 +84,10 @@ class _MapsViewState extends State<MapsView> {
               final status = snapshot.data!;
               if (status == PermissionStatus.granted) {
                 return GoogleMap(
-                  onMapCreated: (controller) => _mapController = controller,
+                  onMapCreated: (controller) {
+                    _mapController = controller;
+                    _mapController.setMapStyle(_mapStyle);
+                  },
                   initialCameraPosition: CameraPosition(
                     target: _currentLocation != null
                         ? LatLng(_currentLocation!.latitude!,
@@ -81,6 +96,7 @@ class _MapsViewState extends State<MapsView> {
                     zoom: 11.0,
                   ),
                   myLocationEnabled: true,
+                  markers: _markers,
                 );
               } else {
                 return const Center(child: Text('Permission denied'));
