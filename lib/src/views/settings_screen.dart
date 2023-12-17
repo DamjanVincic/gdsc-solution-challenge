@@ -194,7 +194,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     primary: Colors.white70, // Button background colorAccent
                     onPrimary: Colors.black87, // Text colorPrimary
                   ),
-                  child: const Text('Create Quote')
+                  child: const Text('Create Quote'),
                 ),
               ),
               Container(
