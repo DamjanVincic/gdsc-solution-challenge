@@ -25,6 +25,17 @@ class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
     loadData();
   }
 
+  List<String> generatedXLabels() {
+    var days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+    var index = DateTime.now().subtract(const Duration(days: 5)).weekday;
+    // var index = (value.toInt() - 1) % 7;
+    List<String> labels = [];
+    for (var i = 0; i < 5; i++) {
+      labels.add(days[(index + i) % 7]);
+    }
+    return labels;
+  }
+
   Future<void> loadData() async {
     List<ExaminationResult> loadedData = await dataHandler.loadData();
     setState(() {
@@ -69,6 +80,7 @@ class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
   }
 
   void _showChartDialog() {
+    var labels = generatedXLabels();
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -104,6 +116,18 @@ class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
                               showTitles: true,
                               reservedSize: 22,
                               margin: 10,
+                              getTitles: (value) {
+                                // values are big so we bring them down to an interval of 5
+                                value /= 1e6;
+                                value = value.toInt()%100;
+                                value -= 59;
+                                value /= 5;
+
+                                if (value.toInt() >= 0 && value.toInt() < labels.length) {
+                                  return labels[value.toInt()];
+                                }
+                                return '';
+                              },
                             ),
                           ),
                           borderData: FlBorderData(
@@ -113,15 +137,6 @@ class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
                               width: 1,
                             ),
                           ),
-                          minX: DateTime
-                              .now()
-                              .subtract(const Duration(days: 7))
-                              .millisecondsSinceEpoch
-                              .toDouble(),
-                          maxX: DateTime
-                              .now()
-                              .millisecondsSinceEpoch
-                              .toDouble(),
                           minY: 0,
                           maxY: 10,
                           lineBarsData: [
