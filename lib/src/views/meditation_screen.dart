@@ -233,7 +233,7 @@ class _MeditationScreenState extends State<MeditationScreen> {
   }
 
   List<PieChartSectionData> _generatePieChartData() {
-    Map<int, double> durationCountMap = {};
+    Map<int, int> durationCountMap = {};
 
     for (var entry in meditationData) {
       int duration = entry.durationInSeconds ~/ 60; // Convert seconds to minutes
@@ -282,7 +282,7 @@ class _MeditationScreenState extends State<MeditationScreen> {
       Colors.teal,
     ];
 
-    Map<int, double> durationCountMap = {};
+    Map<int, int> durationCountMap = {};
 
     for (var entry in meditationData) {
       int duration = entry.durationInSeconds ~/ 60; // Convert seconds to minutes

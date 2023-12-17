@@ -315,11 +315,49 @@ class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
         ));
   }
 
+  // List<Widget> generateLegend() {
+  //   List<Widget> legendWidgets = [];
+  //   for (int i = 0; i < generatePieChartData().length; i++) {
+  //     int feeling = generatePieChartData().keys.elementAt(i);
+  //     Color color = Colors.primaries[i % Colors.primaries.length];
+  //     legendWidgets.add(
+  //       Row(
+  //         children: [
+  //           Container(
+  //             width: 12,
+  //             height: 12,
+  //             color: color,
+  //           ),
+  //           const SizedBox(width: 4),
+  //           Text('$feeling'),
+  //         ],
+  //       ),
+  //     );
+  //   }
+  //   return legendWidgets;
+  // }
+
   List<Widget> generateLegend() {
     List<Widget> legendWidgets = [];
+
+    // Map of feelings and their meanings
+    Map<int, String> feelingMeanings = {
+      1: 'Very Sad',
+      2: 'Sad',
+      3: 'Somewhat Sad',
+      4: 'Neutral',
+      5: 'Somewhat Happy',
+      6: 'Happy',
+      7: 'Very Happy',
+      8: 'Joyful',
+      9: 'Ecstatic',
+      10: 'Blissful'
+    };
+
     for (int i = 0; i < generatePieChartData().length; i++) {
       int feeling = generatePieChartData().keys.elementAt(i);
       Color color = Colors.primaries[i % Colors.primaries.length];
+
       legendWidgets.add(
         Row(
           children: [
@@ -329,13 +367,14 @@ class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
               color: color,
             ),
             const SizedBox(width: 4),
-            Text('$feeling'),
+            Text('$feeling: ${feelingMeanings[feeling]}'),
           ],
         ),
       );
     }
     return legendWidgets;
   }
+
 
   Future<void> _shareItem(ExaminationResult item) async {
     // Create a custom message with placeholders for item details
