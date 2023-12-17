@@ -9,18 +9,19 @@ class QuoteListScreen extends StatefulWidget {
   final Color accentColor;
 
   const QuoteListScreen({
-    Key? key,
+    super.key,
     required this.quoteService,
     required this.primaryColor,
     required this.accentColor,
-  }) : super(key: key);
+  });
 
   @override
-  _QuoteListScreenState createState() => _QuoteListScreenState();
+  State<QuoteListScreen> createState() => _QuoteListScreenState();
 }
 
 class _QuoteListScreenState extends State<QuoteListScreen> {
-  late List<Quote> notifications;
+  late Future<List<Quote>> futureNotifications;
+  List<Quote> notifications = [];
   String selectedCategory = 'All'; // Default category is 'All'
 
   @override
@@ -31,9 +32,12 @@ class _QuoteListScreenState extends State<QuoteListScreen> {
 
   Future<void> fetchData() async {
     // Fetch notifications asynchronously
-    notifications = await widget.quoteService.fetchQuotes();
+    futureNotifications = widget.quoteService.fetchQuotes();
+    final data = await futureNotifications;
     // Call setState to rebuild the widget with the new data
-    setState(() {});
+    setState(() {
+      notifications = data;
+    });
   }
 
   List<String> getUniqueCategories() {
