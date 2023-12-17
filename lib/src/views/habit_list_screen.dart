@@ -42,9 +42,8 @@ class _HabitListScreenState extends State<HabitListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final Color primaryColor = widget.primaryColor; // Store primary color locally
+    final Color primaryColor = widget.primaryColor;
     final Color accentColor = widget.accentColor;
-    print("color: " + primaryColor.toString());
 
     return Scaffold(
       appBar: AppBar(
@@ -84,6 +83,7 @@ class _HabitListScreenState extends State<HabitListScreen> {
                       saveData();
                       setState(() {});
                     },
+                    primaryColor: primaryColor,
                     accentColor: accentColor,
                   );
                 },
@@ -140,12 +140,14 @@ class _HabitListScreenState extends State<HabitListScreen> {
 class HabitCard extends StatelessWidget {
   final Habit habit;
   final VoidCallback onSaveCallback;
+  final Color primaryColor;
   final Color accentColor;
 
   const HabitCard({
     Key? key,
     required this.habit,
     required this.onSaveCallback,
+    required this.primaryColor,
     required this.accentColor,
   }) : super(key: key);
 
@@ -164,7 +166,7 @@ class HabitCard extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => HabitDetailsScreen(habit: habit),
+              builder: (context) => HabitDetailsScreen(habit: habit, primaryColor: primaryColor, accentColor: accentColor),
             ),
           );
         },
