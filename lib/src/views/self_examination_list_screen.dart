@@ -8,8 +8,10 @@ import '../utils/self_examination_data_handler.dart';
 import 'self_examination_input_screen.dart';
 
 class SelfExaminationListScreen extends StatefulWidget {
+  const SelfExaminationListScreen({super.key});
+
   @override
-  _SelfExaminationListScreenState createState() => _SelfExaminationListScreenState();
+  State<SelfExaminationListScreen> createState() => _SelfExaminationListScreenState();
 }
 
 class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
@@ -70,7 +72,7 @@ class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('SelfExamination Screen'),
+        title: const Text('SelfExamination Screen'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -94,14 +96,14 @@ class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
                       ],
                     ),
                     trailing: IconButton(
-                      icon: Icon(Icons.share),
+                      icon: const Icon(Icons.share),
                       onPressed: () => _shareItem(items[index]),
                     ),
                   );
                 },
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
                 // Pass the list to the input screen
@@ -122,13 +124,13 @@ class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
                 // Save the updated list to shared preferences
                 await saveData();
               },
-              child: Text('Add New Item'),
+              child: const Text('Add New Item'),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Show Line Chart'),
+                const Text('Show Line Chart'),
                 Switch(
                   value: showLineChart,
                   onChanged: (value) {
@@ -137,15 +139,14 @@ class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
                     });
                   },
                 ),
-                Text('Show Pie Chart'),
+                const Text('Show Pie Chart'),
               ],
             ),
-            SizedBox(height: 20),
-            Text('Feeling Over the Past 7 Days'),
-            Container(
+            const SizedBox(height: 20),
+            const Text('Feeling Over the Past 7 Days'),
+            SizedBox(
               height: 300,
-              child: showLineChart
-                  ? LineChart(
+              child: showLineChart ? LineChart(
                 LineChartData(
                   titlesData: FlTitlesData(
                     leftTitles: SideTitles(showTitles: true),
@@ -162,7 +163,7 @@ class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
                       width: 1,
                     ),
                   ),
-                  minX: DateTime.now().subtract(Duration(days: 7)).millisecondsSinceEpoch.toDouble(),
+                  minX: DateTime.now().subtract(const Duration(days: 7)).millisecondsSinceEpoch.toDouble(),
                   maxX: DateTime.now().millisecondsSinceEpoch.toDouble(),
                   minY: 0,
                   maxY: 10,
@@ -176,8 +177,7 @@ class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
                     ),
                   ],
                 ),
-              )
-                  : Stack(
+              ) : Stack(
                 children: [
                   PieChart(
                     PieChartData(
@@ -192,7 +192,7 @@ class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
                             value: percentage,
                             radius: percentage / 2,
                             title: '$feeling: $count (${percentage.toStringAsFixed(1)}%)',
-                            titleStyle: TextStyle(fontSize: 10),
+                            titleStyle: const TextStyle(fontSize: 10),
                           );
                         },
                       ),
@@ -231,7 +231,7 @@ class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
               height: 12,
               color: color,
             ),
-            SizedBox(width: 4),
+            const SizedBox(width: 4),
             Text('$feeling'),
           ],
         ),
@@ -242,8 +242,7 @@ class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
 
   Future<void> _shareItem(ExaminationResult item) async {
     // Create a custom message with placeholders for item details
-    String defaultShareMessage =
-        "Hey, I want you to know that I am feeling ${item.feeling}/10, my goal for tomorrow is ${item.goals}, and I will achieve ${item.work} with 5% more work every day.\nThank you for caring for me.";
+    String defaultShareMessage = "Hey, I want you to know that I am feeling ${item.feeling}/10, my goal for tomorrow is ${item.goals}, and I will achieve ${item.work} with 5% more work every day.\nThank you for caring for me.";
 
     // Show a dialog to allow the user to edit the message
     TextEditingController messageController =
@@ -252,11 +251,11 @@ class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
       context: context,
       barrierDismissible: false, // Set to false to prevent dismissal by tapping outside
       builder: (context) => AlertDialog(
-        title: Text('Customize Share Message'),
+        title: const Text('Customize Share Message'),
         content: TextField(
           controller: messageController,
           maxLines: 3,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             hintText: 'Enter your custom message',
           ),
         ),
@@ -265,13 +264,13 @@ class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
             onPressed: () {
               Navigator.of(context).pop(false);
             },
-            child: Text('Cancel'),
+            child: const Text('Cancel'),
           ),
           TextButton(
             onPressed: () {
               Navigator.of(context).pop(true);
             },
-            child: Text('OK'),
+            child: const Text('OK'),
           ),
         ],
       ),

@@ -8,7 +8,7 @@ class MeditationScreen extends StatefulWidget {
   const MeditationScreen({Key? key}) : super(key: key);
 
   @override
-  _MeditationScreenState createState() => _MeditationScreenState();
+  State<MeditationScreen> createState() => _MeditationScreenState();
 }
 
 class _MeditationScreenState extends State<MeditationScreen> {
@@ -35,8 +35,6 @@ class _MeditationScreenState extends State<MeditationScreen> {
         DateTime dataDate = DateTime.parse(data.date);
         return currentDate.difference(dataDate).inDays <= 6;
       }).toList();
-
-      print("Loaded: ${loadedData.length}");
     });
   }
 
@@ -72,7 +70,7 @@ class _MeditationScreenState extends State<MeditationScreen> {
         secondsLeft = meditationDuration * 60 - 1; // Set the initial value correctly
       });
 
-      _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
         if (secondsLeft <= 0) {
           // Timer finished
           timer.cancel();
@@ -106,7 +104,7 @@ class _MeditationScreenState extends State<MeditationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Meditation Timer'),
+        title: const Text('Meditation Timer'),
       ),
       body: Center(
         child: Column(
@@ -114,13 +112,13 @@ class _MeditationScreenState extends State<MeditationScreen> {
           children: [
             Text(
               'Total Meditated Time: ${_formatTotalMeditationTime()}',
-              style: TextStyle(fontSize: 20),
+              style: const TextStyle(fontSize: 20),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 IconButton(
-                  icon: Icon(Icons.remove),
+                  icon: const Icon(Icons.remove),
                   onPressed: () {
                     setState(() {
                       if (meditationDuration > 1) {
@@ -131,7 +129,7 @@ class _MeditationScreenState extends State<MeditationScreen> {
                     });
                   },
                 ),
-                Container(
+                SizedBox(
                   width: 50,
                   child: TextFormField(
                     textAlign: TextAlign.center,
@@ -145,14 +143,14 @@ class _MeditationScreenState extends State<MeditationScreen> {
                         secondsLeft = meditationDuration * 60;
                       });
                     },
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                     ),
                     controller: TextEditingController(text: meditationDuration.toString()),
                   ),
                 ),
                 IconButton(
-                  icon: Icon(Icons.add),
+                  icon: const Icon(Icons.add),
                   onPressed: () {
                     setState(() {
                       meditationDuration++;
@@ -163,18 +161,18 @@ class _MeditationScreenState extends State<MeditationScreen> {
                 ),
               ],
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Text(
               'Time Remaining: ${secondsLeft ~/ 60}m ${secondsLeft % 60}s',
-              style: TextStyle(fontSize: 20),
+              style: const TextStyle(fontSize: 20),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: startStopTimer,
               child: Text(isTimerRunning ? 'Stop' : 'Start'),
             ),
-            SizedBox(height: 20),
-            Text(
+            const SizedBox(height: 20),
+            const Text(
               'Meditation Data for the Last 7 Days',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
@@ -184,7 +182,7 @@ class _MeditationScreenState extends State<MeditationScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: generateLegend(),
                 ),
-                Container(
+                SizedBox(
                   width: 300,
                   height: 300,
                   child: PieChart(
@@ -237,7 +235,7 @@ class _MeditationScreenState extends State<MeditationScreen> {
           value: count.toDouble(),
           title: '$count sessions\n${duration}m', // Display count and duration in minutes
           radius: 60,
-          titleStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white),
+          titleStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white),
         ),
       );
     });
@@ -275,9 +273,9 @@ class _MeditationScreenState extends State<MeditationScreen> {
                 height: 12,
                 color: colors[colorIndex % colors.length],
               ),
-              SizedBox(width: 4),
+              const SizedBox(width: 4),
               Text('$duration min'),
-              SizedBox(width: 16), // Adjust spacing as needed
+              const SizedBox(width: 16), // Adjust spacing as needed
             ],
           )
       );

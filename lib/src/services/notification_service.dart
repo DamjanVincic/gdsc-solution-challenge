@@ -1,10 +1,8 @@
 import 'dart:async';
 import 'dart:core';
 import 'dart:developer';
-
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tzdata;
-
 import '../models/quote.dart';
 import 'quote_service.dart';
 
@@ -26,17 +24,16 @@ class NotificationService {
 
   Future<void> initializeNotifications() async {
     tzdata.initializeTimeZones();
-    const AndroidInitializationSettings initializationSettingsAndroid =
-    AndroidInitializationSettings('@mipmap/ic_launcher');
+    const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
 
     // Linux-specific settings
-    const LinuxInitializationSettings initializationSettingsLinux =
-    LinuxInitializationSettings(defaultActionName: 'View quote');
+    const LinuxInitializationSettings initializationSettingsLinux = LinuxInitializationSettings(defaultActionName: 'View quote');
 
     const InitializationSettings initializationSettings =
     InitializationSettings(
         android: initializationSettingsAndroid,
-        linux: initializationSettingsLinux);
+        linux: initializationSettingsLinux,
+    );
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
@@ -59,8 +56,7 @@ class NotificationService {
 
   Future<void> showRandomNotification() async {
     if (notifications.isNotEmpty) {
-      final random =
-          DateTime.now().microsecondsSinceEpoch % notifications.length;
+      final random = DateTime.now().microsecondsSinceEpoch % notifications.length;
       final randomNotification = notifications[random];
 
       await showNotification(randomNotification);
@@ -69,7 +65,6 @@ class NotificationService {
 
   Future<void> scheduleNotification() async {
     const int intervalSeconds = 15;
-    log("Scheduling notificationnnnn");
 
     // Try calling showRandomNotification directly
     showRandomNotification();

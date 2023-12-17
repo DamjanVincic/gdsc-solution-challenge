@@ -6,18 +6,17 @@ class SelfExaminationInputScreen extends StatefulWidget {
   final VoidCallback onDataChanged; // Define the callback
   final List<ExaminationResult> existingItems; // Accept the existing items
 
-  SelfExaminationInputScreen({
+  const SelfExaminationInputScreen({
+    super.key,
     required this.onDataChanged,
     required this.existingItems,
   });
 
   @override
-  _SelfExaminationInputScreenState createState() =>
-      _SelfExaminationInputScreenState();
+  State<SelfExaminationInputScreen> createState() => _SelfExaminationInputScreenState();
 }
 
-class _SelfExaminationInputScreenState
-    extends State<SelfExaminationInputScreen> {
+class _SelfExaminationInputScreenState extends State<SelfExaminationInputScreen> {
   double feelingValue = 5.0; // Initial value for the feeling slider
   TextEditingController goalsController = TextEditingController();
   TextEditingController workController = TextEditingController();
@@ -32,7 +31,7 @@ class _SelfExaminationInputScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Input Screen'),
+        title: const Text('Input Screen'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -42,7 +41,7 @@ class _SelfExaminationInputScreenState
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('How are you feeling?'),
+                const Text('How are you feeling?'),
                 Text('${feelingValue.toInt()}'),
               ],
             ),
@@ -59,11 +58,11 @@ class _SelfExaminationInputScreenState
             ),
             TextField(
               controller: goalsController,
-              decoration: InputDecoration(labelText: 'Goals for the following day'),
+              decoration: const InputDecoration(labelText: 'Goals for the following day'),
             ),
             TextField(
               controller: workController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'What will you achieve with 5% more work every day?',
               ),
             ),
@@ -77,7 +76,7 @@ class _SelfExaminationInputScreenState
                   Navigator.pop(context); // Return to the previous screen
                 }
               },
-              child: Text('Save and Continue'),
+              child: const Text('Save and Continue'),
             ),
           ],
         ),
@@ -99,8 +98,6 @@ class _SelfExaminationInputScreenState
   }
 
   bool validateInputs() {
-    return (
-        goalsController.text.isNotEmpty &&
-        workController.text.isNotEmpty);
+    return goalsController.text.isNotEmpty && workController.text.isNotEmpty;
   }
 }
