@@ -31,7 +31,7 @@ class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
     var index = DateTime.now().subtract(const Duration(days: 5)).weekday;
     // var index = (value.toInt() - 1) % 7;
     List<String> labels = [];
-    for (var i = 0; i < 5; i++) {
+    for (var i = 0; i < 7; i++) {
       labels.add(days[(index + i) % 7]);
     }
     return labels;
