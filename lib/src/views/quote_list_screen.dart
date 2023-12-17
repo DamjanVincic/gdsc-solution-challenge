@@ -66,7 +66,7 @@ class _QuoteListScreenState extends State<QuoteListScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Quotes'),
-        backgroundColor: Colors.purpleAccent,
+        backgroundColor: Colors.purpleAccent.shade100,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -99,7 +99,7 @@ class _QuoteListScreenState extends State<QuoteListScreen> {
         ],
       ),
       body: Container(
-        color: accentColor,
+        color: Colors.white38,
         child: Center(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -127,7 +127,7 @@ class _QuoteListScreenState extends State<QuoteListScreen> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
                     ),
-                    color: Colors.purpleAccent,
+                    color: Colors.purpleAccent.shade100,
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Column(
