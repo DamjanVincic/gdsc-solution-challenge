@@ -33,52 +33,82 @@ class _SelfExaminationInputScreenState extends State<SelfExaminationInputScreen>
       appBar: AppBar(
         title: const Text('Input Screen'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text('How are you feeling?'),
-                Text('${feelingValue.toInt()}'),
-              ],
-            ),
-            Slider(
-              value: feelingValue,
-              min: 1,
-              max: 10,
-              divisions: 9,
-              onChanged: (value) {
-                setState(() {
-                  feelingValue = value;
-                });
-              },
-            ),
-            TextField(
-              controller: goalsController,
-              decoration: const InputDecoration(labelText: 'Goals for the following day'),
-            ),
-            TextField(
-              controller: workController,
-              decoration: const InputDecoration(
-                labelText: 'What will you achieve with 5% more work every day?',
+      body: Container(
+        width: double.infinity, // Fill the entire width
+        color: Colors.black87, // Set background color
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0), // Add left and right padding
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'How are you feeling (1 - worst, 10 - best)?',
+                    style: TextStyle(color: Colors.white, fontSize: 18), // Set text color and size
+                  ),
+                  Text(
+                    '${feelingValue.toInt()}',
+                    style: const TextStyle(color: Colors.white), // Set text color
+                  ),
+                ],
               ),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () async {
-                if (validateInputs()) {
-                  await saveData();
-                  // Notify the list screen that data is saved
-                  widget.onDataChanged();
-                  Navigator.pop(context); // Return to the previous screen
-                }
-              },
-              child: const Text('Save and Continue'),
-            ),
-          ],
+              Slider(
+                value: feelingValue,
+                min: 1,
+                max: 10,
+                divisions: 9,
+                onChanged: (value) {
+                  setState(() {
+                    feelingValue = value;
+                  });
+                },
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: List.generate(10, (index) {
+                  return Text(
+                    '${index + 1}',
+                    style: TextStyle(color: Colors.white),
+                  );
+                }),
+              ),
+              TextField(
+                controller: goalsController,
+                style: TextStyle(color: Colors.white), // Set text color
+                decoration: const InputDecoration(
+                  labelText: 'Goals for the following day',
+                  labelStyle: TextStyle(color: Colors.white), // Set label color
+                ),
+              ),
+              TextField(
+                controller: workController,
+                style: TextStyle(color: Colors.white), // Set text color
+                decoration: const InputDecoration(
+                  labelText: 'What will you achieve with 5% more work every day?',
+                  labelStyle: TextStyle(color: Colors.white), // Set label color
+                ),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () async {
+                  if (validateInputs()) {
+                    await saveData();
+                    // Notify the list screen that data is saved
+                    widget.onDataChanged();
+                    Navigator.pop(context); // Return to the previous screen
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.white, // Button background color
+                  onPrimary: Colors.black87, // Text color
+                  minimumSize: const Size(double.infinity, 50), // Set button size
+                ),
+                child: const Text('Save and Continue', style: TextStyle(fontSize: 16)),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -91,7 +121,7 @@ class _SelfExaminationInputScreenState extends State<SelfExaminationInputScreen>
         feeling: feelingValue.toInt(),
         goals: goalsController.text,
         work: workController.text,
-        date: DateTime.now()
+        date: DateTime.now(),
       ),
     );
     // You may also save the list to SharedPreferences if needed
