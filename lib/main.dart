@@ -1,10 +1,10 @@
 import 'dart:async';
-import 'package:devfest_hackathon_2023/src/services/map_marker_service.dart';
-import 'package:devfest_hackathon_2023/src/views/maps_view.dart';
-import 'package:devfest_hackathon_2023/src/views/hub.dart';
-import 'package:devfest_hackathon_2023/src/views/settings_screen.dart';
+import 'package:Actualizator/src/services/map_marker_service.dart';
+import 'package:Actualizator/src/views/maps_view.dart';
+import 'package:Actualizator/src/views/hub.dart';
+import 'package:Actualizator/src/views/settings_screen.dart';
 import 'package:flutter_config/flutter_config.dart';
-import 'package:devfest_hackathon_2023/src/services/quote_service.dart';
+import 'package:Actualizator/src/services/quote_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tzdata;
@@ -14,7 +14,7 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterL
 final QuoteService quoteService = QuoteService();
 final MapMarkerService mapMarkerService = MapMarkerService();
 final NotificationService notificationService = NotificationService(quoteService: quoteService);
-const Color primaryColor = Colors.black12;
+const Color primaryColor = Colors.white70;
 const Color accentColor = Colors.black87;
 
 Future<void> main() async {

@@ -1,4 +1,3 @@
-import 'package:devfest_hackathon_2023/main.dart';
 import 'package:flutter/material.dart';
 import '../services/notification_service.dart';
 import '../services/quote_service.dart';
@@ -32,21 +31,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Create Quote"),
+          title: const Text("Upload a new quote"),
           content: Column(
             children: [
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               TextField(
                 controller: categoryController,
-                decoration: InputDecoration(labelText: 'Category'),
+                decoration: const InputDecoration(labelText: 'Category'),
               ),
               TextField(
                 controller: titleController,
-                decoration: InputDecoration(labelText: 'Title'),
+                decoration: const InputDecoration(labelText: 'Title'),
               ),
               TextField(
                 controller: detailsController,
-                decoration: InputDecoration(labelText: 'Details'),
+                decoration: const InputDecoration(labelText: 'Details'),
               ),
             ],
           ),
@@ -55,7 +54,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: Text("Cancel"),
+              child: const Text("Cancel"),
             ),
             ElevatedButton(
               onPressed: () {
@@ -63,7 +62,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 widget.quoteService.uploadQuote(categoryController.text, titleController.text, detailsController.text);
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: Text("Send to Firebase"),
+              child: const Text("Upload"),
             ),
           ],
         );
@@ -82,26 +81,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Create Map Marker"),
+          title: const Text("Upload a new map marker"),
           content: Column(
             children: [
               TextField(
                 controller: mapMarkerLatitudeController,
                 keyboardType: TextInputType.number,
-                decoration: InputDecoration(labelText: 'Map Marker Latitude'),
+                decoration: const InputDecoration(labelText: 'Latitude'),
               ),
               TextField(
                 controller: mapMarkerLongitudeController,
                 keyboardType: TextInputType.number,
-                decoration: InputDecoration(labelText: 'Map Marker Longitude'),
+                decoration: const InputDecoration(labelText: 'Longitude'),
               ),
               TextField(
                 controller: mapMarkerTitleController,
-                decoration: InputDecoration(labelText: 'Map Marker Title'),
+                decoration: const InputDecoration(labelText: 'Title'),
               ),
               TextField(
                 controller: mapMarkerSnippetController,
-                decoration: InputDecoration(labelText: 'Map Marker Snippet'),
+                decoration: const InputDecoration(labelText: 'Snippet'),
               ),
             ],
           ),
@@ -110,7 +109,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: Text("Cancel"),
+              child: const Text("Cancel"),
             ),
             ElevatedButton(
               onPressed: () {
@@ -120,7 +119,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 widget.mapMarkerService.uploadMapMarker(latitude, longitude, mapMarkerTitleController.text, mapMarkerSnippetController.text);
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: Text("Upload Map Marker"),
+              child: const Text("Upload"),
             ),
           ],
         );
@@ -153,7 +152,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.white70,
       ),
       body: Container(
         color: Colors.black87,
@@ -167,7 +166,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 isNotificationScheduled
                     ? 'Receiving Notifications: On'
                     : 'Receiving Notifications: Off',
-                style: const TextStyle(fontSize: 16, color: Colors.white),
+                style: const TextStyle(fontSize: 16, color: Colors.white70),
               ),
               Switch(
                 value: isNotificationScheduled,
@@ -191,22 +190,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 margin: const EdgeInsets.symmetric(vertical: 10),
                 child: ElevatedButton(
                   onPressed: () => _showQuoteDialog(context),
-                  child: const Text('Create Quote'),
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.white, // Button background colorAccent
+                    primary: Colors.white70, // Button background colorAccent
                     onPrimary: Colors.black87, // Text colorPrimary
                   ),
+                  child: const Text('Create Quote')
                 ),
               ),
               Container(
                 margin: const EdgeInsets.symmetric(vertical: 10),
                 child: ElevatedButton(
                   onPressed: () => _showMapMarkerDialog(context),
-                  child: const Text('Create Map Marker'),
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.white, // Button background colorAccent
+                    primary: Colors.white70, // Button background colorAccent
                     onPrimary: Colors.black87, // Text colorPrimary
                   ),
+                  child: const Text('Create Map Marker'),
                 ),
               ),
               Expanded(

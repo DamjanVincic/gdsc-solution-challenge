@@ -31,7 +31,7 @@ class _SelfExaminationInputScreenState extends State<SelfExaminationInputScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Input Screen'),
+        title: const Text('Evaluate your day'),
       ),
       body: Container(
         width: double.infinity, // Fill the entire width
@@ -46,11 +46,11 @@ class _SelfExaminationInputScreenState extends State<SelfExaminationInputScreen>
                 children: [
                   const Text(
                     'How are you feeling (1 - worst, 10 - best)?',
-                    style: TextStyle(color: Colors.white, fontSize: 18), // Set text color and size
+                    style: TextStyle(color: Colors.white70, fontSize: 18), // Set text color and size
                   ),
                   Text(
                     '${feelingValue.toInt()}',
-                    style: const TextStyle(color: Colors.white), // Set text color
+                    style: const TextStyle(color: Colors.white70), // Set text color
                   ),
                 ],
               ),
@@ -70,24 +70,24 @@ class _SelfExaminationInputScreenState extends State<SelfExaminationInputScreen>
                 children: List.generate(10, (index) {
                   return Text(
                     '${index + 1}',
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white70),
                   );
                 }),
               ),
               TextField(
                 controller: goalsController,
-                style: TextStyle(color: Colors.white), // Set text color
+                style: const TextStyle(color: Colors.white70), // Set text color
                 decoration: const InputDecoration(
                   labelText: 'Goals for the following day',
-                  labelStyle: TextStyle(color: Colors.white), // Set label color
+                  labelStyle: TextStyle(color: Colors.white70), // Set label color
                 ),
               ),
               TextField(
                 controller: workController,
-                style: TextStyle(color: Colors.white), // Set text color
+                style: const TextStyle(color: Colors.white70), // Set text color
                 decoration: const InputDecoration(
                   labelText: 'What will you achieve with 5% more work every day?',
-                  labelStyle: TextStyle(color: Colors.white), // Set label color
+                  labelStyle: TextStyle(color: Colors.white70), // Set label color
                 ),
               ),
               const SizedBox(height: 20),
@@ -101,7 +101,7 @@ class _SelfExaminationInputScreenState extends State<SelfExaminationInputScreen>
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.white, // Button background color
+                  primary: Colors.white70, // Button background color
                   onPrimary: Colors.black87, // Text color
                   minimumSize: const Size(double.infinity, 50), // Set button size
                 ),

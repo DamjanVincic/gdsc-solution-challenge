@@ -58,7 +58,7 @@ class QuoteDetailsScreen extends StatelessWidget {
                       const SizedBox(height: 8),
                       Text(
                         'Details: ${notificationItem.details}',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 18,
                           color: Colors.black87,
                         ),

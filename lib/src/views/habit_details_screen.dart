@@ -42,7 +42,6 @@ class _HabitDetailsScreenState extends State<HabitDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final primaryColor = widget.primaryColor;
     final accentColor = widget.accentColor;
 
     return Scaffold(
@@ -61,10 +60,10 @@ class _HabitDetailsScreenState extends State<HabitDetailsScreen> {
                   padding: const EdgeInsets.all(16.0),
                   child: Text(
                     'Habit: ${widget.habit.name}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 26,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: Colors.white70,
                     ),
                   ),
                 ),
@@ -72,7 +71,7 @@ class _HabitDetailsScreenState extends State<HabitDetailsScreen> {
                   padding: const EdgeInsets.all(16.0),
                   child: Text(
                     "You are on a ${widget.habit.streakLength} day streak!",
-                    style: const TextStyle(fontSize: 24, color: Colors.white),
+                    style: const TextStyle(fontSize: 24, color: Colors.white70),
                   ),
                 ),
                 const Padding(
@@ -82,14 +81,14 @@ class _HabitDetailsScreenState extends State<HabitDetailsScreen> {
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: Colors.white70,
                     ),
                   ),
                 ),
                 // Display habit completion status for each day in the week using a graph
                 Center(
                   child: Container(
-                    color: Colors.white,
+                    color: Colors.white70,
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width * 0.9,
                       height: 300,
@@ -124,13 +123,13 @@ class _HabitDetailsScreenState extends State<HabitDetailsScreen> {
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: DataTable(
-                    columns: [
+                    columns: const [
                       DataColumn(
                         label: Text(
                           'Date',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            color: Colors.white70,
                           ),
                         ),
                       ),
@@ -139,7 +138,7 @@ class _HabitDetailsScreenState extends State<HabitDetailsScreen> {
                           'Completed',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            color: Colors.white70,
                           ),
                         ),
                       ),
@@ -153,13 +152,13 @@ class _HabitDetailsScreenState extends State<HabitDetailsScreen> {
                         DataCell(
                           Text(
                             currentDate,
-                            style: TextStyle(color: Colors.white),
+                            style: const TextStyle(color: Colors.white70),
                           ),
                         ),
                         DataCell(
                           isCompleted
-                              ? Icon(Icons.check, color: Colors.green)
-                              : Icon(Icons.close, color: Colors.red),
+                              ? const Icon(Icons.check, color: Colors.green)
+                              : const Icon(Icons.close, color: Colors.red),
                         ),
                       ]);
                     }),

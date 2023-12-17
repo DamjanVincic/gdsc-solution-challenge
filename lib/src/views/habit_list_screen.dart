@@ -1,4 +1,3 @@
-import 'package:devfest_hackathon_2023/main.dart';
 import 'package:flutter/material.dart';
 import 'habit_details_screen.dart';
 import '../models/habit.dart';
@@ -47,7 +46,7 @@ class _HabitListScreenState extends State<HabitListScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Habits'),
+        title: const Text('Habits'),
       ),
       body: Container(
         color: accentColor,
@@ -102,10 +101,10 @@ class _HabitListScreenState extends State<HabitListScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Create Habit"),
+          title: const Text("Create Habit"),
           content: TextField(
             controller: habitController,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'Enter Habit Name',
             ),
           ),
@@ -114,7 +113,7 @@ class _HabitListScreenState extends State<HabitListScreen> {
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: Text("Cancel"),
+              child: const Text("Cancel"),
             ),
             ElevatedButton(
               onPressed: () {
@@ -128,7 +127,7 @@ class _HabitListScreenState extends State<HabitListScreen> {
                 }
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: Text("Confirm"),
+              child: const Text("Confirm"),
             ),
           ],
         );

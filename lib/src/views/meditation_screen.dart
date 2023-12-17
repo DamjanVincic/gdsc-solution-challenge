@@ -110,13 +110,12 @@ class _MeditationScreenState extends State<MeditationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final Color primaryColor = widget.primaryColor;
     final Color accentColor = widget.accentColor;
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Meditation Timer'),
-        backgroundColor: Colors.white, // Set the app bar background color
+        backgroundColor: Colors.white70, // Set the app bar background color
       ),
       body: Container(
         color: accentColor, // Set the actual background color
@@ -126,14 +125,14 @@ class _MeditationScreenState extends State<MeditationScreen> {
             children: [
               Text(
                 'Total Meditated Time: ${_formatTotalMeditationTime()}',
-                style: TextStyle(fontSize: 20, color: Colors.white), // Set text color
+                style: const TextStyle(fontSize: 20, color: Colors.white70), // Set text color
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   IconButton(
                     icon: const Icon(Icons.remove),
-                    color: Colors.white, // Set icon color
+                    color: Colors.white70, // Set icon color
                     onPressed: () {
                       setState(() {
                         if (meditationDuration > 1) {
@@ -149,7 +148,7 @@ class _MeditationScreenState extends State<MeditationScreen> {
                     child: TextFormField(
                       textAlign: TextAlign.center,
                       keyboardType: TextInputType.number,
-                      style: TextStyle(color: Colors.white), // Set text color
+                      style: const TextStyle(color: Colors.white70), // Set text color
                       onChanged: (value) {
                         int newValue = int.tryParse(value) ?? 0;
                         setState(() {
@@ -159,16 +158,16 @@ class _MeditationScreenState extends State<MeditationScreen> {
                           secondsLeft = meditationDuration * 60;
                         });
                       },
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: OutlineInputBorder(),
-                        hintStyle: TextStyle(color: Colors.white), // Set hint text color
+                        hintStyle: TextStyle(color: Colors.white70), // Set hint text color
                       ),
                       controller: TextEditingController(text: meditationDuration.toString()),
                     ),
                   ),
                   IconButton(
                     icon: const Icon(Icons.add),
-                    color: Colors.white, // Set icon color
+                    color: Colors.white70, // Set icon color
                     onPressed: () {
                       setState(() {
                         meditationDuration++;
@@ -182,23 +181,23 @@ class _MeditationScreenState extends State<MeditationScreen> {
               const SizedBox(height: 20),
               Text(
                 'Time Remaining: ${secondsLeft ~/ 60}m ${secondsLeft % 60}s',
-                style: const TextStyle(fontSize: 20, color: Colors.white),
+                style: const TextStyle(fontSize: 20, color: Colors.white70),
               ),
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: startStopTimer,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white70, // Set button background color
+                ),
                 child: Text(
                   isTimerRunning ? 'Stop' : 'Start',
                   style: TextStyle(color: accentColor),
                 ),
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.white, // Set button background color
-                ),
               ),
               const SizedBox(height: 20),
-              Text(
+              const Text(
                 'Meditation Data for the Last 7 Days',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                style: TextStyle(fontSize: 20, color: Colors.white70),
               ),
               Column(
                 children: [
@@ -260,7 +259,7 @@ class _MeditationScreenState extends State<MeditationScreen> {
           value: count.toDouble(),
           title: '$count sessions\n${duration}m', // Display count and duration in minutes
           radius: 60,
-          titleStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white),
+          titleStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white70),
 
         ),
       );
@@ -300,7 +299,7 @@ class _MeditationScreenState extends State<MeditationScreen> {
                 color: colors[colorIndex % colors.length],
               ),
               const SizedBox(width: 4),
-              Text('$duration min', style: TextStyle(color: Colors.white)),
+              Text('$duration min', style: const TextStyle(color: Colors.white70)),
               const SizedBox(width: 16), // Adjust spacing as needed
             ],
           )

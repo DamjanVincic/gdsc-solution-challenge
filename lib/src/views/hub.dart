@@ -1,9 +1,8 @@
-import 'package:devfest_hackathon_2023/main.dart';
 import 'package:flutter/material.dart';
-import 'package:devfest_hackathon_2023/src/services/quote_service.dart';
-import 'package:devfest_hackathon_2023/src/views/habit_list_screen.dart';
-import 'package:devfest_hackathon_2023/src/views/quote_list_screen.dart';
-import 'package:devfest_hackathon_2023/src/views/self_examination_list_screen.dart';
+import 'package:Actualizator/src/services/quote_service.dart';
+import 'package:Actualizator/src/views/habit_list_screen.dart';
+import 'package:Actualizator/src/views/quote_list_screen.dart';
+import 'package:Actualizator/src/views/self_examination_list_screen.dart';
 
 import 'meditation_screen.dart';
 
@@ -23,7 +22,7 @@ class Hub extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Hub', style: TextStyle(color: accentColor)),
+        title: Text('Mental Hub', style: TextStyle(color: accentColor)),
         backgroundColor: primaryColor,
       ),
       body: Container(
@@ -153,7 +152,7 @@ class HubButton extends StatelessWidget {
                     const SizedBox(height: 8.0),
                     Text(
                       description,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 14.0,
                         color: Colors.black54,
                       ),

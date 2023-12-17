@@ -11,7 +11,8 @@ class SelfExaminationListScreen extends StatefulWidget {
   const SelfExaminationListScreen({super.key});
 
   @override
-  State<SelfExaminationListScreen> createState() => _SelfExaminationListScreenState();
+  State<SelfExaminationListScreen> createState() =>
+      _SelfExaminationListScreenState();
 }
 
 class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
@@ -82,12 +83,12 @@ class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
   void _showChartDialog() {
     var labels = generatedXLabels();
     showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Feeling Over the Past 7 Days'),
-          content: StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Feeling Over the Past 7 Days'),
+            content: StatefulBuilder(
+                builder: (BuildContext context, StateSetter setState) {
               return SingleChildScrollView(
                 child: Column(
                   children: [
@@ -108,172 +109,185 @@ class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
                     ),
                     SizedBox(
                       height: 300,
-                      child: showLineChart ? LineChart(
-                        LineChartData(
-                          titlesData: FlTitlesData(
-                            leftTitles: SideTitles(showTitles: true),
-                            bottomTitles: SideTitles(
-                              showTitles: true,
-                              reservedSize: 22,
-                              margin: 10,
-                              getTitles: (value) {
-                                // values are big so we bring them down to an interval of 5
-                                value /= 1e6;
-                                value = value.toInt()%100;
-                                value -= 59;
-                                value /= 5;
+                      child: showLineChart
+                          ? LineChart(
+                              LineChartData(
+                                titlesData: FlTitlesData(
+                                  leftTitles: SideTitles(showTitles: true),
+                                  bottomTitles: SideTitles(
+                                    showTitles: true,
+                                    reservedSize: 22,
+                                    margin: 10,
+                                    getTitles: (value) {
+                                      // values are big so we bring them down to an interval of 5
+                                      value /= 1e6;
+                                      value = value.toInt() % 100;
+                                      value -= 59;
+                                      value /= 5;
 
-                                if (value.toInt() >= 0 && value.toInt() < labels.length) {
-                                  return labels[value.toInt()];
-                                }
-                                return '';
-                              },
-                            ),
-                          ),
-                          borderData: FlBorderData(
-                            show: true,
-                            border: Border.all(
-                              color: const Color(0xff37434d),
-                              width: 1,
-                            ),
-                          ),
-                          minY: 0,
-                          maxY: 10,
-                          lineBarsData: [
-                            LineChartBarData(
-                              spots: generateSpotList(),
-                              isCurved: true,
-                              colors: [Colors.blue],
-                              dotData: FlDotData(show: false),
-                              belowBarData: BarAreaData(show: false),
-                            ),
-                          ],
-                        ),
-                      ) : Stack(
-                        children: [
-                          PieChart(
-                            PieChartData(
-                              sections: List<PieChartSectionData>.generate(
-                                generatePieChartData().length,
-                                    (index) {
-                                  int feeling = generatePieChartData().keys
-                                      .elementAt(index);
-                                  double percentage = generatePieChartData()[feeling]!;
-                                  int count = (percentage * items.length / 100)
-                                      .round();
-                                  return PieChartSectionData(
-                                    color: Colors.primaries[index %
-                                        Colors.primaries.length],
-                                    value: percentage,
-                                    radius: percentage / 2,
-                                    title: '$feeling: $count (${percentage
-                                        .toStringAsFixed(1)}%)',
-                                    titleStyle: const TextStyle(fontSize: 10),
-                                  );
-                                },
+                                      if (value.toInt() >= 0 &&
+                                          value.toInt() < labels.length) {
+                                        return labels[value.toInt()];
+                                      }
+                                      return '';
+                                    },
+                                  ),
+                                ),
+                                borderData: FlBorderData(
+                                  show: true,
+                                  border: Border.all(
+                                    color: const Color(0xff37434d),
+                                    width: 1,
+                                  ),
+                                ),
+                                minY: 0,
+                                maxY: 10,
+                                lineBarsData: [
+                                  LineChartBarData(
+                                    spots: generateSpotList(),
+                                    isCurved: true,
+                                    colors: [Colors.blue],
+                                    dotData: FlDotData(show: false),
+                                    belowBarData: BarAreaData(show: false),
+                                  ),
+                                ],
                               ),
-                              sectionsSpace: 0,
-                              centerSpaceRadius: 40,
-                              centerSpaceColor: Colors.white,
+                            )
+                          : Stack(
+                              children: [
+                                PieChart(
+                                  PieChartData(
+                                    sections:
+                                        List<PieChartSectionData>.generate(
+                                      generatePieChartData().length,
+                                      (index) {
+                                        int feeling = generatePieChartData()
+                                            .keys
+                                            .elementAt(index);
+                                        double percentage =
+                                            generatePieChartData()[feeling]!;
+                                        int count =
+                                            (percentage * items.length / 100)
+                                                .round();
+                                        return PieChartSectionData(
+                                          color: Colors.primaries[
+                                              index % Colors.primaries.length],
+                                          value: percentage,
+                                          radius: percentage / 2,
+                                          title:
+                                              '$feeling: $count (${percentage.toStringAsFixed(1)}%)',
+                                          titleStyle:
+                                              const TextStyle(fontSize: 10),
+                                        );
+                                      },
+                                    ),
+                                    sectionsSpace: 0,
+                                    centerSpaceRadius: 40,
+                                    centerSpaceColor: Colors.white70,
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 8,
+                                  left: 8,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: generateLegend(),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                          Positioned(
-                            top: 8,
-                            left: 8,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: generateLegend(),
-                            ),
-                          ),
-                        ],
-                      ),
                     ),
                   ],
                 ),
               );
-            }
-          ),
-        );
-      }
-    );
+            }),
+          );
+        });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('SelfExamination Screen'),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text('Stored Items:'),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.675,
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: items.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text('F: ${items[index].feeling}'),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('G: ${items[index].goals}'),
-                          Text('W: ${items[index].work}'),
-                          Text('D: ${items[index].date}'),
-                        ],
-                      ),
-                      trailing: IconButton(
-                        icon: const Icon(Icons.share),
-                        onPressed: () => _shareItem(items[index]),
-                      ),
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(height: 20),
-              Center(
-                child: Column(
-                  children: [
-                    ElevatedButton(
-                      onPressed: () async {
-                        // Pass the list to the input screen
-                        await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SelfExaminationInputScreen(
-                              onDataChanged: saveData,
-                              existingItems: items,
-                            ),
+        appBar: AppBar(
+            title: const Text('Self-evaluation screen'),
+            backgroundColor: Colors.white70),
+        body: SingleChildScrollView(
+          child: Container(
+            color: Colors.black87,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('Past self-evaluations: ', style: TextStyle(color: Colors.white70)),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.675,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: items.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          color: Colors.white70,
+                          child:
+                        ListTile(
+                          title: Text('Feeling: ${items[index].feeling}/10', style: const TextStyle(color: Colors.black87)),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Goal: ${items[index].goals}', style: const TextStyle(color: Colors.black87)),
+                              Text('Work-related achievement: ${items[index].work}', style: const TextStyle(color: Colors.black87)),
+                              Text('Date: ${items[index].date}', style: const TextStyle(color: Colors.black87)),
+                            ],
                           ),
-                        );
-
-                        // Reload the data after returning from the input screen
-                        await loadData();
-                        setState(() {});
-
-                        // Save the updated list to shared preferences
-                        await saveData();
+                          trailing: IconButton(
+                            icon: const Icon(Icons.share, color: Colors.black87),
+                            onPressed: () => _shareItem(items[index]),
+                          ),
+                        ));
                       },
-                      child: const Text('Add New Item'),
                     ),
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: _showChartDialog,
-                      child: const Text('Show chart'),
-                    )
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 20),
+                  Center(
+                    child: Column(
+                      children: [
+                        ElevatedButton(
+                          onPressed: () async {
+                            // Pass the list to the input screen
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    SelfExaminationInputScreen(
+                                  onDataChanged: saveData,
+                                  existingItems: items,
+                                ),
+                              ),
+                            );
+
+                            // Reload the data after returning from the input screen
+                            await loadData();
+                            setState(() {});
+
+                            // Save the updated list to shared preferences
+                            await saveData();
+                          },
+                          child: const Text("Evaluate today's feelings"),
+                        ),
+                        const SizedBox(height: 20),
+                        ElevatedButton(
+                          onPressed: _showChartDialog,
+                          child: const Text('Show chart'),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 
   List<Widget> generateLegend() {
@@ -300,14 +314,16 @@ class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
 
   Future<void> _shareItem(ExaminationResult item) async {
     // Create a custom message with placeholders for item details
-    String defaultShareMessage = "Hey, I want you to know that I am feeling ${item.feeling}/10, my goal for tomorrow is ${item.goals}, and I will achieve ${item.work} with 5% more work every day.\nThank you for caring for me.";
+    String defaultShareMessage =
+        "Hey, I want you to know that I am feeling ${item.feeling}/10, my goal for tomorrow is ${item.goals}, and I will achieve ${item.work} with 5% more work every day.\nThank you for caring for me.";
 
     // Show a dialog to allow the user to edit the message
     TextEditingController messageController =
-    TextEditingController(text: defaultShareMessage);
+        TextEditingController(text: defaultShareMessage);
     bool? userConfirmed = await showDialog(
       context: context,
-      barrierDismissible: false, // Set to false to prevent dismissal by tapping outside
+      barrierDismissible: false,
+      // Set to false to prevent dismissal by tapping outside
       builder: (context) => AlertDialog(
         title: const Text('Customize Share Message'),
         content: TextField(
