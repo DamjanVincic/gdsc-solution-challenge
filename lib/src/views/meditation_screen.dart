@@ -114,7 +114,7 @@ class _MeditationScreenState extends State<MeditationScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Meditation Timer'),
+        title: const Text('Meditation'),
         backgroundColor: Colors.white70, // Set the app bar background color
       ),
       body: Container(

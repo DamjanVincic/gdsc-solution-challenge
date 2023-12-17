@@ -72,7 +72,7 @@ class Hub extends StatelessWidget {
                   ),
                 );
               },
-              label: 'SELF EXAMINATION',
+              label: 'SELF EVALUATION',
               icon: Icons.check,
               backgroundColor: primaryColor,
               textColor: accentColor,

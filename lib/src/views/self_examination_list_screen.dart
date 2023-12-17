@@ -210,7 +210,7 @@ class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            title: const Text('Self-evaluation screen'),
+            title: const Text('Self-evaluation'),
             backgroundColor: Colors.white70),
         body: SingleChildScrollView(
           child: Container(
@@ -220,31 +220,46 @@ class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Past self-evaluations: ', style: TextStyle(color: Colors.white70)),
+                  const Text('Past self-evaluations: ',
+                      style: TextStyle(color: Colors.white70, fontSize: 24)),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.675,
                     child: ListView.builder(
                       shrinkWrap: true,
                       itemCount: items.length,
                       itemBuilder: (context, index) {
-                        return Container(
-                          color: Colors.white70,
-                          child:
-                        ListTile(
-                          title: Text('Feeling: ${items[index].feeling}/10', style: const TextStyle(color: Colors.black87)),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Goal: ${items[index].goals}', style: const TextStyle(color: Colors.black87)),
-                              Text('Work-related achievement: ${items[index].work}', style: const TextStyle(color: Colors.black87)),
-                              Text('Date: ${items[index].date}', style: const TextStyle(color: Colors.black87)),
-                            ],
+                        final examinationItem = items[index];
+                        return Card(
+                          elevation: 5,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
                           ),
-                          trailing: IconButton(
-                            icon: const Icon(Icons.share, color: Colors.black87),
-                            onPressed: () => _shareItem(items[index]),
+                          child: ListTile(
+                            title: Text(
+                                'Feeling: ${examinationItem.feeling}/10',
+                                style: const TextStyle(color: Colors.black87)),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Goal: ${examinationItem.goals}',
+                                    style:
+                                        const TextStyle(color: Colors.black87)),
+                                Text(
+                                    'Work-related achievement: ${examinationItem.work}',
+                                    style:
+                                        const TextStyle(color: Colors.black87)),
+                                Text('Date: ${examinationItem.date}',
+                                    style:
+                                        const TextStyle(color: Colors.black87)),
+                              ],
+                            ),
+                            trailing: IconButton(
+                              icon: const Icon(Icons.share,
+                                  color: Colors.black87),
+                              onPressed: () => _shareItem(examinationItem),
+                            ),
                           ),
-                        ));
+                        );
                       },
                     ),
                   ),
@@ -273,13 +288,22 @@ class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
                             // Save the updated list to shared preferences
                             await saveData();
                           },
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 16,
+                                horizontal: 32), // Adjust padding as needed
+                          ),
                           child: const Text("Evaluate today's feelings"),
                         ),
                         const SizedBox(height: 20),
                         ElevatedButton(
-                          onPressed: _showChartDialog,
-                          child: const Text('Show chart'),
-                        )
+                            onPressed: _showChartDialog,
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 16,
+                                  horizontal: 32), // Adjust padding as needed
+                            ),
+                            child: const Text('Show chart')),
                       ],
                     ),
                   ),
