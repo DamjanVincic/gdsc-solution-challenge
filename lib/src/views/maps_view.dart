@@ -20,7 +20,7 @@ class _MapsViewState extends State<MapsView> {
   String? _mapStyle;
   late GoogleMapController _mapController;
   final LatLng _center = const LatLng(44.813178422472525, 20.461723719360762);
-  late Set<Marker> _markers; // Fetch markers
+  late Future<Set<Marker>> _markers; // Fetch markers
 
   late Future<PermissionStatus> _locationPermissionStatus;
   LocationData? _currentLocation;
@@ -63,13 +63,13 @@ class _MapsViewState extends State<MapsView> {
   }
 
   @override
-  void initState() async {
+  void initState() {
     super.initState();
     _locationPermissionStatus = getPermissionStatus();
     rootBundle.loadString('assets/map_style.txt').then((string) {
       _mapStyle = string;
     });
-    _markers = await widget.mapMarkerService.fetchMapMarkers();
+    _markers = widget.mapMarkerService.fetchMapMarkers();
   }
 
   @override
@@ -83,20 +83,35 @@ class _MapsViewState extends State<MapsView> {
             if (snapshot.hasData) {
               final status = snapshot.data!;
               if (status == PermissionStatus.granted) {
-                return GoogleMap(
-                  onMapCreated: (controller) {
-                    _mapController = controller;
-                    _mapController.setMapStyle(_mapStyle);
-                  },
-                  initialCameraPosition: CameraPosition(
-                    target: _currentLocation != null
-                        ? LatLng(_currentLocation!.latitude!,
-                            _currentLocation!.longitude!)
-                        : _center,
-                    zoom: 11.0,
-                  ),
-                  myLocationEnabled: true,
-                  markers: _markers,
+                return FutureBuilder(
+                  future: _markers,
+                  builder: (context, markerSnapshot) {
+                    if (markerSnapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else {
+                      if (markerSnapshot.hasData) {
+                        return GoogleMap(
+                          onMapCreated: (controller) {
+                            _mapController = controller;
+                            _mapController.setMapStyle(_mapStyle);
+                          },
+                          initialCameraPosition: CameraPosition(
+                            target: _currentLocation != null
+                                ? LatLng(_currentLocation!.latitude!,
+                                _currentLocation!.longitude!)
+                                : _center,
+                            zoom: 11.0,
+                          ),
+                          myLocationEnabled: true,
+                          markers: markerSnapshot.data!,
+                        );
+                      } else if (markerSnapshot.hasError) {
+                        return Center(child: Text('Error: ${markerSnapshot.error}'));
+                      } else {
+                        return const Center(child: Text('Unknown error.'));
+                      }
+                    }
+                  }
                 );
               } else {
                 return const Center(child: Text('Permission denied'));
