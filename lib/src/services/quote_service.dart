@@ -39,16 +39,13 @@ class QuoteService {
         List<Quote> items = [];
         final data = List.from(json.decode(response.body).values);
         for (var item in data) {
-          print(item);
           items.add(Quote(category: (item['category']), title: item['text'], details: item['details']));
         }
         return items;
       } else {
-        print('Failed to fetch notifications. Status Code: ${response.statusCode}');
         return [];
       }
     } catch (error) {
-      print('Error: $error');
       return [];
     }
   }

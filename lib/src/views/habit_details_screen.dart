@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-
 import '../models/habit.dart';
 
 class HabitDetailsScreen extends StatefulWidget {
@@ -24,7 +23,7 @@ class _HabitDetailsScreenState extends State<HabitDetailsScreen> {
 
   List<String> generatePastWeekDates() {
     DateTime currentDate = DateTime.now();
-    DateTime startDate = currentDate.subtract(Duration(days: 6));
+    DateTime startDate = currentDate.subtract(const Duration(days: 6));
 
     List<String> pastWeekDates = [];
     for (int i = 0; i < 7; i++) {
@@ -90,7 +89,7 @@ class _HabitDetailsScreenState extends State<HabitDetailsScreen> {
           ),
           // Display a table with habit completion status for each day in the week
           DataTable(
-            columns: [
+            columns: const [
               DataColumn(label: Text('Date')),
               DataColumn(label: Text('Completed')),
             ],

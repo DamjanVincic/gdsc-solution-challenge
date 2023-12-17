@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../models/quote.dart';
 
 class NotificationScreen extends StatelessWidget {

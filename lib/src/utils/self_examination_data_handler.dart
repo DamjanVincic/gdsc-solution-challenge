@@ -1,5 +1,4 @@
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../models/examination_result.dart';
 
 class ExaminationDataHandler {

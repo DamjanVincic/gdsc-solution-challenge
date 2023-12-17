@@ -1,6 +1,4 @@
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../models/habit.dart';
 import '../models/meditation_data.dart';
 
 class MeditationDataHandler {

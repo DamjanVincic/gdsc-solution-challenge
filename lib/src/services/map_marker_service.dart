@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import '../models/map_marker.dart';
@@ -39,7 +38,6 @@ class MapMarkerService {
         Set<Marker> items = {};
         final data = List.from(json.decode(response.body).values);
         for (var item in data) {
-          print(item);
           items.add(Marker(
               markerId: MarkerId(item['id']),
               position: LatLng(item['latitude'], item['longitude']),
@@ -50,32 +48,10 @@ class MapMarkerService {
         }
         return items;
       } else {
-        print('Failed to fetch map markers. Status Code: ${response.statusCode}');
         return {};
       }
     } catch (error) {
-      print('Error: $error');
       return {};
     }
   }
-
-  Set<Marker> getMarkers() =>
-      {
-        const Marker(
-          markerId: MarkerId('1'),
-          position: LatLng(44.813178422472525, 20.461723719360762),
-          infoWindow: InfoWindow(
-            title: 'Some Title',
-            snippet: 'Some Info',
-          ),
-        ),
-        const Marker(
-          markerId: MarkerId('1'),
-          position: LatLng(45.813178422472525, 20.461723719360762),
-          infoWindow: InfoWindow(
-            title: 'Some Title2',
-            snippet: 'Some Info2',
-          ),
-        ),
-      };
 }

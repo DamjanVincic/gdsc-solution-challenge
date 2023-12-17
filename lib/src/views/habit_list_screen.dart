@@ -1,11 +1,7 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
+import 'habit_details_screen.dart';
 import '../models/habit.dart';
 import '../utils/habit_data_handler.dart';
-import 'habit_details_screen.dart';
 
 class HabitListScreen extends StatefulWidget {
   const HabitListScreen({super.key});
@@ -105,21 +101,16 @@ class HabitListItem extends StatelessWidget {
       subtitle: Text('Streak Length: ${habit.streakLength}'),
       trailing: Checkbox(
         // Enable the checkbox only if it's not completed for today
-        onChanged: habit.isCompleted(currentDate)
-            ? null
-            : (bool? isChecked) {
+        onChanged: habit.isCompleted(currentDate) ? null : (bool? isChecked) {
           // Mark the habit as completed if the checkbox is checked
           if (isChecked != null) {
-            print("checking not checked");
             habit.markCompleted(isChecked);
             // Save habits to SharedPreferences or update your state management as needed
             onSaveCallback();
             // Update the UI
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(isChecked
-                    ? 'Habit marked as completed!'
-                    : 'Habit marked as not completed.'),
+                content: Text(isChecked ? 'Habit marked as completed!' : 'Habit marked as not completed.'),
               ),
             );
           }

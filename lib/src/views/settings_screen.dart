@@ -8,14 +8,15 @@ class SettingsScreen extends StatefulWidget {
   final QuoteService quoteService;
   final MapMarkerService mapMarkerService; // Add your map marker service
 
-  SettingsScreen({
+  const SettingsScreen({
+    super.key,
     required this.notificationService,
     required this.quoteService,
     required this.mapMarkerService,
   });
 
   @override
-  _SettingsScreenState createState() => _SettingsScreenState();
+  State<SettingsScreen> createState() => _SettingsScreenState();
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
@@ -55,7 +56,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void toggleNotification() {
     setState(() {
       if (isNotificationScheduled) {
-        print("Cancelling");
         // Cancel the scheduled notifications
         widget.notificationService.cancelScheduledNotifications();
       } else {
@@ -70,7 +70,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings'),
+        title: const Text('Settings'),
       ),
       body: Column(
         children: [
@@ -79,7 +79,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             isNotificationScheduled
                 ? 'Receiving Notifications: On'
                 : 'Receiving Notifications: Off',
-            style: TextStyle(fontSize: 16),
+            style: const TextStyle(fontSize: 16),
           ),
           Switch(
             value: isNotificationScheduled,

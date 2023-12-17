@@ -1,14 +1,12 @@
 import 'package:devfest_hackathon_2023/src/services/quote_service.dart';
-import 'package:devfest_hackathon_2023/src/services/notification_service.dart';
 import 'package:devfest_hackathon_2023/src/views/habit_list_screen.dart';
 import 'package:devfest_hackathon_2023/src/views/notification_list_screen.dart';
 import 'package:devfest_hackathon_2023/src/views/self_examination_list_screen.dart';
 import 'package:flutter/material.dart';
-
 import 'meditation_screen.dart';
 
 class Hub extends StatelessWidget {
-  Hub({super.key, required this.quoteService});
+  const Hub({super.key, required this.quoteService});
 
   final QuoteService quoteService;
 
@@ -24,8 +22,8 @@ class Hub extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => NotificationListScreen(
-                          quoteService: quoteService)),
+                      builder: (context) => NotificationListScreen(quoteService: quoteService),
+                  ),
                 );
               },
               child: const Text('QUOTES'),
@@ -34,8 +32,7 @@ class Hub extends StatelessWidget {
               onPressed: () async {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => const HabitListScreen()),
+                  MaterialPageRoute(builder: (context) => const HabitListScreen()),
                 );
               },
               child: const Text('HABITS'),
@@ -44,8 +41,7 @@ class Hub extends StatelessWidget {
               onPressed: () async {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => SelfExaminationListScreen()),
+                  MaterialPageRoute(builder: (context) => SelfExaminationListScreen()),
                 );
               },
               child: const Text('SELF EXAMINATION'),

@@ -1,5 +1,4 @@
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../models/habit.dart';
 
 class HabitDataHandler {
@@ -17,7 +16,6 @@ class HabitDataHandler {
   Future<void> saveData(List<Habit> items) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String> jsonList = items.map((result) => result.toJson()).toList();
-    print("saving list " + jsonList.toString());
     prefs.setStringList('habits', jsonList);
   }
 }

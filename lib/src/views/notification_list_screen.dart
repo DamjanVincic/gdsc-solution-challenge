@@ -9,7 +9,7 @@ class NotificationListScreen extends StatefulWidget {
   const NotificationListScreen({Key? key, required this.quoteService}) : super(key: key);
 
   @override
-  _NotificationListScreenState createState() => _NotificationListScreenState();
+  State<NotificationListScreen> createState() => _NotificationListScreenState();
 }
 
 class _NotificationListScreenState extends State<NotificationListScreen> {
@@ -69,8 +69,7 @@ class _NotificationListScreenState extends State<NotificationListScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: notifications.isNotEmpty
-            ? ListView.builder(
+        child: notifications.isNotEmpty ? ListView.builder(
           itemCount: getFilteredNotifications().length,
           itemBuilder: (context, index) {
             final notificationItem = getFilteredNotifications()[index];

@@ -1,10 +1,9 @@
+import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' hide PermissionStatus;
 import 'package:permission_handler/permission_handler.dart';
-import 'dart:io' show Platform;
-
 import '../services/map_marker_service.dart';
 
 class MapsView extends StatefulWidget {
@@ -20,7 +19,7 @@ class _MapsViewState extends State<MapsView> {
   String? _mapStyle;
   late GoogleMapController _mapController;
   final LatLng _center = const LatLng(44.813178422472525, 20.461723719360762);
-  late Future<Set<Marker>> _markers; // Fetch markers
+  late Future<Set<Marker>> _markers;
 
   late Future<PermissionStatus> _locationPermissionStatus;
   LocationData? _currentLocation;
@@ -96,10 +95,7 @@ class _MapsViewState extends State<MapsView> {
                             _mapController.setMapStyle(_mapStyle);
                           },
                           initialCameraPosition: CameraPosition(
-                            target: _currentLocation != null
-                                ? LatLng(_currentLocation!.latitude!,
-                                _currentLocation!.longitude!)
-                                : _center,
+                            target: _currentLocation != null ? LatLng(_currentLocation!.latitude!, _currentLocation!.longitude!) : _center,
                             zoom: 11.0,
                           ),
                           myLocationEnabled: true,
