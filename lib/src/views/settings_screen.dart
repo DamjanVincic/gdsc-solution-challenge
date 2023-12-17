@@ -72,75 +72,77 @@ class _SettingsScreenState extends State<SettingsScreen> {
       appBar: AppBar(
         title: const Text('Settings'),
       ),
-      body: Column(
-        children: [
-          const SizedBox(height: 16),
-          Text(
-            isNotificationScheduled
-                ? 'Receiving Notifications: On'
-                : 'Receiving Notifications: Off',
-            style: const TextStyle(fontSize: 16),
-          ),
-          Switch(
-            value: isNotificationScheduled,
-            onChanged: (value) {
-              setState(() {
-                isNotificationScheduled = value;
-                if (isNotificationScheduled) {
-                  widget.notificationService.scheduleNotification();
-                } else {
-                  widget.notificationService.cancelScheduledNotifications();
-                }
-              });
-            },
-            activeTrackColor: Colors.lightGreenAccent,
-            activeColor: Colors.green,
-            inactiveTrackColor: Colors.red,
-            inactiveThumbColor: Colors.redAccent,
-            materialTapTargetSize: MaterialTapTargetSize.padded,
-          ),
-          const SizedBox(height: 16),
-          TextField(
-            controller: categoryController,
-            decoration: const InputDecoration(labelText: 'Category'),
-          ),
-          TextField(
-            controller: titleController,
-            decoration: const InputDecoration(labelText: 'Title'),
-          ),
-          TextField(
-            controller: detailsController,
-            decoration: const InputDecoration(labelText: 'Details'),
-          ),
-          const SizedBox(height: 16.0),
-          TextField(
-            controller: mapMarkerLatitudeController,
-            keyboardType: TextInputType.number,
-            decoration: const InputDecoration(labelText: 'Map Marker Latitude'),
-          ),
-          TextField(
-            controller: mapMarkerLongitudeController,
-            keyboardType: TextInputType.number,
-            decoration: const InputDecoration(labelText: 'Map Marker Longitude'),
-          ),
-          TextField(
-            controller: mapMarkerTitleController,
-            decoration: const InputDecoration(labelText: 'Map Marker Title'),
-          ),
-          TextField(
-            controller: mapMarkerSnippetController,
-            decoration: const InputDecoration(labelText: 'Map Marker Snippet'),
-          ),
-          const SizedBox(height: 16.0),
-          ElevatedButton(
-            onPressed: uploadQuote,
-            child: const Text('Send to Firebase'),
-          ),
-          ElevatedButton(
-            onPressed: uploadMapMarker,
-            child: const Text('Upload Map Marker'),
-          ),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const SizedBox(height: 16),
+            Text(
+              isNotificationScheduled
+                  ? 'Receiving Notifications: On'
+                  : 'Receiving Notifications: Off',
+              style: const TextStyle(fontSize: 16),
+            ),
+            Switch(
+              value: isNotificationScheduled,
+              onChanged: (value) {
+                setState(() {
+                  isNotificationScheduled = value;
+                  if (isNotificationScheduled) {
+                    widget.notificationService.scheduleNotification();
+                  } else {
+                    widget.notificationService.cancelScheduledNotifications();
+                  }
+                });
+              },
+              activeTrackColor: Colors.lightGreenAccent,
+              activeColor: Colors.green,
+              inactiveTrackColor: Colors.red,
+              inactiveThumbColor: Colors.redAccent,
+              materialTapTargetSize: MaterialTapTargetSize.padded,
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: categoryController,
+              decoration: const InputDecoration(labelText: 'Category'),
+            ),
+            TextField(
+              controller: titleController,
+              decoration: const InputDecoration(labelText: 'Title'),
+            ),
+            TextField(
+              controller: detailsController,
+              decoration: const InputDecoration(labelText: 'Details'),
+            ),
+            const SizedBox(height: 16.0),
+            TextField(
+              controller: mapMarkerLatitudeController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(labelText: 'Map Marker Latitude'),
+            ),
+            TextField(
+              controller: mapMarkerLongitudeController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(labelText: 'Map Marker Longitude'),
+            ),
+            TextField(
+              controller: mapMarkerTitleController,
+              decoration: const InputDecoration(labelText: 'Map Marker Title'),
+            ),
+            TextField(
+              controller: mapMarkerSnippetController,
+              decoration: const InputDecoration(labelText: 'Map Marker Snippet'),
+            ),
+            const SizedBox(height: 16.0),
+            ElevatedButton(
+              onPressed: uploadQuote,
+              child: const Text('Send to Firebase'),
+            ),
+            ElevatedButton(
+              onPressed: uploadMapMarker,
+              child: const Text('Upload Map Marker'),
+            ),
+          ],
+        ),
       ),
     );
   }
