@@ -1,3 +1,4 @@
+import 'package:devfest_hackathon_2023/main.dart';
 import 'package:flutter/material.dart';
 import 'package:devfest_hackathon_2023/src/services/quote_service.dart';
 import 'package:devfest_hackathon_2023/src/views/habit_list_screen.dart';
@@ -83,7 +84,7 @@ class Hub extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const MeditationScreen(),
+                    builder: (context) => MeditationScreen(primaryColor: primaryColor, accentColor: accentColor),
                   ),
                 );
               },
