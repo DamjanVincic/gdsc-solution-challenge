@@ -3,10 +3,10 @@ import 'package:Actualizator/src/services/map_marker_service.dart';
 import 'package:Actualizator/src/views/maps_view.dart';
 import 'package:Actualizator/src/views/hub.dart';
 import 'package:Actualizator/src/views/settings_screen.dart';
-import 'package:flutter_config/flutter_config.dart';
 import 'package:Actualizator/src/services/quote_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest.dart' as tzdata;
 import 'src/services/notification_service.dart';
 
@@ -20,9 +20,12 @@ const Color accentColor = Colors.black87;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   //await FlutterConfig.loadEnvVariables();
+  //SharedPreferences prefs = await SharedPreferences.getInstance();
+  //prefs.clear();
   await notificationService.initializeNotifications();
   runApp(
     MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: MyApp(
         notificationService: notificationService,
         quoteService: quoteService,
