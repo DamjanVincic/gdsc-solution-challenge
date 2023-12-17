@@ -17,11 +17,11 @@ class QuoteDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.purpleAccent,
           title: Text(
             'Quote Details',
             style: TextStyle(color: accentColor), // Customize text color
           ),
-          backgroundColor: primaryColor, // Set app bar background color
         ),
         body: Container(
           color: accentColor,
@@ -33,6 +33,7 @@ class QuoteDetailsScreen extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
+                color: Colors.purpleAccent,
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(

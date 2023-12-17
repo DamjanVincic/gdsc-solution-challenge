@@ -45,7 +45,7 @@ class Hub extends StatelessWidget {
               },
               label: 'QUOTES',
               icon: Icons.format_quote,
-              backgroundColor: primaryColor,
+              backgroundColor: Colors.purpleAccent,
               textColor: accentColor,
               description: 'Explore and discover meaningful quotes.',
             ),
@@ -54,12 +54,12 @@ class Hub extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => HabitListScreen(primaryColor: primaryColor, accentColor: accentColor)),
+                      builder: (context) => HabitListScreen(primaryColor: Colors.lightBlueAccent, accentColor: accentColor)),
                 );
               },
               label: 'HABITS',
               icon: Icons.star,
-              backgroundColor: primaryColor,
+              backgroundColor: Colors.blue,
               textColor: accentColor,
               description: 'Track and build healthy habits.',
             ),
@@ -74,7 +74,7 @@ class Hub extends StatelessWidget {
               },
               label: 'SELF EVALUATION',
               icon: Icons.check,
-              backgroundColor: primaryColor,
+              backgroundColor: Colors.greenAccent,
               textColor: accentColor,
               description: 'Reflect and evaluate personal growth.',
             ),
@@ -89,7 +89,7 @@ class Hub extends StatelessWidget {
               },
               label: 'MEDITATION',
               icon: Icons.spa,
-              backgroundColor: primaryColor,
+              backgroundColor: Colors.redAccent,
               textColor: accentColor,
               description: 'Practice mindfulness and meditation.',
             ),
@@ -125,6 +125,7 @@ class HubButton extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
       ),
+      color: backgroundColor,
       child: InkWell(
         onTap: onPressed,
         child: Padding(

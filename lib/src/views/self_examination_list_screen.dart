@@ -211,7 +211,7 @@ class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
     return Scaffold(
         appBar: AppBar(
             title: const Text('Self-evaluation'),
-            backgroundColor: Colors.white70),
+            backgroundColor: Colors.greenAccent),
         body: SingleChildScrollView(
           child: Container(
             color: Colors.black87,
@@ -220,50 +220,6 @@ class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Past self-evaluations: ',
-                      style: TextStyle(color: Colors.white70, fontSize: 24)),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.675,
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: items.length,
-                      itemBuilder: (context, index) {
-                        final examinationItem = items[index];
-                        return Card(
-                          elevation: 5,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: ListTile(
-                            title: Text(
-                                'Feeling: ${examinationItem.feeling}/10',
-                                style: const TextStyle(color: Colors.black87)),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Goal: ${examinationItem.goals}',
-                                    style:
-                                        const TextStyle(color: Colors.black87)),
-                                Text(
-                                    'Work-related achievement: ${examinationItem.work}',
-                                    style:
-                                        const TextStyle(color: Colors.black87)),
-                                Text('Date: ${examinationItem.date}',
-                                    style:
-                                        const TextStyle(color: Colors.black87)),
-                              ],
-                            ),
-                            trailing: IconButton(
-                              icon: const Icon(Icons.share,
-                                  color: Colors.black87),
-                              onPressed: () => _shareItem(examinationItem),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 20),
                   Center(
                     child: Column(
                       children: [
@@ -275,9 +231,9 @@ class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
                               MaterialPageRoute(
                                 builder: (context) =>
                                     SelfExaminationInputScreen(
-                                  onDataChanged: saveData,
-                                  existingItems: items,
-                                ),
+                                      onDataChanged: saveData,
+                                      existingItems: items,
+                                    ),
                               ),
                             );
 
@@ -305,6 +261,51 @@ class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
                             ),
                             child: const Text('Show chart')),
                       ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  const Text('Past self-evaluations: ',
+                      style: TextStyle(color: Colors.white70, fontSize: 24)),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.675,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: items.length,
+                      itemBuilder: (context, index) {
+                        final examinationItem = items[index];
+                        return Card(
+                          elevation: 5,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          color: Colors.greenAccent,
+                          child: ListTile(
+                            title: Text(
+                                'Feeling: ${examinationItem.feeling}/10',
+                                style: const TextStyle(color: Colors.black87)),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Goal: ${examinationItem.goals}',
+                                    style:
+                                        const TextStyle(color: Colors.black87)),
+                                Text(
+                                    'Work-related achievement: ${examinationItem.work}',
+                                    style:
+                                        const TextStyle(color: Colors.black87)),
+                                Text('Date: ${examinationItem.date}',
+                                    style:
+                                        const TextStyle(color: Colors.black87)),
+                              ],
+                            ),
+                            trailing: IconButton(
+                              icon: const Icon(Icons.share,
+                                  color: Colors.black87),
+                              onPressed: () => _shareItem(examinationItem),
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ],

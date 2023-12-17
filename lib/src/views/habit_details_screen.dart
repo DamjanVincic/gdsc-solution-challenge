@@ -46,6 +46,7 @@ class _HabitDetailsScreenState extends State<HabitDetailsScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.lightBlueAccent,
         title: const Text('Habit Details'),
       ),
       body: Container(
@@ -110,7 +111,7 @@ class _HabitDetailsScreenState extends State<HabitDetailsScreen> {
                               isCurved: true,
                               belowBarData: BarAreaData(show: false),
                               colors: [
-                                Colors.green
+                                Colors.lightBlueAccent
                               ], // Set graph color to accentColor
                             ),
                           ],

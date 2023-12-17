@@ -46,51 +46,55 @@ class _HabitListScreenState extends State<HabitListScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.lightBlueAccent,
         title: const Text('Habits'),
       ),
       body: Container(
-        color: accentColor,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(height: 20),
-            ElevatedButton.icon(
-              onPressed: () {
-                _showCreateHabitDialog(context);
-              },
-              icon: Icon(Icons.add, size: 36.0, color: accentColor),
-              label: Text(
-                'Create Habit',
-                style: TextStyle(fontSize: 18.0, color: accentColor),
-              ),
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
+          color: accentColor,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(height: 20),
+                ElevatedButton.icon(
+                  onPressed: () {
+                    _showCreateHabitDialog(context);
+                  },
+                  icon: Icon(Icons.add, size: 36.0, color: accentColor),
+                  label: Text(
+                    'Create Habit',
+                    style: TextStyle(fontSize: 18.0, color: accentColor),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10.0, horizontal: 16.0),
+                  ),
                 ),
-                padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-              ),
-            ),
-            const SizedBox(height: 20),
-            Expanded(
-              child: ListView.builder(
-                itemCount: habits.length,
-                itemBuilder: (context, index) {
-                  return HabitCard(
-                    habit: habits[index],
-                    onSaveCallback: () {
-                      saveData();
-                      setState(() {});
+                const SizedBox(height: 20),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: habits.length,
+                    itemBuilder: (context, index) {
+                      return HabitCard(
+                        habit: habits[index],
+                        onSaveCallback: () {
+                          saveData();
+                          setState(() {});
+                        },
+                        primaryColor: primaryColor,
+                        accentColor: accentColor,
+                      );
                     },
-                    primaryColor: primaryColor,
-                    accentColor: accentColor,
-                  );
-                },
-              ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          )),
     );
   }
 
@@ -160,12 +164,16 @@ class HabitCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
       ),
+      color: Colors.lightBlueAccent,
       child: InkWell(
         onTap: () {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => HabitDetailsScreen(habit: habit, primaryColor: primaryColor, accentColor: accentColor),
+              builder: (context) => HabitDetailsScreen(
+                  habit: habit,
+                  primaryColor: primaryColor,
+                  accentColor: accentColor),
             ),
           );
         },
@@ -176,7 +184,9 @@ class HabitCard extends StatelessWidget {
               Icon(
                 Icons.star,
                 size: 36.0,
-                color: habit.isCompleted(currentDate) ? Colors.amber : Colors.black, // Set the icon color
+                color: habit.isCompleted(currentDate)
+                    ? Colors.amber
+                    : Colors.black, // Set the icon color
               ),
               const SizedBox(width: 16.0),
               Expanded(
@@ -186,35 +196,31 @@ class HabitCard extends StatelessWidget {
                     Text(
                       habit.name,
                       style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
-                        color: accentColor
-                      ),
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                          color: accentColor),
                     ),
                     const SizedBox(height: 8.0),
                     Text(
                       'Streak Length: ${habit.streakLength}',
-                      style: TextStyle(
-                        fontSize: 14.0,
-                        color: accentColor
-                      ),
+                      style: TextStyle(fontSize: 14.0, color: accentColor),
                     ),
                     Checkbox(
                       onChanged: habit.isCompleted(currentDate)
                           ? null
                           : (bool? isChecked) {
-                        if (isChecked != null) {
-                          habit.markCompleted(isChecked);
-                          onSaveCallback();
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(isChecked
-                                  ? 'Habit marked as completed!'
-                                  : 'Habit marked as not completed.'),
-                            ),
-                          );
-                        }
-                      },
+                              if (isChecked != null) {
+                                habit.markCompleted(isChecked);
+                                onSaveCallback();
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(isChecked
+                                        ? 'Habit marked as completed!'
+                                        : 'Habit marked as not completed.'),
+                                  ),
+                                );
+                              }
+                            },
                       value: habit.isCompleted(currentDate),
                     ),
                   ],

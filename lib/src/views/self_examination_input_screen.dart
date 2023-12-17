@@ -31,6 +31,7 @@ class _SelfExaminationInputScreenState extends State<SelfExaminationInputScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.greenAccent,
         title: const Text('Evaluate your day'),
       ),
       body: Container(
