@@ -9,7 +9,7 @@ class MapMarkerService {
   final String notificationsEndpoint = "/markers.json";
 
   void uploadMapMarker(double latitude, double longitude, String title, String snippet) async {
-    MapMarker mapMarker = MapMarker(id: DateTime.now().toString(), latitude: latitude, longitude: latitude, title: title, snippet: snippet);
+    MapMarker mapMarker = MapMarker(id: DateTime.now().toString(), latitude: latitude, longitude: longitude, title: title, snippet: snippet);
     final String firebaseUrl = '$baseUrl$notificationsEndpoint';
 
     try {
