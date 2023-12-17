@@ -68,6 +68,121 @@ class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
     return pieChartData;
   }
 
+  void _showChartDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Feeling Over the Past 7 Days'),
+          content: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text('Show Line Chart'),
+                        Switch(
+                          value: showLineChart,
+                          onChanged: (value) {
+                            setState(() {
+                              showLineChart = value;
+                            });
+                          },
+                        ),
+                        const Text('Show Pie Chart'),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 300,
+                      child: showLineChart ? LineChart(
+                        LineChartData(
+                          titlesData: FlTitlesData(
+                            leftTitles: SideTitles(showTitles: true),
+                            bottomTitles: SideTitles(
+                              showTitles: true,
+                              reservedSize: 22,
+                              margin: 10,
+                            ),
+                          ),
+                          borderData: FlBorderData(
+                            show: true,
+                            border: Border.all(
+                              color: const Color(0xff37434d),
+                              width: 1,
+                            ),
+                          ),
+                          minX: DateTime
+                              .now()
+                              .subtract(const Duration(days: 7))
+                              .millisecondsSinceEpoch
+                              .toDouble(),
+                          maxX: DateTime
+                              .now()
+                              .millisecondsSinceEpoch
+                              .toDouble(),
+                          minY: 0,
+                          maxY: 10,
+                          lineBarsData: [
+                            LineChartBarData(
+                              spots: generateSpotList(),
+                              isCurved: true,
+                              colors: [Colors.blue],
+                              dotData: FlDotData(show: false),
+                              belowBarData: BarAreaData(show: false),
+                            ),
+                          ],
+                        ),
+                      ) : Stack(
+                        children: [
+                          PieChart(
+                            PieChartData(
+                              sections: List<PieChartSectionData>.generate(
+                                generatePieChartData().length,
+                                    (index) {
+                                  int feeling = generatePieChartData().keys
+                                      .elementAt(index);
+                                  double percentage = generatePieChartData()[feeling]!;
+                                  int count = (percentage * items.length / 100)
+                                      .round();
+                                  return PieChartSectionData(
+                                    color: Colors.primaries[index %
+                                        Colors.primaries.length],
+                                    value: percentage,
+                                    radius: percentage / 2,
+                                    title: '$feeling: $count (${percentage
+                                        .toStringAsFixed(1)}%)',
+                                    titleStyle: const TextStyle(fontSize: 10),
+                                  );
+                                },
+                              ),
+                              sectionsSpace: 0,
+                              centerSpaceRadius: 40,
+                              centerSpaceColor: Colors.white,
+                            ),
+                          ),
+                          Positioned(
+                            top: 8,
+                            left: 8,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: generateLegend(),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+          ),
+        );
+      }
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,7 +197,7 @@ class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
             children: [
               const Text('Stored Items:'),
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.3,
+                height: MediaQuery.of(context).size.height * 0.675,
                 child: ListView.builder(
                   shrinkWrap: true,
                   itemCount: items.length,
@@ -106,111 +221,36 @@ class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () async {
-                  // Pass the list to the input screen
-                  await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => SelfExaminationInputScreen(
-                        onDataChanged: saveData,
-                        existingItems: items,
-                      ),
-                    ),
-                  );
-        
-                  // Reload the data after returning from the input screen
-                  await loadData();
-                  setState(() {});
-        
-                  // Save the updated list to shared preferences
-                  await saveData();
-                },
-                child: const Text('Add New Item'),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text('Show Line Chart'),
-                  Switch(
-                    value: showLineChart,
-                    onChanged: (value) {
-                      setState(() {
-                        showLineChart = value;
-                      });
-                    },
-                  ),
-                  const Text('Show Pie Chart'),
-                ],
-              ),
-              const SizedBox(height: 20),
-              const Text('Feeling Over the Past 7 Days'),
-              SizedBox(
-                height: 300,
-                child: showLineChart ? LineChart(
-                  LineChartData(
-                    titlesData: FlTitlesData(
-                      leftTitles: SideTitles(showTitles: true),
-                      bottomTitles: SideTitles(
-                        showTitles: true,
-                        reservedSize: 22,
-                        margin: 10,
-                      ),
-                    ),
-                    borderData: FlBorderData(
-                      show: true,
-                      border: Border.all(
-                        color: const Color(0xff37434d),
-                        width: 1,
-                      ),
-                    ),
-                    minX: DateTime.now().subtract(const Duration(days: 7)).millisecondsSinceEpoch.toDouble(),
-                    maxX: DateTime.now().millisecondsSinceEpoch.toDouble(),
-                    minY: 0,
-                    maxY: 10,
-                    lineBarsData: [
-                      LineChartBarData(
-                        spots: generateSpotList(),
-                        isCurved: true,
-                        colors: [Colors.blue],
-                        dotData: FlDotData(show: false),
-                        belowBarData: BarAreaData(show: false),
-                      ),
-                    ],
-                  ),
-                ) : Stack(
+              Center(
+                child: Column(
                   children: [
-                    PieChart(
-                      PieChartData(
-                        sections: List<PieChartSectionData>.generate(
-                          generatePieChartData().length,
-                              (index) {
-                            int feeling = generatePieChartData().keys.elementAt(index);
-                            double percentage = generatePieChartData()[feeling]!;
-                            int count = (percentage * items.length / 100).round();
-                            return PieChartSectionData(
-                              color: Colors.primaries[index % Colors.primaries.length],
-                              value: percentage,
-                              radius: percentage / 2,
-                              title: '$feeling: $count (${percentage.toStringAsFixed(1)}%)',
-                              titleStyle: const TextStyle(fontSize: 10),
-                            );
-                          },
-                        ),
-                        sectionsSpace: 0,
-                        centerSpaceRadius: 40,
-                        centerSpaceColor: Colors.white,
-                      ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        // Pass the list to the input screen
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SelfExaminationInputScreen(
+                              onDataChanged: saveData,
+                              existingItems: items,
+                            ),
+                          ),
+                        );
+
+                        // Reload the data after returning from the input screen
+                        await loadData();
+                        setState(() {});
+
+                        // Save the updated list to shared preferences
+                        await saveData();
+                      },
+                      child: const Text('Add New Item'),
                     ),
-                    Positioned(
-                      top: 8,
-                      left: 8,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: generateLegend(),
-                      ),
-                    ),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: _showChartDialog,
+                      child: const Text('Show chart'),
+                    )
                   ],
                 ),
               ),
