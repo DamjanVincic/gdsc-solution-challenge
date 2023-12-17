@@ -5,6 +5,8 @@ import 'package:devfest_hackathon_2023/src/views/notification_list_screen.dart';
 import 'package:devfest_hackathon_2023/src/views/self_examination_list_screen.dart';
 import 'package:flutter/material.dart';
 
+import 'meditation_screen.dart';
+
 class Hub extends StatelessWidget {
   Hub({super.key, required this.quoteService});
 
@@ -47,6 +49,16 @@ class Hub extends StatelessWidget {
                 );
               },
               child: const Text('SELF EXAMINATION'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const MeditationScreen()),
+                );
+              },
+              child: const Text('MEDITATION')
             ),
           ],
         ),

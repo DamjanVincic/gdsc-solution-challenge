@@ -6,6 +6,7 @@ import 'package:devfest_hackathon_2023/src/views/settings_screen.dart';
 import 'package:flutter_config/flutter_config.dart';
 import 'dart:async';
 import 'package:devfest_hackathon_2023/src/services/quote_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'src/services/notification_service.dart';
 
@@ -20,6 +21,8 @@ final MapMarkerService mapMarkerService = MapMarkerService();
 final NotificationService notificationService = NotificationService(quoteService: quoteService);
 
 Future<void> main() async {
+  // SharedPreferences prefs = await SharedPreferences.getInstance();
+  // await prefs.clear();
   WidgetsFlutterBinding.ensureInitialized();
   //await FlutterConfig.loadEnvVariables();
   await notificationService.initializeNotifications();
@@ -72,7 +75,7 @@ class _MyAppState extends State<MyApp> {
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.home),
-              label: 'Home',
+              label: 'Mental hub',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.map),

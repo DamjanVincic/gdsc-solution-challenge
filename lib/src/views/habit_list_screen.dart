@@ -34,7 +34,6 @@ class _HabitListScreenState extends State<HabitListScreen> {
 
   Future<void> saveData() async {
     await dataHandler.saveData(habits);
-    print("saved data handler");
   }
 
   @override
@@ -76,6 +75,7 @@ class _HabitListScreenState extends State<HabitListScreen> {
                 return HabitListItem(
                   habit: habits[index],
                   onSaveCallback: () {
+                    saveData();
                     // Update the state of the parent widget
                     setState(() {});
                   },
