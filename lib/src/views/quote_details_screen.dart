@@ -41,9 +41,9 @@ class QuoteDetailsScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Title: ${notificationItem.title}',
+                        notificationItem.title,
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 20,
                           color: accentColor,
                           fontWeight: FontWeight.bold,
                         ),
@@ -58,9 +58,9 @@ class QuoteDetailsScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'Details: ${notificationItem.details}',
+                        notificationItem.details,
                         style: const TextStyle(
-                          fontSize: 18,
+                          fontSize: 16,
                           color: Colors.black87,
                         ),
                       ),

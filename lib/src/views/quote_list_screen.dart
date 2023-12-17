@@ -134,9 +134,9 @@ class _QuoteListScreenState extends State<QuoteListScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Title: ${notificationItem.title}',
+                            notificationItem.title,
                             style: TextStyle(
-                              fontSize: 18,
+                              fontSize: 20,
                               fontWeight: FontWeight.bold,
                               color: accentColor,
                             ),
@@ -151,9 +151,9 @@ class _QuoteListScreenState extends State<QuoteListScreen> {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            'Details: ${notificationItem.details}',
+                            notificationItem.details,
                             style: TextStyle(
-                              fontSize: 18,
+                              fontSize: 16,
                               color: accentColor,
                             ),
                           ),
