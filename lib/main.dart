@@ -19,6 +19,8 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 final QuoteService quoteService = QuoteService();
 final MapMarkerService mapMarkerService = MapMarkerService();
 final NotificationService notificationService = NotificationService(quoteService: quoteService);
+const Color primaryColor = Colors.black12;
+const Color accentColor = Colors.black87;
 
 Future<void> main() async {
   // SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -67,7 +69,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         body: <Widget>[
-          Hub(quoteService: widget.quoteService),
+          Hub(quoteService: widget.quoteService, primaryColor: primaryColor, accentColor: accentColor),
           MapsView(mapMarkerService: widget.mapMarkerService),
           SettingsScreen(notificationService: widget.notificationService, quoteService: widget.quoteService, mapMarkerService: widget.mapMarkerService)
         ][_selectedIndex],

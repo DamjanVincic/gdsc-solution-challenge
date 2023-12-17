@@ -1,16 +1,18 @@
 import 'package:devfest_hackathon_2023/src/services/quote_service.dart';
 import 'package:devfest_hackathon_2023/src/services/notification_service.dart';
 import 'package:devfest_hackathon_2023/src/views/habit_list_screen.dart';
-import 'package:devfest_hackathon_2023/src/views/notification_list_screen.dart';
+import 'package:devfest_hackathon_2023/src/views/quote_list_screen.dart';
 import 'package:devfest_hackathon_2023/src/views/self_examination_list_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'meditation_screen.dart';
 
 class Hub extends StatelessWidget {
-  Hub({super.key, required this.quoteService});
+  Hub({Key? key, required this.quoteService, required this.primaryColor, required this.accentColor}) : super(key: key);
 
   final QuoteService quoteService;
+  final Color primaryColor;
+  final Color accentColor;
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +26,10 @@ class Hub extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => NotificationListScreen(
-                          quoteService: quoteService)),
+                      builder: (context) => QuoteListScreen(
+                          quoteService: quoteService,
+                      primaryColor: primaryColor,
+                      accentColor: accentColor,)),
                 );
               },
               child: const Text('QUOTES'),
