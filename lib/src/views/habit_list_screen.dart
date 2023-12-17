@@ -50,7 +50,7 @@ class _HabitListScreenState extends State<HabitListScreen> {
         title: const Text('Habits'),
       ),
       body: Container(
-          color: accentColor,
+          color: Colors.white38,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(

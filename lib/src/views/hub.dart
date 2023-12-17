@@ -23,10 +23,10 @@ class Hub extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Mental Hub', style: TextStyle(color: accentColor)),
-        backgroundColor: primaryColor,
+        backgroundColor: Colors.white70,
       ),
       body: Container(
-        color: accentColor,
+        color: Colors.white38,
         child: ListView(
           padding: const EdgeInsets.all(16.0),
           children: [
@@ -45,7 +45,7 @@ class Hub extends StatelessWidget {
               },
               label: 'QUOTES',
               icon: Icons.format_quote,
-              backgroundColor: Colors.purpleAccent,
+              backgroundColor: Colors.purpleAccent.shade100,
               textColor: accentColor,
               description: 'Explore and discover meaningful quotes.',
             ),
@@ -59,7 +59,7 @@ class Hub extends StatelessWidget {
               },
               label: 'HABITS',
               icon: Icons.star,
-              backgroundColor: Colors.blue,
+              backgroundColor: Colors.lightBlueAccent,
               textColor: accentColor,
               description: 'Track and build healthy habits.',
             ),

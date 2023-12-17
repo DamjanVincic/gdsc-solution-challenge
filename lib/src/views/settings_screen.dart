@@ -155,7 +155,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         backgroundColor: Colors.white70,
       ),
       body: Container(
-        color: Colors.black87,
+        color: Colors.white38,
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -166,7 +166,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 isNotificationScheduled
                     ? 'Receiving Notifications: On'
                     : 'Receiving Notifications: Off',
-                style: const TextStyle(fontSize: 16, color: Colors.white70),
+                style: const TextStyle(fontSize: 16, color: Colors.black87),
               ),
               Switch(
                 value: isNotificationScheduled,

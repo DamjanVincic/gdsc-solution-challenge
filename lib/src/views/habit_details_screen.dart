@@ -47,10 +47,10 @@ class _HabitDetailsScreenState extends State<HabitDetailsScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.lightBlueAccent,
-        title: const Text('Habit Details'),
+        title: const Text('Habit Details', style: TextStyle(color: Colors.black87)),
       ),
       body: Container(
-        color: accentColor,
+        color: Colors.white38,
         child: SingleChildScrollView(
           child: Center(
             child: Column(
@@ -64,7 +64,7 @@ class _HabitDetailsScreenState extends State<HabitDetailsScreen> {
                     style: const TextStyle(
                       fontSize: 26,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white70,
+                      color: Colors.black87,
                     ),
                   ),
                 ),
@@ -72,7 +72,7 @@ class _HabitDetailsScreenState extends State<HabitDetailsScreen> {
                   padding: const EdgeInsets.all(16.0),
                   child: Text(
                     "You are on a ${widget.habit.streakLength} day streak!",
-                    style: const TextStyle(fontSize: 24, color: Colors.white70),
+                    style: const TextStyle(fontSize: 24, color: Colors.black87),
                   ),
                 ),
                 const Padding(
@@ -82,7 +82,7 @@ class _HabitDetailsScreenState extends State<HabitDetailsScreen> {
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white70,
+                      color: Colors.black87,
                     ),
                   ),
                 ),
@@ -130,7 +130,7 @@ class _HabitDetailsScreenState extends State<HabitDetailsScreen> {
                           'Date',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: Colors.white70,
+                            color: Colors.black87,
                           ),
                         ),
                       ),
@@ -139,7 +139,7 @@ class _HabitDetailsScreenState extends State<HabitDetailsScreen> {
                           'Completed',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: Colors.white70,
+                            color: Colors.black87,
                           ),
                         ),
                       ),
@@ -153,7 +153,7 @@ class _HabitDetailsScreenState extends State<HabitDetailsScreen> {
                         DataCell(
                           Text(
                             currentDate,
-                            style: const TextStyle(color: Colors.white70),
+                            style: const TextStyle(color: Colors.black87),
                           ),
                         ),
                         DataCell(

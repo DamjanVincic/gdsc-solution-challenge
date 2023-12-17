@@ -214,7 +214,7 @@ class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
             backgroundColor: Colors.greenAccent),
         body: SingleChildScrollView(
           child: Container(
-            color: Colors.black87,
+            color: Colors.white38,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
