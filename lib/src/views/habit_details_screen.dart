@@ -66,24 +66,29 @@ class _HabitDetailsScreenState extends State<HabitDetailsScreen> {
           ),
           // Display habit completion status for each day in the week using a graph
           Expanded(
-            child: LineChart(
-              LineChartData(
-                gridData: FlGridData(show: false),
-                titlesData: FlTitlesData(show: false),
-                borderData: FlBorderData(show: false),
-                lineBarsData: [
-                  LineChartBarData(
-                    spots: List.generate(pastWeekDates.length, (index) {
-                      String currentDate = pastWeekDates[index];
-                      bool isCompleted = widget.habit.isCompleted(currentDate);
+            child: Center(
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width * 0.9,
+                child: LineChart(
+                  LineChartData(
+                    gridData: FlGridData(show: false),
+                    titlesData: FlTitlesData(show: false),
+                    borderData: FlBorderData(show: false),
+                    lineBarsData: [
+                      LineChartBarData(
+                        spots: List.generate(pastWeekDates.length, (index) {
+                          String currentDate = pastWeekDates[index];
+                          bool isCompleted = widget.habit.isCompleted(currentDate);
 
-                      return FlSpot(index.toDouble(), isCompleted ? 1.0 : 0.0);
-                    }),
-                    isCurved: true,
-                    belowBarData: BarAreaData(show: false),
-                    colors: [Colors.blue],
+                          return FlSpot(index.toDouble(), isCompleted ? 1.0 : 0.0);
+                        }),
+                        isCurved: true,
+                        belowBarData: BarAreaData(show: false),
+                        colors: [Colors.blue],
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           ),
