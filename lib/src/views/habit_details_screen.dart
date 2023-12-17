@@ -4,8 +4,15 @@ import '../models/habit.dart';
 
 class HabitDetailsScreen extends StatefulWidget {
   final Habit habit;
+  final Color primaryColor;
+  final Color accentColor;
 
-  const HabitDetailsScreen({super.key, required this.habit});
+  const HabitDetailsScreen({
+    Key? key,
+    required this.habit,
+    required this.primaryColor,
+    required this.accentColor,
+  }) : super(key: key);
 
   @override
   State<HabitDetailsScreen> createState() => _HabitDetailsScreenState();
@@ -35,80 +42,133 @@ class _HabitDetailsScreenState extends State<HabitDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = widget.primaryColor;
+    final accentColor = widget.accentColor;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Habit Details'),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              'Habit: ${widget.habit.name}',
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              'Streak Length: ${widget.habit.streakLength}',
-              style: const TextStyle(fontSize: 16),
-            ),
-          ),
-          const Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Text(
-              'Habit completion for the week:',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-          ),
-          // Display habit completion status for each day in the week using a graph
-          Expanded(
-            child: Center(
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width * 0.9,
-                child: LineChart(
-                  LineChartData(
-                    gridData: FlGridData(show: false),
-                    titlesData: FlTitlesData(show: false),
-                    borderData: FlBorderData(show: false),
-                    lineBarsData: [
-                      LineChartBarData(
-                        spots: List.generate(pastWeekDates.length, (index) {
-                          String currentDate = pastWeekDates[index];
-                          bool isCompleted = widget.habit.isCompleted(currentDate);
-
-                          return FlSpot(index.toDouble(), isCompleted ? 1.0 : 0.0);
-                        }),
-                        isCurved: true,
-                        belowBarData: BarAreaData(show: false),
-                        colors: [Colors.blue],
-                      ),
-                    ],
+      body: Container(
+        color: accentColor,
+        child: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    'Habit: ${widget.habit.name}',
+                    style: TextStyle(
+                      fontSize: 26,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
-              ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    "You are on a ${widget.habit.streakLength} day streak!",
+                    style: const TextStyle(fontSize: 24, color: Colors.white),
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Text(
+                    "This week's progress:",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                // Display habit completion status for each day in the week using a graph
+                Center(
+                  child: Container(
+                    color: Colors.white,
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      height: 300,
+                      child: LineChart(
+                        LineChartData(
+                          gridData: FlGridData(show: false),
+                          titlesData: FlTitlesData(show: false),
+                          borderData: FlBorderData(show: false),
+                          lineBarsData: [
+                            LineChartBarData(
+                              spots: List.generate(pastWeekDates.length, (index) {
+                                String currentDate = pastWeekDates[index];
+                                bool isCompleted =
+                                widget.habit.isCompleted(currentDate);
+
+                                return FlSpot(
+                                    index.toDouble(), isCompleted ? 1.0 : 0.0);
+                              }),
+                              isCurved: true,
+                              belowBarData: BarAreaData(show: false),
+                              colors: [
+                                Colors.green
+                              ], // Set graph color to accentColor
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                // Display a table with habit completion status for each day in the week
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: DataTable(
+                    columns: [
+                      DataColumn(
+                        label: Text(
+                          'Date',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      DataColumn(
+                        label: Text(
+                          'Completed',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                    rows: List.generate(pastWeekDates.length, (index) {
+                      String currentDate = pastWeekDates[index];
+                      bool isCompleted =
+                      widget.habit.isCompleted(currentDate);
+
+                      return DataRow(cells: [
+                        DataCell(
+                          Text(
+                            currentDate,
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                        DataCell(
+                          isCompleted
+                              ? Icon(Icons.check, color: Colors.green)
+                              : Icon(Icons.close, color: Colors.red),
+                        ),
+                      ]);
+                    }),
+                  ),
+                ),
+              ],
             ),
           ),
-          // Display a table with habit completion status for each day in the week
-          DataTable(
-            columns: const [
-              DataColumn(label: Text('Date')),
-              DataColumn(label: Text('Completed')),
-            ],
-            rows: List.generate(pastWeekDates.length, (index) {
-              String currentDate = pastWeekDates[index];
-              bool isCompleted = widget.habit.isCompleted(currentDate);
-
-              return DataRow(cells: [
-                DataCell(Text(currentDate)),
-                DataCell(Text(isCompleted ? 'Yes' : 'No')),
-              ]);
-            }),
-          ),
-        ],
+        ),
       ),
     );
   }

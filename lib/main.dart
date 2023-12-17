@@ -19,7 +19,7 @@ const Color accentColor = Colors.black87;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await FlutterConfig.loadEnvVariables();
+  //await FlutterConfig.loadEnvVariables();
   await notificationService.initializeNotifications();
   runApp(
     MaterialApp(

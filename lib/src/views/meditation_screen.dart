@@ -16,7 +16,7 @@ class _MeditationScreenState extends State<MeditationScreen> {
   final MeditationDataHandler dataHandler = MeditationDataHandler();
   int meditationDuration = 5;
   bool isTimerRunning = false;
-  late Timer _timer;
+  Timer? _timer;
   int secondsLeft = 5 * 60;
 
   @override
@@ -45,7 +45,7 @@ class _MeditationScreenState extends State<MeditationScreen> {
   void startStopTimer() {
     if (isTimerRunning) {
       // Stop the timer
-      _timer.cancel();
+      _timer?.cancel();
 
       int actualDuration = meditationDuration * 60 - secondsLeft;
       MeditationData newMeditationData = MeditationData(
@@ -204,7 +204,7 @@ class _MeditationScreenState extends State<MeditationScreen> {
 
   @override
   void dispose() {
-    _timer.cancel(); // Dispose of the timer to prevent memory leaks
+    _timer?.cancel(); // Dispose of the timer to prevent memory leaks
     super.dispose();
   }
 

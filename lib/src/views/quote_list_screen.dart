@@ -43,7 +43,7 @@ class _QuoteListScreenState extends State<QuoteListScreen> {
   List<String> getUniqueCategories() {
     // Get unique categories from the list of notifications
     Set<String> uniqueCategories =
-    notifications.map((item) => item.category).toSet();
+        notifications.map((item) => item.category).toSet();
     return ['All', ...uniqueCategories.toList()];
   }
 
@@ -60,112 +60,118 @@ class _QuoteListScreenState extends State<QuoteListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final Color primaryColor = widget.primaryColor; // Store primary color locally
+    final Color accentColor = widget.accentColor;
+    
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Quote List'),
-        backgroundColor: widget.primaryColor,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        actions: [
-          // DropdownButton for selecting categories
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: widget.accentColor), // Use accent color for the border
-              borderRadius: BorderRadius.circular(8.0), // Adjust the radius as needed
-            ),
-            child: DropdownButton<String>(
-              value: selectedCategory,
-              onChanged: (String? newValue) {
-                setState(() {
-                  selectedCategory = newValue ?? 'All';
-                });
-              },
-              items: getUniqueCategories()
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-            ),
-          )
-
-        ],
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: notifications.isNotEmpty
-              ? ListView.builder(
-            itemCount: getFilteredNotifications().length,
-            itemBuilder: (context, index) {
-              final notificationItem =
-              getFilteredNotifications()[index];
-              return GestureDetector(
-                onTap: () {
-                  // Navigate to QuoteDetailsScreen when an item is clicked
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => QuoteDetailsScreen(
-                        notificationItem: notificationItem,
-                        primaryColor: widget.primaryColor,
-                        accentColor: widget.accentColor,
-                      ),
-                    ),
-                  );
-                },
-                child: Card(
-                  elevation: 5,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Title: ${notificationItem.title}',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: widget.accentColor,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Category: ${notificationItem.category}',
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: widget.accentColor,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Details: ${notificationItem.details}',
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: widget.accentColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              );
+        appBar: AppBar(
+          title: const Text('Quote List'),
+          backgroundColor: primaryColor,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
             },
-          )
-              : const Center(
-            child:
-            CircularProgressIndicator(), // Show a loading indicator while fetching data
           ),
+          actions: [
+            // DropdownButton for selecting categories
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: accentColor),
+                // Use accent color for the border
+                borderRadius:
+                    BorderRadius.circular(8.0), // Adjust the radius as needed
+              ),
+              child: DropdownButton<String>(
+                value: selectedCategory,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    selectedCategory = newValue ?? 'All';
+                  });
+                },
+                items: getUniqueCategories()
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+            )
+          ],
         ),
-      ),
-    );
+        body: Container(
+          color: accentColor,
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: notifications.isNotEmpty
+                  ? ListView.builder(
+                      itemCount: getFilteredNotifications().length,
+                      itemBuilder: (context, index) {
+                        final notificationItem =
+                            getFilteredNotifications()[index];
+                        return GestureDetector(
+                          onTap: () {
+                            // Navigate to QuoteDetailsScreen when an item is clicked
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => QuoteDetailsScreen(
+                                  notificationItem: notificationItem,
+                                  primaryColor: primaryColor,
+                                  accentColor: accentColor,
+                                ),
+                              ),
+                            );
+                          },
+                          child: Card(
+                            elevation: 5,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Title: ${notificationItem.title}',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: accentColor,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    'Category: ${notificationItem.category}',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: accentColor,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    'Details: ${notificationItem.details}',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: accentColor,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    )
+                  : const Center(
+                      child:
+                          CircularProgressIndicator(), // Show a loading indicator while fetching data
+                    ),
+            ),
+          ),
+        ));
   }
 }
