@@ -4,8 +4,16 @@ import '../models/meditation_data.dart';
 import '../utils/meditation_data_handler.dart';
 import 'package:fl_chart/fl_chart.dart';
 
+
 class MeditationScreen extends StatefulWidget {
-  const MeditationScreen({Key? key}) : super(key: key);
+  final Color primaryColor;
+  final Color accentColor;
+
+  const MeditationScreen({
+    Key? key,
+    required this.primaryColor,
+    required this.accentColor,
+  }) : super(key: key);
 
   @override
   State<MeditationScreen> createState() => _MeditationScreenState();
@@ -102,101 +110,118 @@ class _MeditationScreenState extends State<MeditationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final Color primaryColor = widget.primaryColor;
+    final Color accentColor = widget.accentColor;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Meditation Timer'),
+        backgroundColor: Colors.white, // Set the app bar background color
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Total Meditated Time: ${_formatTotalMeditationTime()}',
-              style: const TextStyle(fontSize: 20),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.remove),
-                  onPressed: () {
-                    setState(() {
-                      if (meditationDuration > 1) {
-                        meditationDuration--;
-                        // Update the displayed time when duration changes
-                        secondsLeft = meditationDuration * 60;
-                      }
-                    });
-                  },
-                ),
-                SizedBox(
-                  width: 50,
-                  child: TextFormField(
-                    textAlign: TextAlign.center,
-                    keyboardType: TextInputType.number,
-                    onChanged: (value) {
-                      int newValue = int.tryParse(value) ?? 0;
+      body: Container(
+        color: accentColor, // Set the actual background color
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Total Meditated Time: ${_formatTotalMeditationTime()}',
+                style: TextStyle(fontSize: 20, color: Colors.white), // Set text color
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.remove),
+                    color: Colors.white, // Set icon color
+                    onPressed: () {
                       setState(() {
-                        // Ensure the duration is not negative
-                        meditationDuration = newValue >= 0 ? newValue : 0;
+                        if (meditationDuration > 1) {
+                          meditationDuration--;
+                          // Update the displayed time when duration changes
+                          secondsLeft = meditationDuration * 60;
+                        }
+                      });
+                    },
+                  ),
+                  SizedBox(
+                    width: 50,
+                    child: TextFormField(
+                      textAlign: TextAlign.center,
+                      keyboardType: TextInputType.number,
+                      style: TextStyle(color: Colors.white), // Set text color
+                      onChanged: (value) {
+                        int newValue = int.tryParse(value) ?? 0;
+                        setState(() {
+                          // Ensure the duration is not negative
+                          meditationDuration = newValue >= 0 ? newValue : 0;
+                          // Update the displayed time when duration changes
+                          secondsLeft = meditationDuration * 60;
+                        });
+                      },
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintStyle: TextStyle(color: Colors.white), // Set hint text color
+                      ),
+                      controller: TextEditingController(text: meditationDuration.toString()),
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.add),
+                    color: Colors.white, // Set icon color
+                    onPressed: () {
+                      setState(() {
+                        meditationDuration++;
                         // Update the displayed time when duration changes
                         secondsLeft = meditationDuration * 60;
                       });
                     },
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                    ),
-                    controller: TextEditingController(text: meditationDuration.toString()),
                   ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              Text(
+                'Time Remaining: ${secondsLeft ~/ 60}m ${secondsLeft % 60}s',
+                style: const TextStyle(fontSize: 20, color: Colors.white),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: startStopTimer,
+                child: Text(
+                  isTimerRunning ? 'Stop' : 'Start',
+                  style: TextStyle(color: accentColor),
                 ),
-                IconButton(
-                  icon: const Icon(Icons.add),
-                  onPressed: () {
-                    setState(() {
-                      meditationDuration++;
-                      // Update the displayed time when duration changes
-                      secondsLeft = meditationDuration * 60;
-                    });
-                  },
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.white, // Set button background color
                 ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            Text(
-              'Time Remaining: ${secondsLeft ~/ 60}m ${secondsLeft % 60}s',
-              style: const TextStyle(fontSize: 20),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: startStopTimer,
-              child: Text(isTimerRunning ? 'Stop' : 'Start'),
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              'Meditation Data for the Last 7 Days',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: generateLegend(),
-                ),
-                SizedBox(
-                  width: 300,
-                  height: 300,
-                  child: PieChart(
-                    PieChartData(
-                      sections: _generatePieChartData(),
-                      sectionsSpace: 0,
-                      centerSpaceRadius: 40,
-                      startDegreeOffset: -90,
+              ),
+              const SizedBox(height: 20),
+              Text(
+                'Meditation Data for the Last 7 Days',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+              ),
+              Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: generateLegend(),
+                  ),
+                  SizedBox(
+                    width: 300,
+                    height: 300,
+                    child: PieChart(
+                      PieChartData(
+                        sections: _generatePieChartData(),
+                        sectionsSpace: 0,
+                        centerSpaceRadius: 40,
+                        startDegreeOffset: -90,
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -236,6 +261,7 @@ class _MeditationScreenState extends State<MeditationScreen> {
           title: '$count sessions\n${duration}m', // Display count and duration in minutes
           radius: 60,
           titleStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white),
+
         ),
       );
     });
@@ -274,7 +300,7 @@ class _MeditationScreenState extends State<MeditationScreen> {
                 color: colors[colorIndex % colors.length],
               ),
               const SizedBox(width: 4),
-              Text('$duration min'),
+              Text('$duration min', style: TextStyle(color: Colors.white)),
               const SizedBox(width: 16), // Adjust spacing as needed
             ],
           )

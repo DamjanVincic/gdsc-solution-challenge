@@ -1,3 +1,4 @@
+import 'package:devfest_hackathon_2023/main.dart';
 import 'package:flutter/material.dart';
 import '../services/notification_service.dart';
 import '../services/quote_service.dart';
@@ -20,37 +21,118 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  final TextEditingController categoryController = TextEditingController();
-  final TextEditingController titleController = TextEditingController();
-  final TextEditingController detailsController = TextEditingController();
-  final TextEditingController mapMarkerLatitudeController = TextEditingController();
-  final TextEditingController mapMarkerLongitudeController = TextEditingController();
-  final TextEditingController mapMarkerTitleController = TextEditingController();
-  final TextEditingController mapMarkerSnippetController = TextEditingController();
-
   bool isNotificationScheduled = false;
+
+  Future<void> _showQuoteDialog(BuildContext context) async {
+    TextEditingController categoryController = TextEditingController();
+    TextEditingController titleController = TextEditingController();
+    TextEditingController detailsController = TextEditingController();
+
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Create Quote"),
+          content: Column(
+            children: [
+              SizedBox(height: 16),
+              TextField(
+                controller: categoryController,
+                decoration: InputDecoration(labelText: 'Category'),
+              ),
+              TextField(
+                controller: titleController,
+                decoration: InputDecoration(labelText: 'Title'),
+              ),
+              TextField(
+                controller: detailsController,
+                decoration: InputDecoration(labelText: 'Details'),
+              ),
+            ],
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text("Cancel"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                // Perform actions for uploading the quote
+                widget.quoteService.uploadQuote(categoryController.text, titleController.text, detailsController.text);
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text("Send to Firebase"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
+  Future<void> _showMapMarkerDialog(BuildContext context) async {
+    TextEditingController mapMarkerLatitudeController = TextEditingController();
+    TextEditingController mapMarkerLongitudeController = TextEditingController();
+    TextEditingController mapMarkerTitleController = TextEditingController();
+    TextEditingController mapMarkerSnippetController = TextEditingController();
+
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Create Map Marker"),
+          content: Column(
+            children: [
+              TextField(
+                controller: mapMarkerLatitudeController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(labelText: 'Map Marker Latitude'),
+              ),
+              TextField(
+                controller: mapMarkerLongitudeController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(labelText: 'Map Marker Longitude'),
+              ),
+              TextField(
+                controller: mapMarkerTitleController,
+                decoration: InputDecoration(labelText: 'Map Marker Title'),
+              ),
+              TextField(
+                controller: mapMarkerSnippetController,
+                decoration: InputDecoration(labelText: 'Map Marker Snippet'),
+              ),
+            ],
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text("Cancel"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                // Perform actions for uploading the map marker
+                double latitude = double.parse(mapMarkerLatitudeController.text);
+                double longitude = double.parse(mapMarkerLongitudeController.text);
+                widget.mapMarkerService.uploadMapMarker(latitude, longitude, mapMarkerTitleController.text, mapMarkerSnippetController.text);
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text("Upload Map Marker"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 
   @override
   void initState() {
     super.initState();
     isNotificationScheduled = false; // Set the initial state
-  }
-
-  void uploadQuote() {
-    final String category = categoryController.text;
-    final String title = titleController.text;
-    final String details = detailsController.text;
-
-    widget.quoteService.uploadQuote(category, title, details);
-  }
-
-  void uploadMapMarker() {
-    double latitude = double.parse(mapMarkerLatitudeController.text);
-    double longitude = double.parse(mapMarkerLongitudeController.text);
-    String title = mapMarkerTitleController.text;
-    String snippet = mapMarkerSnippetController.text;
-
-    widget.mapMarkerService.uploadMapMarker(latitude, longitude, title, snippet);
   }
 
   void toggleNotification() {
@@ -71,76 +153,68 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
+        backgroundColor: Colors.white,
       ),
-      body: Column(
-        children: [
-          const SizedBox(height: 16),
-          Text(
-            isNotificationScheduled
-                ? 'Receiving Notifications: On'
-                : 'Receiving Notifications: Off',
-            style: const TextStyle(fontSize: 16),
+      body: Container(
+        color: Colors.black87,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: 16),
+              Text(
+                isNotificationScheduled
+                    ? 'Receiving Notifications: On'
+                    : 'Receiving Notifications: Off',
+                style: const TextStyle(fontSize: 16, color: Colors.white),
+              ),
+              Switch(
+                value: isNotificationScheduled,
+                onChanged: (value) {
+                  setState(() {
+                    isNotificationScheduled = value;
+                    if (isNotificationScheduled) {
+                      widget.notificationService.scheduleNotification();
+                    } else {
+                      widget.notificationService.cancelScheduledNotifications();
+                    }
+                  });
+                },
+                activeTrackColor: Colors.lightGreenAccent,
+                activeColor: Colors.green,
+                inactiveTrackColor: Colors.red,
+                inactiveThumbColor: Colors.redAccent,
+                materialTapTargetSize: MaterialTapTargetSize.padded,
+              ),
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 10),
+                child: ElevatedButton(
+                  onPressed: () => _showQuoteDialog(context),
+                  child: const Text('Create Quote'),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.white, // Button background colorAccent
+                    onPrimary: Colors.black87, // Text colorPrimary
+                  ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 10),
+                child: ElevatedButton(
+                  onPressed: () => _showMapMarkerDialog(context),
+                  child: const Text('Create Map Marker'),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.white, // Button background colorAccent
+                    onPrimary: Colors.black87, // Text colorPrimary
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Container(), // Empty container to fill remaining space
+              ),
+            ],
           ),
-          Switch(
-            value: isNotificationScheduled,
-            onChanged: (value) {
-              setState(() {
-                isNotificationScheduled = value;
-                if (isNotificationScheduled) {
-                  widget.notificationService.scheduleNotification();
-                } else {
-                  widget.notificationService.cancelScheduledNotifications();
-                }
-              });
-            },
-            activeTrackColor: Colors.lightGreenAccent,
-            activeColor: Colors.green,
-            inactiveTrackColor: Colors.red,
-            inactiveThumbColor: Colors.redAccent,
-            materialTapTargetSize: MaterialTapTargetSize.padded,
-          ),
-          const SizedBox(height: 16),
-          TextField(
-            controller: categoryController,
-            decoration: const InputDecoration(labelText: 'Category'),
-          ),
-          TextField(
-            controller: titleController,
-            decoration: const InputDecoration(labelText: 'Title'),
-          ),
-          TextField(
-            controller: detailsController,
-            decoration: const InputDecoration(labelText: 'Details'),
-          ),
-          const SizedBox(height: 16.0),
-          TextField(
-            controller: mapMarkerLatitudeController,
-            keyboardType: TextInputType.number,
-            decoration: const InputDecoration(labelText: 'Map Marker Latitude'),
-          ),
-          TextField(
-            controller: mapMarkerLongitudeController,
-            keyboardType: TextInputType.number,
-            decoration: const InputDecoration(labelText: 'Map Marker Longitude'),
-          ),
-          TextField(
-            controller: mapMarkerTitleController,
-            decoration: const InputDecoration(labelText: 'Map Marker Title'),
-          ),
-          TextField(
-            controller: mapMarkerSnippetController,
-            decoration: const InputDecoration(labelText: 'Map Marker Snippet'),
-          ),
-          const SizedBox(height: 16.0),
-          ElevatedButton(
-            onPressed: uploadQuote,
-            child: const Text('Send to Firebase'),
-          ),
-          ElevatedButton(
-            onPressed: uploadMapMarker,
-            child: const Text('Upload Map Marker'),
-          ),
-        ],
+        ),
       ),
     );
   }
