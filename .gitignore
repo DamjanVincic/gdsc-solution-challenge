@@ -11,6 +11,7 @@
 .packages
 .pub-cache/
 .pub/
+pubspec.yaml
 build/
 coverage/
 lib/generated_plugin_registrant.dart
