@@ -102,8 +102,7 @@ class _SelfExaminationInputScreenState extends State<SelfExaminationInputScreen>
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.white70, // Button background color
-                  onPrimary: Colors.black87, // Text color
+                  foregroundColor: Colors.black87, backgroundColor: Colors.white70, // Text color
                   minimumSize: const Size(double.infinity, 50), // Set button size
                 ),
                 child: const Text('Save and Continue', style: TextStyle(fontSize: 16)),

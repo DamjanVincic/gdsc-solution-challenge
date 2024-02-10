@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'habit_details_screen.dart';
 import '../models/habit.dart';
-import '../utils/habit_data_handler.dart';
+import '../utils/habit_db.dart';
 
 class HabitListScreen extends StatefulWidget {
   final Color primaryColor;
