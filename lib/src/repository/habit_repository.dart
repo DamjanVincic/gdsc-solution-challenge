@@ -1,7 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/habit.dart';
 
-class HabitDataHandler {
+class HabitRepository {
   Future<List<Habit>> loadData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 

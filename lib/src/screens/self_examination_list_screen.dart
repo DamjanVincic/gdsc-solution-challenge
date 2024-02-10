@@ -6,7 +6,7 @@ import 'package:share/share.dart';
 import '../components/line_chart.dart';
 import '../components/pie_chart.dart';
 import '../models/examination_result.dart';
-import '../utils/self_examination_db.dart';
+import '../repository/self_examination_repository.dart';
 import 'self_examination_input_screen.dart';
 
 class SelfExaminationListScreen extends StatefulWidget {
@@ -19,7 +19,7 @@ class SelfExaminationListScreen extends StatefulWidget {
 
 class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
   List<ExaminationResult> items = [];
-  final ExaminationDataHandler dataHandler = ExaminationDataHandler();
+  final ExaminationRepository examinationRepository = ExaminationRepository();
   bool showLineChart = true; // Track the selected chart type
 
   @override
@@ -39,14 +39,14 @@ class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
   }
 
   Future<void> loadData() async {
-    List<ExaminationResult> loadedData = await dataHandler.loadData();
+    List<ExaminationResult> loadedData = await examinationRepository.loadData();
     setState(() {
       items = loadedData;
     });
   }
 
   Future<void> saveData() async {
-    await dataHandler.saveData(items);
+    await examinationRepository.saveData(items);
   }
 
   void showChartDialog() {

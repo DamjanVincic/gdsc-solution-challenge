@@ -2,9 +2,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../models/meditation_data.dart';
-import '../utils/meditation_db.dart';
-import '../components/line_chart.dart'; // Import LineChartWidget
-import '../components/pie_chart.dart'; // Import PieChartWidget
+import '../repository/meditation_repository.dart';
+import '../components/line_chart.dart';
+import '../components/pie_chart.dart';
 
 class MeditationScreen extends StatefulWidget {
   final Color primaryColor;
@@ -22,7 +22,7 @@ class MeditationScreen extends StatefulWidget {
 
 class _MeditationScreenState extends State<MeditationScreen> {
   List<MeditationData> meditationData = [];
-  final MeditationDataHandler dataHandler = MeditationDataHandler();
+  final MeditationRepository meditationRepository = MeditationRepository();
   int meditationDuration = 5;
   bool isTimerRunning = false;
   Timer? _timer;
@@ -36,7 +36,7 @@ class _MeditationScreenState extends State<MeditationScreen> {
   }
 
   Future<void> loadData() async {
-    List<MeditationData> loadedData = await dataHandler.loadData();
+    List<MeditationData> loadedData = await meditationRepository.loadData();
     setState(() {
       DateTime currentDate = DateTime.now();
 
@@ -49,7 +49,7 @@ class _MeditationScreenState extends State<MeditationScreen> {
   }
 
   Future<void> saveData() async {
-    await dataHandler.saveData(meditationData);
+    await meditationRepository.saveData(meditationData);
   }
 
   void startStopTimer() {
