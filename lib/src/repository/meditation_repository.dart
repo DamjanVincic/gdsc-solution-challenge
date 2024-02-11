@@ -1,7 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/meditation_data.dart';
 
-class MeditationDataHandler {
+class MeditationRepository {
   Future<List<MeditationData>> loadData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
