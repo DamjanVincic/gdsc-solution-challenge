@@ -45,6 +45,7 @@ dependencies:
   flutter_config: ^2.0.2
   permission_handler: ^11.1.0
   location: ^5.0.3
+  table_calendar: ^3.1.0
 
 dev_dependencies:
   flutter_test:

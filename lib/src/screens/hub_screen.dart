@@ -4,6 +4,7 @@ import 'package:Actualizator/src/screens/habit_list_screen.dart';
 import 'package:Actualizator/src/screens/quote_list_screen.dart';
 import 'package:Actualizator/src/screens/self_examination_list_screen.dart';
 
+import 'gratitude_journal_screen.dart';
 import 'meditation_screen.dart';
 
 class HubScreen extends StatelessWidget {
@@ -62,6 +63,14 @@ class HubScreen extends StatelessWidget {
               textColor: accentColor,
               description: 'Practice mindfulness and meditation.',
             ),
+            HubButton(
+              onPressed: () => _navigateToGratitudeJournalScreen(context),
+              label: 'GRATITUDE JOURNAL',
+              icon: Icons.book,
+              backgroundColor: Colors.yellowAccent,
+              textColor: accentColor,
+              description: 'Write & read about things you are grateful for.',
+            ),
           ],
         ),
       ),
@@ -104,6 +113,13 @@ class HubScreen extends StatelessWidget {
       MaterialPageRoute(
         builder: (context) => MeditationScreen(primaryColor: primaryColor, accentColor: accentColor),
       ),
+    );
+  }
+
+  void _navigateToGratitudeJournalScreen(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const GratitudeJournalScreen())
     );
   }
 }
