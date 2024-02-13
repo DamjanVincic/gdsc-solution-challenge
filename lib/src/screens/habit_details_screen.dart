@@ -42,8 +42,6 @@ class _HabitDetailsScreenState extends State<HabitDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final accentColor = widget.accentColor;
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.lightBlueAccent,

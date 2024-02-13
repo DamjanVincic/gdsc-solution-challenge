@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'habit_details_screen.dart';
 import '../models/habit.dart';
-import '../utils/habit_data_handler.dart';
+import '../repository/habit_repository.dart';
 
 class HabitListScreen extends StatefulWidget {
   final Color primaryColor;
@@ -19,7 +19,7 @@ class HabitListScreen extends StatefulWidget {
 
 class _HabitListScreenState extends State<HabitListScreen> {
   List<Habit> habits = [];
-  final HabitDataHandler dataHandler = HabitDataHandler();
+  final HabitRepository habitRepository = HabitRepository();
   TextEditingController habitController = TextEditingController();
 
   @override
@@ -29,14 +29,14 @@ class _HabitListScreenState extends State<HabitListScreen> {
   }
 
   Future<void> loadData() async {
-    List<Habit> loadedData = await dataHandler.loadData();
+    List<Habit> loadedData = await habitRepository.loadData();
     setState(() {
       habits = loadedData;
     });
   }
 
   Future<void> saveData() async {
-    await dataHandler.saveData(habits);
+    await habitRepository.saveData(habits);
   }
 
   @override

@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import '../services/notification_service.dart';
 import '../services/quote_service.dart';
-import '../services/map_marker_service.dart'; // Import your map marker service
+import '../services/map_marker_service.dart';
 
 class SettingsScreen extends StatefulWidget {
   final NotificationService notificationService;
   final QuoteService quoteService;
-  final MapMarkerService mapMarkerService; // Add your map marker service
+  final MapMarkerService mapMarkerService;
 
   const SettingsScreen({
-    super.key,
+    Key? key,
     required this.notificationService,
     required this.quoteService,
     required this.mapMarkerService,
-  });
+  }) : super(key: key);
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
@@ -22,12 +22,29 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   bool isNotificationScheduled = false;
 
+  @override
+  void initState() {
+    super.initState();
+    isNotificationScheduled = false;
+  }
+
+  void toggleNotification() {
+    setState(() {
+      if (isNotificationScheduled) {
+        widget.notificationService.cancelScheduledNotifications();
+      } else {
+        widget.notificationService.scheduleNotification();
+      }
+      isNotificationScheduled = !isNotificationScheduled;
+    });
+  }
+
   Future<void> _showQuoteDialog(BuildContext context) async {
     TextEditingController categoryController = TextEditingController();
     TextEditingController titleController = TextEditingController();
     TextEditingController detailsController = TextEditingController();
 
-    return showDialog(
+    await showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -52,15 +69,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
           actions: [
             ElevatedButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               child: const Text("Cancel"),
             ),
             ElevatedButton(
               onPressed: () {
-                // Perform actions for uploading the quote
                 widget.quoteService.uploadQuote(categoryController.text, titleController.text, detailsController.text);
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               child: const Text("Upload"),
             ),
@@ -70,14 +86,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-
   Future<void> _showMapMarkerDialog(BuildContext context) async {
     TextEditingController mapMarkerLatitudeController = TextEditingController();
     TextEditingController mapMarkerLongitudeController = TextEditingController();
     TextEditingController mapMarkerTitleController = TextEditingController();
     TextEditingController mapMarkerSnippetController = TextEditingController();
 
-    return showDialog(
+    await showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -107,17 +122,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
           actions: [
             ElevatedButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               child: const Text("Cancel"),
             ),
             ElevatedButton(
               onPressed: () {
-                // Perform actions for uploading the map marker
                 double latitude = double.parse(mapMarkerLatitudeController.text);
                 double longitude = double.parse(mapMarkerLongitudeController.text);
                 widget.mapMarkerService.uploadMapMarker(latitude, longitude, mapMarkerTitleController.text, mapMarkerSnippetController.text);
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               child: const Text("Upload"),
             ),
@@ -125,26 +139,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
         );
       },
     );
-  }
-
-
-  @override
-  void initState() {
-    super.initState();
-    isNotificationScheduled = false; // Set the initial state
-  }
-
-  void toggleNotification() {
-    setState(() {
-      if (isNotificationScheduled) {
-        // Cancel the scheduled notifications
-        widget.notificationService.cancelScheduledNotifications();
-      } else {
-        // Schedule periodic notifications
-        widget.notificationService.scheduleNotification();
-      }
-      isNotificationScheduled = !isNotificationScheduled; // Toggle the state
-    });
   }
 
   @override
@@ -191,8 +185,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 child: ElevatedButton(
                   onPressed: () => _showQuoteDialog(context),
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.white70, // Button background colorAccent
-                    onPrimary: Colors.black87, // Text colorPrimary
+                    foregroundColor: Colors.black87, backgroundColor: Colors.white70,
                   ),
                   child: const Text('Create Quote'),
                 ),
@@ -202,14 +195,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 child: ElevatedButton(
                   onPressed: () => _showMapMarkerDialog(context),
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.white70, // Button background colorAccent
-                    onPrimary: Colors.black87, // Text colorPrimary
+                    foregroundColor: Colors.black87, backgroundColor: Colors.white70,
                   ),
                   child: const Text('Create Map Marker'),
                 ),
               ),
               Expanded(
-                child: Container(), // Empty container to fill remaining space
+                child: Container(),
               ),
             ],
           ),

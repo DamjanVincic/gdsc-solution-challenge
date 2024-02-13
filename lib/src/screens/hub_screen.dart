@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:Actualizator/src/services/quote_service.dart';
-import 'package:Actualizator/src/views/habit_list_screen.dart';
-import 'package:Actualizator/src/views/quote_list_screen.dart';
-import 'package:Actualizator/src/views/self_examination_list_screen.dart';
+import 'package:Actualizator/src/screens/habit_list_screen.dart';
+import 'package:Actualizator/src/screens/quote_list_screen.dart';
+import 'package:Actualizator/src/screens/self_examination_list_screen.dart';
 
+import 'gratitude_journal_screen.dart';
 import 'meditation_screen.dart';
 
-class Hub extends StatelessWidget {
-  const Hub({
+class HubScreen extends StatelessWidget {
+  const HubScreen({
     Key? key,
     required this.quoteService,
     required this.primaryColor,
@@ -23,26 +24,15 @@ class Hub extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Mental Hub', style: TextStyle(color: accentColor)),
-        backgroundColor: Colors.white70,
+        backgroundColor: primaryColor,
       ),
       body: Container(
-        color: Colors.white38,
+        color: primaryColor,
         child: ListView(
           padding: const EdgeInsets.all(16.0),
           children: [
             HubButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => QuoteListScreen(
-                      quoteService: quoteService,
-                      primaryColor: primaryColor,
-                      accentColor: accentColor,
-                    ),
-                  ),
-                );
-              },
+              onPressed: () => _navigateToQuoteListScreen(context),
               label: 'QUOTES',
               icon: Icons.format_quote,
               backgroundColor: Colors.purpleAccent.shade100,
@@ -50,13 +40,7 @@ class Hub extends StatelessWidget {
               description: 'Explore and discover meaningful quotes.',
             ),
             HubButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => HabitListScreen(primaryColor: Colors.lightBlueAccent, accentColor: accentColor)),
-                );
-              },
+              onPressed: () => _navigateToHabitListScreen(context),
               label: 'HABITS',
               icon: Icons.star,
               backgroundColor: Colors.lightBlueAccent,
@@ -64,14 +48,7 @@ class Hub extends StatelessWidget {
               description: 'Track and build healthy habits.',
             ),
             HubButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const SelfExaminationListScreen(),
-                  ),
-                );
-              },
+              onPressed: () => _navigateToEvaluationScreen(context),
               label: 'SELF EVALUATION',
               icon: Icons.check,
               backgroundColor: Colors.greenAccent,
@@ -79,23 +56,70 @@ class Hub extends StatelessWidget {
               description: 'Reflect and evaluate personal growth.',
             ),
             HubButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MeditationScreen(primaryColor: primaryColor, accentColor: accentColor),
-                  ),
-                );
-              },
+              onPressed: () => _navigateToMeditationScreen(context),
               label: 'MEDITATION',
               icon: Icons.spa,
               backgroundColor: Colors.redAccent,
               textColor: accentColor,
               description: 'Practice mindfulness and meditation.',
             ),
+            HubButton(
+              onPressed: () => _navigateToGratitudeJournalScreen(context),
+              label: 'GRATITUDE JOURNAL',
+              icon: Icons.book,
+              backgroundColor: Colors.yellowAccent,
+              textColor: accentColor,
+              description: 'Write & read about things you are grateful for.',
+            ),
           ],
         ),
       ),
+    );
+  }
+
+  void _navigateToQuoteListScreen(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => QuoteListScreen(
+          quoteService: quoteService,
+          primaryColor: primaryColor,
+          accentColor: accentColor,
+        ),
+      ),
+    );
+  }
+
+  void _navigateToHabitListScreen(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => HabitListScreen(primaryColor: Colors.lightBlueAccent, accentColor: accentColor)),
+    );
+  }
+
+  void _navigateToEvaluationScreen(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const SelfExaminationListScreen(),
+      ),
+    );
+  }
+
+  void _navigateToMeditationScreen(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MeditationScreen(primaryColor: primaryColor, accentColor: accentColor),
+      ),
+    );
+  }
+
+  void _navigateToGratitudeJournalScreen(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const GratitudeJournalScreen())
     );
   }
 }

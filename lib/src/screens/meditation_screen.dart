@@ -1,9 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import '../models/meditation_data.dart';
-import '../utils/meditation_data_handler.dart';
 import 'package:fl_chart/fl_chart.dart';
-
+import '../models/meditation_data.dart';
+import '../repository/meditation_repository.dart';
+import '../components/line_chart.dart';
+import '../components/pie_chart.dart';
 
 class MeditationScreen extends StatefulWidget {
   final Color primaryColor;
@@ -21,11 +22,12 @@ class MeditationScreen extends StatefulWidget {
 
 class _MeditationScreenState extends State<MeditationScreen> {
   List<MeditationData> meditationData = [];
-  final MeditationDataHandler dataHandler = MeditationDataHandler();
+  final MeditationRepository meditationRepository = MeditationRepository();
   int meditationDuration = 5;
   bool isTimerRunning = false;
   Timer? _timer;
   int secondsLeft = 5 * 60;
+  bool showLineChart = true;
 
   @override
   void initState() {
@@ -34,7 +36,7 @@ class _MeditationScreenState extends State<MeditationScreen> {
   }
 
   Future<void> loadData() async {
-    List<MeditationData> loadedData = await dataHandler.loadData();
+    List<MeditationData> loadedData = await meditationRepository.loadData();
     setState(() {
       DateTime currentDate = DateTime.now();
 
@@ -47,7 +49,7 @@ class _MeditationScreenState extends State<MeditationScreen> {
   }
 
   Future<void> saveData() async {
-    await dataHandler.saveData(meditationData);
+    await meditationRepository.saveData(meditationData);
   }
 
   void startStopTimer() {
@@ -115,16 +117,16 @@ class _MeditationScreenState extends State<MeditationScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Meditation'),
-          backgroundColor: Colors.redAccent
+        backgroundColor: Colors.redAccent,
       ),
       body: Container(
-        color: Colors.white38, // Set the actual background color
+        color: Colors.white38,
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Total Meditated Time: ${_formatTotalMeditationTime()}',
+                'Total Meditated Time: ${formatTotalMeditationTime()}',
                 style: const TextStyle(fontSize: 20, color: Colors.black87), // Set text color
               ),
               Row(
@@ -199,22 +201,43 @@ class _MeditationScreenState extends State<MeditationScreen> {
                 'Meditation Data for the Last 7 Days',
                 style: TextStyle(fontSize: 20, color: Colors.black87),
               ),
-              Column(
+              const SizedBox(height: 20),
+              // Button to toggle between line chart and pie chart
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    showLineChart = !showLineChart;
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white38,
+                ),
+                child: Text(
+                  showLineChart ? 'Show Pie Chart' : 'Show Line Chart',
+                  style: TextStyle(color: accentColor),
+                ),
+              ),
+              const SizedBox(height: 20),
+              // Conditionally display line chart or pie chart
+              showLineChart
+                  ? SizedBox(
+                height: 300,
+                child: LineChartWidget(
+                  spots: generateLineChartSpots(),
+                  labels: generateXLabels(),
+                  xAxisTitle: 'Days',
+                  yAxisTitle: 'Duration',
+                  yAxisUnit: 'minutes'
+                ),
+              )
+                  : Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: generateLegend(),
-                  ),
                   SizedBox(
                     width: 300,
                     height: 300,
-                    child: PieChart(
-                      PieChartData(
-                        sections: _generatePieChartData(),
-                        sectionsSpace: 0,
-                        centerSpaceRadius: 40,
-                        startDegreeOffset: -90,
-                      ),
+                    child: PieChartWidget(
+                        data: generatePieChartData(),
+                        legendTitles: generatePieChartLegendTitles()
                     ),
                   ),
                 ],
@@ -232,7 +255,28 @@ class _MeditationScreenState extends State<MeditationScreen> {
     super.dispose();
   }
 
-  List<PieChartSectionData> _generatePieChartData() {
+  List<String> generateXLabels() {
+    var days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    var index = DateTime.now().subtract(const Duration(days: 5)).weekday;
+    List<String> labels = [];
+    for (var i = 0; i < 7; i++) {
+      labels.add(days[(index + i) % 7]);
+    }
+    return labels;
+  }
+
+  List<String> generatePieChartLegendTitles() {
+    Set<String> legendTitles = {};
+
+    for (var entry in meditationData) {
+      int duration = entry.durationInSeconds ~/ 60; // Convert seconds to minutes
+      legendTitles.add(duration.toString());
+    }
+
+    return legendTitles.toList();
+  }
+
+  List<PieChartSectionData> generatePieChartData() {
     Map<int, int> durationCountMap = {};
 
     for (var entry in meditationData) {
@@ -260,7 +304,6 @@ class _MeditationScreenState extends State<MeditationScreen> {
           title: '$count sessions\n${duration}m', // Display count and duration in minutes
           radius: 60,
           titleStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black87),
-
         ),
       );
     });
@@ -268,48 +311,17 @@ class _MeditationScreenState extends State<MeditationScreen> {
     return sections;
   }
 
+  List<FlSpot> generateLineChartSpots() {
+    List<FlSpot> spots = [];
 
-  List<Widget> generateLegend() {
-    List<Widget> legendWidgets = [];
-    int colorIndex = 0;
-    List<Color> colors = [
-      Colors.red,
-      Colors.blue,
-      Colors.green,
-      Colors.yellow,
-      Colors.orange,
-      Colors.purple,
-      Colors.teal,
-    ];
-
-    Map<int, int> durationCountMap = {};
-
-    for (var entry in meditationData) {
-      int duration = entry.durationInSeconds ~/ 60; // Convert seconds to minutes
-      durationCountMap[duration] = (durationCountMap[duration] ?? 0) + 1;
+    for (int i = 0; i < meditationData.length; i++) {
+      spots.add(FlSpot(i.toDouble(), meditationData[i].durationInSeconds.toDouble()));
     }
 
-    durationCountMap.forEach((duration, count) {
-      legendWidgets.add(
-          Row(
-            children: [
-              Container(
-                width: 12,
-                height: 12,
-                color: colors[colorIndex % colors.length],
-              ),
-              const SizedBox(width: 4),
-              Text('$duration min', style: const TextStyle(color: Colors.black87)),
-              const SizedBox(width: 16), // Adjust spacing as needed
-            ],
-          )
-      );
-    });
-
-    return legendWidgets;
+    return spots;
   }
 
-  int _calculateTotalMeditationTime() {
+  int calculateTotalMeditationTime() {
     int totalSeconds = 0;
     for (var entry in meditationData) {
       totalSeconds += entry.durationInSeconds;
@@ -317,8 +329,8 @@ class _MeditationScreenState extends State<MeditationScreen> {
     return totalSeconds;
   }
 
-  String _formatTotalMeditationTime() {
-    int totalSeconds = _calculateTotalMeditationTime();
+  String formatTotalMeditationTime() {
+    int totalSeconds = calculateTotalMeditationTime();
     int hours = totalSeconds ~/ 3600;
     int minutes = (totalSeconds % 3600) ~/ 60;
     int seconds = totalSeconds % 60;
