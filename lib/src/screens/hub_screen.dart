@@ -3,7 +3,9 @@ import 'package:Actualizator/src/services/quote_service.dart';
 import 'package:Actualizator/src/screens/habit_list_screen.dart';
 import 'package:Actualizator/src/screens/quote_list_screen.dart';
 import 'package:Actualizator/src/screens/self_examination_list_screen.dart';
+import 'package:google_fonts/google_fonts.dart';
 
+import '../services/self_examination_service.dart';
 import 'gratitude_journal_screen.dart';
 import 'meditation_screen.dart';
 
@@ -11,10 +13,12 @@ class HubScreen extends StatelessWidget {
   const HubScreen({
     Key? key,
     required this.quoteService,
+    required this.selfExaminationService,
     required this.primaryColor,
     required this.accentColor,
   }) : super(key: key);
 
+  final SelfExaminationService selfExaminationService;
   final QuoteService quoteService;
   final Color primaryColor;
   final Color accentColor;
@@ -31,51 +35,97 @@ class HubScreen extends StatelessWidget {
         child: ListView(
           padding: const EdgeInsets.all(16.0),
           children: [
-            HubButton(
-              onPressed: () => _navigateToQuoteListScreen(context),
-              label: 'QUOTES',
-              icon: Icons.format_quote,
-              backgroundColor: Colors.purpleAccent.shade100,
-              textColor: accentColor,
-              description: 'Explore and discover meaningful quotes.',
+            // Goals
+            FutureBuilder<List<String>>(
+              future: selfExaminationService.getTodayExaminations(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else {
+                  List<String> goals = snapshot.data ?? [];
+
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      for (String goal in goals)
+                        ListTile(
+                          title: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Container(
+                              color: Colors.green.withOpacity(0.2),
+                              padding: const EdgeInsets.all(8),
+                              child: Center(
+                                child: Text(
+                                  '"$goal"',
+                                  style: GoogleFonts.greatVibes(
+                                    textStyle: const TextStyle(
+                                      fontStyle: FontStyle.italic,
+                                      color: Colors.black,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+
+                      // Add a SizedBox for spacing between the goals and the QUOTES HubButton
+                      const SizedBox(height: 40),
+
+                      HubButton(
+                        onPressed: () => _navigateToQuoteListScreen(context),
+                        label: 'QUOTES',
+                        icon: Icons.format_quote,
+                        backgroundColor: Colors.purpleAccent.shade100,
+                        textColor: accentColor,
+                        description: 'Explore and discover meaningful quotes.',
+                      ),
+                      HubButton(
+                        onPressed: () => _navigateToHabitListScreen(context),
+                        label: 'HABITS',
+                        icon: Icons.star,
+                        backgroundColor: Colors.lightBlueAccent,
+                        textColor: accentColor,
+                        description: 'Track and build healthy habits.',
+                      ),
+                      HubButton(
+                        onPressed: () => _navigateToEvaluationScreen(context),
+                        label: 'SELF EVALUATION',
+                        icon: Icons.check,
+                        backgroundColor: Colors.greenAccent,
+                        textColor: accentColor,
+                        description: 'Reflect and evaluate personal growth.',
+                      ),
+                      HubButton(
+                        onPressed: () => _navigateToMeditationScreen(context),
+                        label: 'MEDITATION',
+                        icon: Icons.spa,
+                        backgroundColor: Colors.redAccent,
+                        textColor: accentColor,
+                        description: 'Practice mindfulness and meditation.',
+                      ),
+                      HubButton(
+                        onPressed: () => _navigateToGratitudeJournalScreen(context),
+                        label: 'GRATITUDE JOURNAL',
+                        icon: Icons.book,
+                        backgroundColor: Colors.yellowAccent,
+                        textColor: accentColor,
+                        description: 'Write & read about things you are grateful for.',
+                      ),
+                    ],
+                  );
+                }
+              },
             ),
-            HubButton(
-              onPressed: () => _navigateToHabitListScreen(context),
-              label: 'HABITS',
-              icon: Icons.star,
-              backgroundColor: Colors.lightBlueAccent,
-              textColor: accentColor,
-              description: 'Track and build healthy habits.',
-            ),
-            HubButton(
-              onPressed: () => _navigateToEvaluationScreen(context),
-              label: 'SELF EVALUATION',
-              icon: Icons.check,
-              backgroundColor: Colors.greenAccent,
-              textColor: accentColor,
-              description: 'Reflect and evaluate personal growth.',
-            ),
-            HubButton(
-              onPressed: () => _navigateToMeditationScreen(context),
-              label: 'MEDITATION',
-              icon: Icons.spa,
-              backgroundColor: Colors.redAccent,
-              textColor: accentColor,
-              description: 'Practice mindfulness and meditation.',
-            ),
-            HubButton(
-              onPressed: () => _navigateToGratitudeJournalScreen(context),
-              label: 'GRATITUDE JOURNAL',
-              icon: Icons.book,
-              backgroundColor: Colors.yellowAccent,
-              textColor: accentColor,
-              description: 'Write & read about things you are grateful for.',
-            ),
-          ],
+          ], // the children of ListView
         ),
       ),
-    );
+    ); // Scaffold
   }
+
 
   void _navigateToQuoteListScreen(BuildContext context) {
     Navigator.push(
