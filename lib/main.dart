@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:io';
+import 'package:Actualizator/src/repository/settings_repository.dart';
 import 'package:Actualizator/src/services/map_marker_service.dart';
 import 'package:Actualizator/src/screens/map_screen.dart';
 import 'package:Actualizator/src/screens/hub_screen.dart';
@@ -14,14 +16,17 @@ import 'src/services/notification_service.dart';
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 final QuoteService quoteService = QuoteService();
 final MapMarkerService mapMarkerService = MapMarkerService();
+final SettingsRepository settingsRepository = SettingsRepository();
 final SelfExaminationService selfExaminationService = SelfExaminationService();
-final NotificationService notificationService = NotificationService(quoteService: quoteService, selfExaminationService: selfExaminationService);
+final NotificationService notificationService = NotificationService(settingsRepository: settingsRepository, quoteService: quoteService, selfExaminationService: selfExaminationService);
 const Color primaryColor = Colors.white70;
 const Color accentColor = Colors.black87;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await FlutterConfig.loadEnvVariables();
+  if (Platform.isAndroid || Platform.isIOS) {
+    await FlutterConfig.loadEnvVariables();
+  }
   await initializeNotifications();
   runApp(const MyApp());
 }
@@ -67,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
         children: [
           HubScreen(quoteService: quoteService, selfExaminationService: selfExaminationService, primaryColor: primaryColor, accentColor: accentColor),
           MapScreen(mapMarkerService: mapMarkerService),
-          SettingsScreen(notificationService: notificationService, quoteService: quoteService, mapMarkerService: mapMarkerService)
+          SettingsScreen(notificationService: notificationService, quoteService: quoteService, mapMarkerService: mapMarkerService, settingsRepository: settingsRepository)
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
