@@ -22,6 +22,7 @@ class PieChartWidget extends StatelessWidget {
         Positioned(
           top: 8,
           left: 8,
+          bottom: 16, // Adjust the bottom value for the desired spacing
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: generateLegend(),
@@ -30,6 +31,7 @@ class PieChartWidget extends StatelessWidget {
       ],
     );
   }
+
 
   List<Widget> generateLegend() {
     List<Widget> legendWidgets = [];
