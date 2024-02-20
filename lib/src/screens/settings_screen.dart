@@ -1,4 +1,7 @@
+import 'package:Actualizator/main.dart';
+import 'package:Actualizator/src/services/self_examination_service.dart';
 import 'package:flutter/material.dart';
+import '../models/quote.dart';
 import '../services/notification_service.dart';
 import '../services/quote_service.dart';
 import '../services/map_marker_service.dart';
@@ -141,6 +144,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
+  Future<void> _showNotification(BuildContext context) async {
+    SelfExaminationService selfExaminationService = SelfExaminationService();
+    List<String> goals = await selfExaminationService.getTodayExaminations();
+    for (String goal in goals) {
+      await notificationService.showExaminationNotification(goal);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -198,6 +209,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     foregroundColor: Colors.black87, backgroundColor: Colors.white70,
                   ),
                   child: const Text('Create Map Marker'),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 10),
+                child: ElevatedButton(
+                  onPressed: () => _showNotification(context),
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.black87, backgroundColor: Colors.white70,
+                  ),
+                  child: const Text('Self Examination Notification'),
                 ),
               ),
               Expanded(

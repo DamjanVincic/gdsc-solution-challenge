@@ -35,8 +35,6 @@ Future<void> initializeNotifications() async {
     linux: initializationSettingsLinux,
   );
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-
-  notificationService.showDailyGoals();
 }
 
 class MyApp extends StatelessWidget {
