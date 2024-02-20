@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../repository/settings_repository.dart';
 import '../services/notification_service.dart';
 import '../services/quote_service.dart';
 import '../services/map_marker_service.dart';
@@ -7,12 +8,14 @@ class SettingsScreen extends StatefulWidget {
   final NotificationService notificationService;
   final QuoteService quoteService;
   final MapMarkerService mapMarkerService;
+  final SettingsRepository settingsRepository;
 
   const SettingsScreen({
     Key? key,
     required this.notificationService,
     required this.quoteService,
     required this.mapMarkerService,
+    required this.settingsRepository
   }) : super(key: key);
 
   @override
@@ -154,6 +157,42 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
+  Future<void> _showQuoteTimePicker(BuildContext context) async {
+    TimeOfDay? selectedTime = await showTimePicker(
+      context: context,
+      initialTime: const TimeOfDay(hour: 10, minute: 0),
+    );
+
+    if (selectedTime != null) {
+      DateTime selectedDateTime = DateTime(
+        DateTime.now().year,
+        DateTime.now().month,
+        DateTime.now().day,
+        selectedTime.hour,
+        selectedTime.minute,
+      );
+      await widget.settingsRepository.saveQuoteDateTime(selectedDateTime);
+    }
+  }
+
+  Future<void> _showDiaryTimePicker(BuildContext context) async {
+    TimeOfDay? selectedTime = await showTimePicker(
+      context: context,
+      initialTime: const TimeOfDay(hour: 10, minute: 0),
+    );
+
+    if (selectedTime != null) {
+      DateTime selectedDateTime = DateTime(
+        DateTime.now().year,
+        DateTime.now().month,
+        DateTime.now().day,
+        selectedTime.hour,
+        selectedTime.minute,
+      );
+      await widget.settingsRepository.saveDiaryDateTime(selectedDateTime);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -192,6 +231,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 inactiveTrackColor: Colors.red,
                 inactiveThumbColor: Colors.redAccent,
                 materialTapTargetSize: MaterialTapTargetSize.padded,
+              ),
+              const SizedBox(width: 10), // Adding some space between text and button
+              ElevatedButton(
+                onPressed: () => _showQuoteTimePicker(context),
+                child: const Text('Set quote time'),
               ),
               Container(
                 margin: const EdgeInsets.symmetric(vertical: 10),
@@ -240,6 +284,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 inactiveTrackColor: Colors.red,
                 inactiveThumbColor: Colors.redAccent,
                 materialTapTargetSize: MaterialTapTargetSize.padded,
+              ),
+              const SizedBox(width: 10), // Adding some space between text and button
+              ElevatedButton(
+                onPressed: () => _showDiaryTimePicker(context),
+                child: const Text('Set gratitude time'),
               )
             ],
           ),

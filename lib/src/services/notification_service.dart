@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:core';
-import 'dart:developer';
+import 'package:Actualizator/src/repository/settings_repository.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tzdata;
 import '../models/quote.dart';
@@ -10,6 +10,7 @@ class NotificationService {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
   FlutterLocalNotificationsPlugin();
   final QuoteService quoteService;
+  final SettingsRepository settingsRepository;
   static const channelId = "1";
   static const channelIdNum = 1;
   static const channelName = 'Actualizer';
@@ -22,7 +23,7 @@ class NotificationService {
 
   Timer? gratitudeNotificationTimer;
   
-  NotificationService({required this.quoteService}) {
+  NotificationService({required this.settingsRepository, required this.quoteService}) {
     _setQuotes();
   }
 
@@ -42,18 +43,30 @@ class NotificationService {
   }
 
   Future<void> scheduleQuoteNotification() async {
-    const int intervalSeconds = 15;
+    DateTime? scheduledTime = await settingsRepository.getQuoteDateTime();
+    scheduledTime ??= DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 10, 0, 0);
 
-    // Try calling showRandomNotification directly
+    // Calculate the delay until the scheduled time
+    DateTime now = DateTime.now();
+    Duration delay = scheduledTime.difference(now);
+
+    // If the scheduled time is in the past, adjust it to the next day
+    if (delay.isNegative) {
+      scheduledTime = scheduledTime.add(const Duration(days: 1));
+      delay = scheduledTime.difference(now);
+    }
+
+    // Convert the delay to seconds
+    int delaySeconds = delay.inSeconds;
+
+    // Call showRandomQuoteNotification directly to prove that it works
     _showRandomQuoteNotification();
 
-    quoteNotificationTimer = Timer.periodic(
-      const Duration(seconds: intervalSeconds),
-          (Timer timer) {
-        log("Scheduling quote notification");
-        _showRandomQuoteNotification();
-      },
-    );
+    // Set up periodic timer with delaySeconds interval
+    Timer.periodic(Duration(seconds: delaySeconds), (Timer timer) {
+      print("Scheduling random quote notification");
+      _showRandomQuoteNotification();
+    });
   }
 
   void cancelQuoteNotifications() {
@@ -61,18 +74,30 @@ class NotificationService {
   }
 
   Future<void> scheduleGratitudeNotification() async {
-    const int intervalSeconds = 15;
+    DateTime? scheduledTime = await settingsRepository.getDiaryDateTime();
+    scheduledTime ??= DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 10, 0, 0);
 
-    // Try calling showRandomNotification directly
+    // Calculate the delay until the scheduled time
+    DateTime now = DateTime.now();
+    Duration delay = scheduledTime.difference(now);
+
+    // If the scheduled time is in the past, adjust it to the next day
+    if (delay.isNegative) {
+      scheduledTime = scheduledTime.add(const Duration(days: 1));
+      delay = scheduledTime.difference(now);
+    }
+
+    // Convert the delay to seconds
+    int delaySeconds = delay.inSeconds;
+
+    // Call showGratitudeNotification directly to prove that it works
     _showGratitudeNotification();
 
-    gratitudeNotificationTimer = Timer.periodic(
-      const Duration(seconds: intervalSeconds),
-          (Timer timer) {
-        log("Scheduling gratitude notification");
-        _showGratitudeNotification();
-      },
-    );
+    // Set up periodic timer with delaySeconds interval
+    Timer.periodic(Duration(seconds: delaySeconds), (Timer timer) {
+      print("Scheduling gratitude notification");
+      _showGratitudeNotification();
+    });
   }
 
   void cancelGratitudeNotifications() {
