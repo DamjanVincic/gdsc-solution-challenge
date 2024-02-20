@@ -12,6 +12,7 @@ import 'package:flutter_config/flutter_config.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tzdata;
 import 'src/services/notification_service.dart';
+import 'dart:io' show Platform;
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 final QuoteService quoteService = QuoteService();

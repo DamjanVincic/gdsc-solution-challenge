@@ -22,6 +22,8 @@ lib/generated_plugin_registrant.dart
 ### dotenv ###
 .env
 
+pubspec.lock
+
 # Android related
 **/android/**/gradle-wrapper.jar
 **/android/.gradle

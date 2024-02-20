@@ -1,13 +1,9 @@
 import 'dart:async';
 import 'dart:core';
 import 'package:Actualizator/src/repository/settings_repository.dart';
-import 'dart:developer';
 import 'package:Actualizator/src/services/self_examination_service.dart';
-import 'package:cron/cron.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tzdata;
-import 'package:timezone/timezone.dart' as tz;
 import '../models/quote.dart';
 import 'quote_service.dart';
 
@@ -31,7 +27,7 @@ class NotificationService {
   
   NotificationService({required this.settingsRepository, required this.quoteService, required this.selfExaminationService}) {
     _setQuotes();
-    fetchAndSetNotifications();
+    //fetchAndSetNotifications();
   }
 
   static const AndroidNotificationDetails _androidNotificationDetails =
