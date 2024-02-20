@@ -14,12 +14,16 @@ class NotificationService {
   static const channelIdNum = 1;
   static const channelName = 'Actualizer';
   static const channelDescription = 'Shows actualizer notifications';
+  static const gratitudeNotificationTitle = 'Gratitude journal';
+  static const gratitudeNotificationSubtitle = 'What are you grateful for today?';
 
-  List<Quote> notifications = [];
-  Timer? notificationTimer;
+  List<Quote> quotes = [];
+  Timer? quoteNotificationTimer;
 
+  Timer? gratitudeNotificationTimer;
+  
   NotificationService({required this.quoteService}) {
-    fetchAndSetNotifications();
+    _setQuotes();
   }
 
   Future<void> initializeNotifications() async {
@@ -37,7 +41,45 @@ class NotificationService {
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
-  Future<void> showNotification(Quote notificationItem) async {
+  Future<void> scheduleQuoteNotification() async {
+    const int intervalSeconds = 15;
+
+    // Try calling showRandomNotification directly
+    _showRandomQuoteNotification();
+
+    quoteNotificationTimer = Timer.periodic(
+      const Duration(seconds: intervalSeconds),
+          (Timer timer) {
+        log("Scheduling quote notification");
+        _showRandomQuoteNotification();
+      },
+    );
+  }
+
+  void cancelQuoteNotifications() {
+    quoteNotificationTimer?.cancel();
+  }
+
+  Future<void> scheduleGratitudeNotification() async {
+    const int intervalSeconds = 15;
+
+    // Try calling showRandomNotification directly
+    _showGratitudeNotification();
+
+    gratitudeNotificationTimer = Timer.periodic(
+      const Duration(seconds: intervalSeconds),
+          (Timer timer) {
+        log("Scheduling gratitude notification");
+        _showGratitudeNotification();
+      },
+    );
+  }
+
+  void cancelGratitudeNotifications() {
+    gratitudeNotificationTimer?.cancel();
+  }
+
+  Future<void> _showNotification(String title, String subtitle) async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
     AndroidNotificationDetails(
       channelId,
@@ -48,42 +90,27 @@ class NotificationService {
     NotificationDetails(android: androidPlatformChannelSpecifics);
 
     await flutterLocalNotificationsPlugin.show(
-        notificationItem.title.hashCode,
-        notificationItem.category,
-        notificationItem.title,
+        title.hashCode,
+        title,
+        subtitle,
         platformChannelSpecifics);
   }
 
-  Future<void> showRandomNotification() async {
-    if (notifications.isNotEmpty) {
-      final random = DateTime.now().microsecondsSinceEpoch % notifications.length;
-      final randomNotification = notifications[random];
+  Future<void> _showRandomQuoteNotification() async {
+    if (quotes.isNotEmpty) {
+      final random = DateTime.now().microsecondsSinceEpoch % quotes.length;
+      final randomQuote = quotes[random];
 
-      await showNotification(randomNotification);
+      await _showNotification(randomQuote.category, randomQuote.title);
     }
   }
 
-  Future<void> scheduleNotification() async {
-    const int intervalSeconds = 15;
-
-    // Try calling showRandomNotification directly
-    showRandomNotification();
-
-    notificationTimer = Timer.periodic(
-      const Duration(seconds: intervalSeconds),
-          (Timer timer) {
-        log("Scheduling notification");
-        showRandomNotification();
-      },
-    );
+  Future<void> _showGratitudeNotification() async {
+    await _showNotification(gratitudeNotificationTitle, gratitudeNotificationSubtitle);
   }
 
-  void cancelScheduledNotifications() {
-    notificationTimer?.cancel();
-  }
-
-  Future<void> fetchAndSetNotifications() async {
-    // Fetch notifications from Firebase and store them in the list
-    notifications = await quoteService.fetchQuotes();
+  // Fetch notifications from Firebase and store them in the list
+  Future<void> _setQuotes() async {
+    quotes = await quoteService.fetchQuotes();
   }
 }

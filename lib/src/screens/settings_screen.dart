@@ -20,22 +20,35 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  bool isNotificationScheduled = false;
+  bool isQuoteNotificationScheduled = false;
+  bool isGratitudeNotificationScheduled = false;
 
   @override
   void initState() {
     super.initState();
-    isNotificationScheduled = false;
+    isQuoteNotificationScheduled = false;
+    isGratitudeNotificationScheduled = false;
   }
 
-  void toggleNotification() {
+  void toggleQuoteNotification() {
     setState(() {
-      if (isNotificationScheduled) {
-        widget.notificationService.cancelScheduledNotifications();
+      if (isQuoteNotificationScheduled) {
+        widget.notificationService.cancelQuoteNotifications();
       } else {
-        widget.notificationService.scheduleNotification();
+        widget.notificationService.scheduleQuoteNotification();
       }
-      isNotificationScheduled = !isNotificationScheduled;
+      isQuoteNotificationScheduled = !isQuoteNotificationScheduled;
+    });
+  }
+
+  void toggleGratitudeNotification() {
+    setState(() {
+      if (isGratitudeNotificationScheduled) {
+        widget.notificationService.cancelGratitudeNotifications();
+      } else {
+        widget.notificationService.scheduleGratitudeNotification();
+      }
+      isGratitudeNotificationScheduled = !isGratitudeNotificationScheduled;
     });
   }
 
@@ -157,20 +170,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
             children: [
               const SizedBox(height: 16),
               Text(
-                isNotificationScheduled
-                    ? 'Receiving Notifications: On'
-                    : 'Receiving Notifications: Off',
+                isQuoteNotificationScheduled
+                    ? 'Quote notifications: On'
+                    : 'Quote notifications: Off',
                 style: const TextStyle(fontSize: 16, color: Colors.black87),
               ),
               Switch(
-                value: isNotificationScheduled,
+                value: isQuoteNotificationScheduled,
                 onChanged: (value) {
                   setState(() {
-                    isNotificationScheduled = value;
-                    if (isNotificationScheduled) {
-                      widget.notificationService.scheduleNotification();
+                    isQuoteNotificationScheduled = value;
+                    if (isQuoteNotificationScheduled) {
+                      widget.notificationService.scheduleQuoteNotification();
                     } else {
-                      widget.notificationService.cancelScheduledNotifications();
+                      widget.notificationService.cancelQuoteNotifications();
                     }
                   });
                 },
@@ -203,6 +216,31 @@ class _SettingsScreenState extends State<SettingsScreen> {
               Expanded(
                 child: Container(),
               ),
+              const SizedBox(height: 16),
+              Text(
+                isGratitudeNotificationScheduled
+                    ? 'Gratitude notifications: On'
+                    : 'Gratitude notifications: Off',
+                style: const TextStyle(fontSize: 16, color: Colors.black87),
+              ),
+              Switch(
+                value: isGratitudeNotificationScheduled,
+                onChanged: (value) {
+                  setState(() {
+                    isGratitudeNotificationScheduled = value;
+                    if (isGratitudeNotificationScheduled) {
+                      widget.notificationService.scheduleGratitudeNotification();
+                    } else {
+                      widget.notificationService.cancelGratitudeNotifications();
+                    }
+                  });
+                },
+                activeTrackColor: Colors.lightGreenAccent,
+                activeColor: Colors.green,
+                inactiveTrackColor: Colors.red,
+                inactiveThumbColor: Colors.redAccent,
+                materialTapTargetSize: MaterialTapTargetSize.padded,
+              )
             ],
           ),
         ),
