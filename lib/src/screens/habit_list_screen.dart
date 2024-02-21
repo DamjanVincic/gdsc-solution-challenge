@@ -47,7 +47,12 @@ class _HabitListScreenState extends State<HabitListScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.lightBlueAccent,
-        title: const Text('Habits'),
+
+        title: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: Text("Habits"),
+        ),
+
       ),
       body: Container(
           color: Colors.white38,
@@ -58,23 +63,7 @@ class _HabitListScreenState extends State<HabitListScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(height: 20),
-                ElevatedButton.icon(
-                  onPressed: () {
-                    _showCreateHabitDialog(context);
-                  },
-                  icon: Icon(Icons.add, size: 36.0, color: accentColor),
-                  label: Text(
-                    'Create Habit',
-                    style: TextStyle(fontSize: 18.0, color: accentColor),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10.0, horizontal: 16.0),
-                  ),
-                ),
+
                 const SizedBox(height: 20),
                 Expanded(
                   child: ListView.builder(
@@ -95,6 +84,26 @@ class _HabitListScreenState extends State<HabitListScreen> {
               ],
             ),
           )),
+      bottomNavigationBar: BottomAppBar(
+        //hasNotch: true,
+        color: Colors.lightBlue,
+        child: new Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+        ),
+      ),
+      floatingActionButton: FloatingActionButton.large(
+
+        onPressed: () {
+          _showCreateHabitDialog(context);
+        },
+        backgroundColor: Colors.lightBlue,
+        child: const Icon(Icons.add),
+
+
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 
