@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:flutter/cupertino.dart';
+import 'package:Actualizator/src/components/bar_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../models/meditation_data.dart';
@@ -28,7 +28,7 @@ class _MeditationScreenState extends State<MeditationScreen> {
   bool isTimerRunning = false;
   Timer? _timer;
   int secondsLeft = 5 * 60;
-  bool showLineChart = true;
+  bool showBarChart = true;
 
   @override
   void initState() {
@@ -204,31 +204,31 @@ class _MeditationScreenState extends State<MeditationScreen> {
               ElevatedButton(
                 onPressed: () {
                   setState(() {
-                    showLineChart = !showLineChart;
+                    showBarChart = !showBarChart;
                   });
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.redAccent,
                 ),
                 child: Text(
-                  showLineChart ? 'Show Pie Chart' : 'Show Line Chart',
+                  showBarChart ? 'Show Pie Chart' : 'Show Bar Chart',
                   style: TextStyle(color: accentColor),
                 ),
               ),
               const SizedBox(height: 20),
               // Conditionally display line chart or pie chart
-              showLineChart
+              showBarChart
                   ? SizedBox(
                 height: 300,
-                child: LineChartWidget(
-                  spots: generateLineChartSpots(),
-                  labels: generateXLabels(),
+                child: BarChartWidget(
+                  description: "Seconds Meditating per Day",
+                  data: getBarChartData(),
+                  labels: const ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
                   xAxisTitle: 'Days',
-                  yAxisTitle: 'Duration',
-                  yAxisUnit: 'minutes'
-                ),
+                  yAxisTitle: 'Duration(seconds)',
+                )
               )
-                  : Column(
+                  :Column(
                 children: [
                   SizedBox(
                     width: 300,
@@ -269,16 +269,6 @@ class _MeditationScreenState extends State<MeditationScreen> {
     super.dispose();
   }
 
-  List<String> generateXLabels() {
-    var days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    var index = DateTime.now().subtract(const Duration(days: 5)).weekday;
-    List<String> labels = [];
-    for (var i = 0; i < 7; i++) {
-      labels.add(days[(index + i) % 7]);
-    }
-    return labels;
-  }
-
   List<String> generatePieChartLegendTitles() {
     Set<String> legendTitles = {};
 
@@ -310,11 +300,13 @@ class _MeditationScreenState extends State<MeditationScreen> {
       Colors.teal,
     ];
 
+    int numberOfSessions = meditationData.length;
+
     durationCountMap.forEach((duration, count) {
       sections.add(
         PieChartSectionData(
           color: colors[colorIndex++ % colors.length],
-          value: count.toDouble(),
+          value: count * 100 / numberOfSessions,
           title: '$count sessions\n${duration}m', // Display count and duration in minutes
           radius: 60,
           titleStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black87),
@@ -325,14 +317,14 @@ class _MeditationScreenState extends State<MeditationScreen> {
     return sections;
   }
 
-  List<FlSpot> generateLineChartSpots() {
-    List<FlSpot> spots = [];
 
-    for (int i = 0; i < meditationData.length; i++) {
-      spots.add(FlSpot(i.toDouble(), meditationData[i].durationInSeconds.toDouble()));
+  List<int> getBarChartData() {
+    List<int> durations = List<int>.filled(7, 0);
+    for (var entry in meditationData) {
+      int day = (DateTime.parse(entry.date).weekday - 1) % 7;
+      durations[day] += entry.durationInSeconds;
     }
-
-    return spots;
+    return durations;
   }
 
   int calculateTotalMeditationTime() {

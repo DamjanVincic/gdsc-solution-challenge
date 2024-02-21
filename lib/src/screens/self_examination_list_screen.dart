@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:share/share.dart';
-import '../components/line_chart.dart';
+import '../components/bar_chart.dart';
 import '../components/pie_chart.dart';
 import '../models/examination_result.dart';
 import '../repository/self_examination_repository.dart';
@@ -20,7 +20,7 @@ class SelfExaminationListScreen extends StatefulWidget {
 class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
   List<ExaminationResult> items = [];
   final ExaminationRepository examinationRepository = ExaminationRepository();
-  bool showLineChart = true; // Track the selected chart type
+  bool showBarChart = true; // Track the selected chart type
 
   @override
   void initState() {
@@ -63,27 +63,28 @@ class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text('Show Line Chart'),
+                          const Text('Bar Chart'),
                           Switch(
-                            value: showLineChart,
+                            value: showBarChart,
                             onChanged: (value) {
                               setState(() {
-                                showLineChart = value;
+                                showBarChart = value;
                               });
                             },
                           ),
-                          const Text('Show Pie Chart'),
+                          const Text('Pie Chart'),
                         ],
                       ),
                       SizedBox(
                         height: 300,
-                        child: showLineChart
-                            ? LineChartWidget(
-                                spots: generateLineChartSpots(),
-                                labels: generatedXLabels(),
+                        child: showBarChart
+                            ? BarChartWidget(
+                                description: "Number of Goals Based on Feeling",
+                                data: getBarChartData(),
+                                labels: const ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
                                 xAxisTitle: 'Feeling',
-                                yAxisTitle: 'Points',
-                                yAxisUnit: 'score')
+                                yAxisTitle: 'Num Examinations',
+                              )
                             : PieChartWidget(
                                 data: generatePieChartData(),
                                 legendTitles: generatePieChartLegendTitles(),
@@ -226,6 +227,15 @@ class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
         ),
       ),
     );
+  }
+
+  List<int> getBarChartData() {
+    List<int> examinations = List<int>.filled(10, 0);
+    for(var entry in items) {
+      int index = entry.feeling;
+      examinations[index] += 1;
+    }
+    return examinations;
   }
 
   List<String> generatePieChartLegendTitles() {
