@@ -30,12 +30,12 @@ class HubScreen extends StatelessWidget {
             padding: EdgeInsets.only(top: 35.0),
             child: Center(
                 child: Text(
-              'Mental Hub',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 30,
-              ),
-            ))),
+                  'Mental Hub',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 30,
+                  ),
+                ))),
         backgroundColor: primaryColor,
       ),
       body: Container(

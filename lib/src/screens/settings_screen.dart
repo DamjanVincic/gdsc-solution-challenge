@@ -1,9 +1,9 @@
 import 'package:Actualizator/main.dart';
 import 'package:Actualizator/src/services/self_examination_service.dart';
 import 'package:flutter/material.dart';
-
 import '../repository/settings_repository.dart';
 import '../services/map_marker_service.dart';
+import '../models/quote.dart';
 import '../services/notification_service.dart';
 import '../services/quote_service.dart';
 
@@ -13,13 +13,13 @@ class SettingsScreen extends StatefulWidget {
   final MapMarkerService mapMarkerService;
   final SettingsRepository settingsRepository;
 
-  const SettingsScreen(
-      {Key? key,
-      required this.notificationService,
-      required this.quoteService,
-      required this.mapMarkerService,
-      required this.settingsRepository})
-      : super(key: key);
+  const SettingsScreen({
+    Key? key,
+    required this.notificationService,
+    required this.quoteService,
+    required this.mapMarkerService,
+    required this.settingsRepository
+  }) : super(key: key);
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
@@ -226,11 +226,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
-                "Notifications settings: ",
-                style: TextStyle(fontSize: 20, color: Colors.black),
-              ),
-              const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -264,6 +259,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               const SizedBox(width: 10),
               // Adding some space between text and button
+              ElevatedButton(
+                onPressed: () => _showQuoteTimePicker(context),
+                child: const Text('Set quote time'),
+              ),
+              const SizedBox(width: 10), // Adding some space between text and button
               ElevatedButton(
                 onPressed: () => _showQuoteTimePicker(context),
                 child: const Text('Set quote time'),
@@ -305,33 +305,37 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 child: Container(),
               ),
               const SizedBox(height: 16),
-              Text(
-                isGratitudeNotificationScheduled
-                    ? 'Gratitude notifications: On'
-                    : 'Gratitude notifications: Off',
-                style: const TextStyle(fontSize: 16, color: Colors.black87),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    "Gratitude notifications: ",
+                    style: TextStyle(fontSize: 16, color: Colors.black87),
+                  ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  Switch(
+                    value: isGratitudeNotificationScheduled,
+                    onChanged: (value) {
+                      setState(() {
+                        isGratitudeNotificationScheduled = value;
+                        if (isGratitudeNotificationScheduled) {
+                          widget.notificationService.scheduleGratitudeNotification();
+                        } else {
+                          widget.notificationService.cancelGratitudeNotifications();
+                        }
+                      });
+                    },
+                    activeTrackColor: Colors.lightGreenAccent,
+                    activeColor: Colors.green,
+                    inactiveTrackColor: Colors.red,
+                    inactiveThumbColor: Colors.redAccent,
+                    materialTapTargetSize: MaterialTapTargetSize.padded,
+                  ),
+                ],
               ),
-              Switch(
-                value: isGratitudeNotificationScheduled,
-                onChanged: (value) {
-                  setState(() {
-                    isGratitudeNotificationScheduled = value;
-                    if (isGratitudeNotificationScheduled) {
-                      widget.notificationService
-                          .scheduleGratitudeNotification();
-                    } else {
-                      widget.notificationService.cancelGratitudeNotifications();
-                    }
-                  });
-                },
-                activeTrackColor: Colors.lightGreenAccent,
-                activeColor: Colors.green,
-                inactiveTrackColor: Colors.red,
-                inactiveThumbColor: Colors.redAccent,
-                materialTapTargetSize: MaterialTapTargetSize.padded,
-              ),
-              const SizedBox(width: 10),
-              // Adding some space between text and button
+              const SizedBox(width: 10), // Adding some space between text and button
               ElevatedButton(
                 onPressed: () => _showDiaryTimePicker(context),
                 child: const Text('Set gratitude time'),
