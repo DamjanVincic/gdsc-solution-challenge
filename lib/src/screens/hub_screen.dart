@@ -1,9 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:Actualizator/src/services/quote_service.dart';
 import 'package:Actualizator/src/screens/habit_list_screen.dart';
 import 'package:Actualizator/src/screens/quote_list_screen.dart';
 import 'package:Actualizator/src/screens/self_examination_list_screen.dart';
+import 'package:Actualizator/src/services/quote_service.dart';
+import 'package:flutter/material.dart';
 
+import '../services/self_examination_service.dart';
 import 'gratitude_journal_screen.dart';
 import 'meditation_screen.dart';
 
@@ -11,10 +12,12 @@ class HubScreen extends StatelessWidget {
   const HubScreen({
     Key? key,
     required this.quoteService,
+    required this.selfExaminationService,
     required this.primaryColor,
     required this.accentColor,
   }) : super(key: key);
 
+  final SelfExaminationService selfExaminationService;
   final QuoteService quoteService;
   final Color primaryColor;
   final Color accentColor;
@@ -23,16 +26,24 @@ class HubScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Padding(padding: EdgeInsets.only(top: 35.0),child: Center(child: Text('Mental Hub', style: TextStyle(color: Colors.black,fontSize: 30,),))),
+        title: const Padding(
+            padding: EdgeInsets.only(top: 35.0),
+            child: Center(
+                child: Text(
+              'Mental Hub',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 30,
+              ),
+            ))),
         backgroundColor: primaryColor,
       ),
       body: Container(
         color: primaryColor,
         child: GridView.count(
-          
           scrollDirection: Axis.horizontal,
           crossAxisCount: 1,
-          padding: const EdgeInsets.fromLTRB(20,150,20,300),
+          padding: const EdgeInsets.fromLTRB(20, 150, 20, 300),
           children: [
             HubButton(
               onPressed: () => _navigateToQuoteListScreen(context),
@@ -97,7 +108,8 @@ class HubScreen extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => HabitListScreen(primaryColor: Colors.lightBlueAccent, accentColor: accentColor)),
+          builder: (context) => HabitListScreen(
+              primaryColor: Colors.lightBlueAccent, accentColor: accentColor)),
     );
   }
 
@@ -114,16 +126,17 @@ class HubScreen extends StatelessWidget {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => MeditationScreen(primaryColor: primaryColor, accentColor: accentColor),
+        builder: (context) => MeditationScreen(
+            primaryColor: primaryColor, accentColor: accentColor),
       ),
     );
   }
 
   void _navigateToGratitudeJournalScreen(BuildContext context) {
     Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const GratitudeJournalScreen())
-    );
+        context,
+        MaterialPageRoute(
+            builder: (context) => const GratitudeJournalScreen()));
   }
 }
 
