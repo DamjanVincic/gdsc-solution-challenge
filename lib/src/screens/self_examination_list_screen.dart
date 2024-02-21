@@ -79,6 +79,7 @@ class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
                         height: 300,
                         child: showBarChart
                             ? BarChartWidget(
+                                description: "Number of Goals Based on Feeling",
                                 data: getBarChartData(),
                                 labels: const ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
                                 xAxisTitle: 'Feeling',

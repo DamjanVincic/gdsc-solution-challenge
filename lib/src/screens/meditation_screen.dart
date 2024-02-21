@@ -224,6 +224,7 @@ class _MeditationScreenState extends State<MeditationScreen> {
                   ? SizedBox(
                 height: 300,
                 child: BarChartWidget(
+                  description: "Seconds Meditating per Day",
                   data: getBarChartData(),
                   labels: const ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
                   xAxisTitle: 'Days',
