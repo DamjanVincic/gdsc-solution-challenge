@@ -112,49 +112,7 @@ class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Center(
-                    child: Column(
-                      children: [
-                        ElevatedButton(
-                          onPressed: () async {
-                            // Pass the list to the input screen
-                            await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    SelfExaminationInputScreen(
-                                  onDataChanged: saveData,
-                                  existingItems: items,
-                                ),
-                              ),
-                            );
 
-                            // Reload the data after returning from the input screen
-                            await loadData();
-                            setState(() {});
-
-                            // Save the updated list to shared preferences
-                            await saveData();
-                          },
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 16,
-                                horizontal: 32), // Adjust padding as needed
-                          ),
-                          child: const Text("Evaluate today's feelings"),
-                        ),
-                        const SizedBox(height: 20),
-                        ElevatedButton(
-                            onPressed: showChartDialog,
-                            style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 16,
-                                  horizontal: 32), // Adjust padding as needed
-                            ),
-                            child: const Text('Show chart')),
-                      ],
-                    ),
-                  ),
                   const SizedBox(height: 20),
                   const Text('Past self-evaluations: ',
                       style: TextStyle(color: Colors.white70, fontSize: 24)),
@@ -204,7 +162,70 @@ class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
               ),
             ),
           ),
-        ));
+        ),
+      bottomNavigationBar: BottomAppBar(
+        //hasNotch: true,
+        color: Colors.greenAccent,
+        height: 150,
+        child: Center(
+          child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Center(
+                  child: Column(
+                    children: [
+                      Center(
+                        child: Center(
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              // Pass the list to the input screen
+                              await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      SelfExaminationInputScreen(
+                                        onDataChanged: saveData,
+                                        existingItems: items,
+                                      ),
+                                ),
+                              );
+                          
+                              // Reload the data after returning from the input screen
+                              await loadData();
+                              setState(() {});
+                          
+                              // Save the updated list to shared preferences
+                              await saveData();
+                            },
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 16,
+                                  horizontal: 32), // Adjust padding as needed
+                            ),
+                            child: const Text("Evaluate today's feelings",
+                              style: TextStyle(fontSize: 15, color: Colors.black87,),),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      ElevatedButton(
+                          onPressed: showChartDialog,
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 16,
+                                horizontal: 32), // Adjust padding as needed
+                          ),
+                          child: const Text('Show chart',style: TextStyle(fontSize:15, color: Colors.black87,),)),
+                    ],
+                  ),
+                ),
+              ]
+          ),
+        ),
+      ),
+    );
   }
 
   List<String> generatePieChartLegendTitles() {

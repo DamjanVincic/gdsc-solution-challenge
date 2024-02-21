@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../models/meditation_data.dart';
@@ -126,12 +127,13 @@ class _MeditationScreenState extends State<MeditationScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Total Meditated Time: ${formatTotalMeditationTime()}',
-                style: const TextStyle(fontSize: 20, color: Colors.black87), // Set text color
+                'Time Remaining: ${secondsLeft ~/ 60}m ${secondsLeft % 60}s',
+                style: const TextStyle(fontSize: 20, color: Colors.black87),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  
                   IconButton(
                     icon: const Icon(Icons.remove),
                     color: Colors.black87, // Set icon color
@@ -180,16 +182,12 @@ class _MeditationScreenState extends State<MeditationScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
-              Text(
-                'Time Remaining: ${secondsLeft ~/ 60}m ${secondsLeft % 60}s',
-                style: const TextStyle(fontSize: 20, color: Colors.black87),
-              ),
+
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: startStopTimer,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white38, // Set button background color
+                  backgroundColor: Colors.redAccent, // Set button background color
                 ),
                 child: Text(
                   isTimerRunning ? 'Stop' : 'Start',
@@ -210,7 +208,7 @@ class _MeditationScreenState extends State<MeditationScreen> {
                   });
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white38,
+                  backgroundColor: Colors.redAccent,
                 ),
                 child: Text(
                   showLineChart ? 'Show Pie Chart' : 'Show Line Chart',
@@ -246,6 +244,22 @@ class _MeditationScreenState extends State<MeditationScreen> {
           ),
         ),
       ),
+      bottomNavigationBar: BottomAppBar(
+        //hasNotch: true,
+        color: Colors.red,
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children : [
+            Text(
+              'Total Meditated Time: ${formatTotalMeditationTime()}',
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 20, color: Colors.black87,), // Set text color
+            ),
+          ]
+        ),
+      ),
+
     );
   }
 
