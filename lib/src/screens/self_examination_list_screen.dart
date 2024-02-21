@@ -63,7 +63,7 @@ class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text('Bar Chart'),
+                          const Text('Pie Chart'),
                           Switch(
                             value: showBarChart,
                             onChanged: (value) {
@@ -72,7 +72,7 @@ class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
                               });
                             },
                           ),
-                          const Text('Pie Chart'),
+                          const Text('Bar Chart'),
                         ],
                       ),
                       SizedBox(
