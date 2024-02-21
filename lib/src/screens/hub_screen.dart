@@ -23,13 +23,16 @@ class HubScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Mental Hub', style: TextStyle(color: accentColor)),
+        title: const Padding(padding: EdgeInsets.only(top: 35.0),child: Center(child: Text('Mental Hub', style: TextStyle(color: Colors.black,fontSize: 30,),))),
         backgroundColor: primaryColor,
       ),
       body: Container(
         color: primaryColor,
-        child: ListView(
-          padding: const EdgeInsets.all(16.0),
+        child: GridView.count(
+          
+          scrollDirection: Axis.horizontal,
+          crossAxisCount: 1,
+          padding: const EdgeInsets.fromLTRB(20,150,20,300),
           children: [
             HubButton(
               onPressed: () => _navigateToQuoteListScreen(context),

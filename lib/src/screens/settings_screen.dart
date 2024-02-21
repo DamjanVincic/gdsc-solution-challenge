@@ -155,14 +155,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              Text("Notifications settings: ",
+              style: TextStyle(fontSize: 20, color: Colors.black),),
               const SizedBox(height: 16),
-              Text(
-                isNotificationScheduled
-                    ? 'Receiving Notifications: On'
-                    : 'Receiving Notifications: Off',
-                style: const TextStyle(fontSize: 16, color: Colors.black87),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                const Text(
+                "Receiving Notifications",
+                style: TextStyle(fontSize: 16, color: Colors.black87),
               ),
-              Switch(
+                const SizedBox(width: 20,),
+                Switch(
                 value: isNotificationScheduled,
                 onChanged: (value) {
                   setState(() {
@@ -179,7 +183,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 inactiveTrackColor: Colors.red,
                 inactiveThumbColor: Colors.redAccent,
                 materialTapTargetSize: MaterialTapTargetSize.padded,
-              ),
+              ),],),
+              const SizedBox(height: 20,),
+              Text("Admin: ",
+                style: TextStyle(fontSize: 20, color: Colors.black),),
+
               Container(
                 margin: const EdgeInsets.symmetric(vertical: 10),
                 child: ElevatedButton(
