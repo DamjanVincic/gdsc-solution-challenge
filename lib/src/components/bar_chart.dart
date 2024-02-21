@@ -25,11 +25,14 @@ class BarChartWidget extends StatelessWidget {
       padding: const EdgeInsets.only(left: 16.0, top: 8.0),
       child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
           Text(
               description,
               textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
           ),
             const SizedBox(
               height: 16.0, // Add vertical space between Text and BarChart
