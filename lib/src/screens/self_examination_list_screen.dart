@@ -111,8 +111,8 @@ class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
         children: [
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 ElevatedButton(
                   onPressed: () async {
@@ -143,6 +143,7 @@ class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
                     style: TextStyle(fontSize: 15, color: Colors.black87),
                   ),
                 ),
+                const SizedBox(height: 16), // Add some space between buttons
                 ElevatedButton(
                   onPressed: showChartDialog,
                   style: ElevatedButton.styleFrom(
