@@ -1,11 +1,10 @@
-import 'package:Actualizator/main.dart';
-import 'package:Actualizator/src/services/self_examination_service.dart';
 import 'package:flutter/material.dart';
 import '../repository/settings_repository.dart';
 import '../services/map_marker_service.dart';
-import '../models/quote.dart';
 import '../services/notification_service.dart';
 import '../services/quote_service.dart';
+import 'package:Actualizator/src/services/self_examination_service.dart';
+import 'package:Actualizator/main.dart';
 
 class SettingsScreen extends StatefulWidget {
   final NotificationService notificationService;
@@ -69,6 +68,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         return AlertDialog(
           title: const Text("Upload a new quote"),
           content: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               const SizedBox(height: 16),
               TextField(
@@ -109,7 +109,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Future<void> _showMapMarkerDialog(BuildContext context) async {
     TextEditingController mapMarkerLatitudeController = TextEditingController();
     TextEditingController mapMarkerLongitudeController =
-        TextEditingController();
+    TextEditingController();
     TextEditingController mapMarkerTitleController = TextEditingController();
     TextEditingController mapMarkerSnippetController = TextEditingController();
 
@@ -119,6 +119,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         return AlertDialog(
           title: const Text("Upload a new map marker"),
           content: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: mapMarkerLatitudeController,
@@ -150,9 +151,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ElevatedButton(
               onPressed: () {
                 double latitude =
-                    double.parse(mapMarkerLatitudeController.text);
+                double.parse(mapMarkerLatitudeController.text);
                 double longitude =
-                    double.parse(mapMarkerLongitudeController.text);
+                double.parse(mapMarkerLongitudeController.text);
                 widget.mapMarkerService.uploadMapMarker(
                     latitude,
                     longitude,
@@ -208,7 +209,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     SelfExaminationService selfExaminationService = SelfExaminationService();
     List<String> goals = await selfExaminationService.getTodayExaminations();
     for (String goal in goals) {
-      await notificationService.showExaminationNotification(goal);
+      await widget.notificationService.showExaminationNotification(goal);
     }
   }
 
@@ -219,129 +220,86 @@ class _SettingsScreenState extends State<SettingsScreen> {
         title: const Text('Settings'),
         backgroundColor: Colors.white70,
       ),
-      body: Container(
-        color: Colors.white38,
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    "Quote Notifications: ",
-                    style: TextStyle(fontSize: 16, color: Colors.black87),
-                  ),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  Switch(
-                    value: isQuoteNotificationScheduled,
-                    onChanged: (value) {
-                      setState(() {
-                        isQuoteNotificationScheduled = value;
-                        if (isQuoteNotificationScheduled) {
-                          widget.notificationService
-                              .scheduleQuoteNotification();
-                        } else {
-                          widget.notificationService.cancelQuoteNotifications();
-                        }
-                      });
-                    },
-                    activeTrackColor: Colors.lightGreenAccent,
-                    activeColor: Colors.green,
-                    inactiveTrackColor: Colors.red,
-                    inactiveThumbColor: Colors.redAccent,
-                    materialTapTargetSize: MaterialTapTargetSize.padded,
-                  ),
-                ],
-              ),
-              const SizedBox(width: 10),
-              // Adding some space between text and button
-              ElevatedButton(
-                onPressed: () => _showQuoteTimePicker(context),
-                child: const Text('Set quote time'),
-              ),
-              const SizedBox(width: 10), // Adding some space between text and button
-              ElevatedButton(
-                onPressed: () => _showQuoteTimePicker(context),
-                child: const Text('Set quote time'),
-              ),
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 10),
-                child: ElevatedButton(
-                  onPressed: () => _showQuoteDialog(context),
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.black87,
-                    backgroundColor: Colors.white70,
-                  ),
-                  child: const Text('Create Quote'),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              children: [
+                const Text(
+                  "Quote Notifications: ",
+                  style: TextStyle(fontSize: 16, color: Colors.black87),
                 ),
-              ),
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 10),
-                child: ElevatedButton(
-                  onPressed: () => _showMapMarkerDialog(context),
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.black87,
-                    backgroundColor: Colors.white70,
-                  ),
-                  child: const Text('Create Map Marker'),
+                const SizedBox(width: 20),
+                Switch(
+                  value: isQuoteNotificationScheduled,
+                  onChanged: (value) {
+                    toggleQuoteNotification();
+                  },
+                  activeTrackColor: Colors.lightGreenAccent,
+                  activeColor: Colors.green,
+                  inactiveTrackColor: Colors.red,
+                  inactiveThumbColor: Colors.redAccent,
                 ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () => _showQuoteTimePicker(context),
+              child: const Text('Set quote time'),
+            ),
+            ElevatedButton(
+              onPressed: () => _showQuoteDialog(context),
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.all(10),
+                primary: Colors.white70,
               ),
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 10),
-                child: ElevatedButton(
-                  onPressed: () => _showNotification(context),
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.black87,
-                    backgroundColor: Colors.white70,
-                  ),
-                  child: const Text('Self Examination Notification'),
+              child: const Text('Create Quote'),
+            ),
+            ElevatedButton(
+              onPressed: () => _showMapMarkerDialog(context),
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.all(10),
+                primary: Colors.white70,
+              ),
+              child: const Text('Create Map Marker'),
+            ),
+            ElevatedButton(
+              onPressed: () => _showNotification(context),
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.all(10),
+                primary: Colors.white70,
+              ),
+              child: const Text('Self Examination Notification'),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                const Text(
+                  "Gratitude notifications: ",
+                  style: TextStyle(fontSize: 16, color: Colors.black87),
                 ),
-              ),
-              Expanded(
-                child: Container(),
-              ),
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    "Gratitude notifications: ",
-                    style: TextStyle(fontSize: 16, color: Colors.black87),
-                  ),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  Switch(
-                    value: isGratitudeNotificationScheduled,
-                    onChanged: (value) {
-                      setState(() {
-                        isGratitudeNotificationScheduled = value;
-                        if (isGratitudeNotificationScheduled) {
-                          widget.notificationService.scheduleGratitudeNotification();
-                        } else {
-                          widget.notificationService.cancelGratitudeNotifications();
-                        }
-                      });
-                    },
-                    activeTrackColor: Colors.lightGreenAccent,
-                    activeColor: Colors.green,
-                    inactiveTrackColor: Colors.red,
-                    inactiveThumbColor: Colors.redAccent,
-                    materialTapTargetSize: MaterialTapTargetSize.padded,
-                  ),
-                ],
-              ),
-              const SizedBox(width: 10), // Adding some space between text and button
-              ElevatedButton(
-                onPressed: () => _showDiaryTimePicker(context),
-                child: const Text('Set gratitude time'),
-              )
-            ],
-          ),
+                const SizedBox(width: 20),
+                Switch(
+                  value: isGratitudeNotificationScheduled,
+                  onChanged: (value) {
+                    toggleGratitudeNotification();
+                  },
+                  activeTrackColor: Colors.lightGreenAccent,
+                  activeColor: Colors.green,
+                  inactiveTrackColor: Colors.red,
+                  inactiveThumbColor: Colors.redAccent,
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () => _showDiaryTimePicker(context),
+              child: const Text('Set gratitude time'),
+            )
+          ],
         ),
       ),
     );

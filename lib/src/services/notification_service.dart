@@ -24,7 +24,7 @@ class NotificationService {
   Timer? quoteNotificationTimer;
 
   Timer? gratitudeNotificationTimer;
-  
+
   NotificationService({required this.settingsRepository, required this.quoteService, required this.selfExaminationService}) {
     _setQuotes();
     //fetchAndSetNotifications();
@@ -67,6 +67,9 @@ class NotificationService {
   }
 
   Future<void> scheduleQuoteNotification() async {
+    // Cancel any existing quoteNotificationTimer
+    quoteNotificationTimer?.cancel();
+
     DateTime? scheduledTime = await settingsRepository.getQuoteDateTime();
     scheduledTime ??= DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 10, 0, 0);
 
@@ -87,10 +90,10 @@ class NotificationService {
     _showRandomQuoteNotification();
 
     // Set up periodic timer with delaySeconds interval
-    Timer.periodic(Duration(seconds: delaySeconds), (Timer timer) {
-      print("Scheduling random quote notification");
-      _showRandomQuoteNotification();
-    });
+    // Timer.periodic(Duration(seconds: delaySeconds), (Timer timer) {
+    //   print("Scheduling random quote notification");
+    //   _showRandomQuoteNotification();
+    // });
   }
 
   void cancelQuoteNotifications() {
@@ -98,6 +101,9 @@ class NotificationService {
   }
 
   Future<void> scheduleGratitudeNotification() async {
+    // Cancel any existing gratitudeNotificationTimer
+    gratitudeNotificationTimer?.cancel();
+
     DateTime? scheduledTime = await settingsRepository.getDiaryDateTime();
     scheduledTime ??= DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 10, 0, 0);
 
@@ -118,10 +124,10 @@ class NotificationService {
     _showGratitudeNotification();
 
     // Set up periodic timer with delaySeconds interval
-    Timer.periodic(Duration(seconds: delaySeconds), (Timer timer) {
-      print("Scheduling gratitude notification");
-      _showGratitudeNotification();
-    });
+    // Timer.periodic(Duration(seconds: delaySeconds), (Timer timer) {
+    //   print("Scheduling gratitude notification");
+    //   _showGratitudeNotification();
+    // });
   }
 
   void cancelGratitudeNotifications() {
@@ -166,7 +172,7 @@ class NotificationService {
     if (quotes.isNotEmpty) {
       final random = DateTime.now().microsecondsSinceEpoch % quotes.length;
       final randomQuote = quotes[random];
-      
+
       await _showNotification(randomQuote.category, randomQuote.title);
     }
   }
