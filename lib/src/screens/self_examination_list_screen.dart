@@ -102,130 +102,127 @@ class _SelfExaminationListScreenState extends State<SelfExaminationListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-            title: const Text('Self-evaluation'),
-            backgroundColor: Colors.greenAccent),
-        body: SingleChildScrollView(
-          child: Container(
-            color: Colors.white38,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-
-                  const SizedBox(height: 20),
-                  const Text('Past self-evaluations: ',
-                      style: TextStyle(color: Colors.white70, fontSize: 24)),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.675,
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: items.length,
-                      itemBuilder: (context, index) {
-                        final examinationItem = items[index];
-                        return Card(
-                          elevation: 5,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          color: Colors.greenAccent,
-                          child: ListTile(
-                            title: Text(
-                                'Feeling: ${examinationItem.feeling}/10',
-                                style: const TextStyle(color: Colors.black87)),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Goal: ${examinationItem.goals}',
-                                    style:
-                                        const TextStyle(color: Colors.black87)),
-                                Text(
-                                    'Work-related achievement: ${examinationItem.work}',
-                                    style:
-                                        const TextStyle(color: Colors.black87)),
-                                Text('Date: ${examinationItem.date}',
-                                    style:
-                                        const TextStyle(color: Colors.black87)),
-                              ],
-                            ),
-                            trailing: IconButton(
-                              icon: const Icon(Icons.share,
-                                  color: Colors.black87),
-                              onPressed: () => shareItem(examinationItem),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      bottomNavigationBar: BottomAppBar(
-        //hasNotch: true,
-        color: Colors.greenAccent,
-        height: 150,
-        child: Center(
-          child: Column(
-              mainAxisSize: MainAxisSize.max,
+      appBar: AppBar(
+        title: const Text('Self-evaluation'),
+        backgroundColor: Colors.greenAccent,
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Center(
-                  child: Column(
-                    children: [
-                      Center(
-                        child: Center(
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              // Pass the list to the input screen
-                              await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      SelfExaminationInputScreen(
-                                        onDataChanged: saveData,
-                                        existingItems: items,
-                                      ),
-                                ),
-                              );
-                          
-                              // Reload the data after returning from the input screen
-                              await loadData();
-                              setState(() {});
-                          
-                              // Save the updated list to shared preferences
-                              await saveData();
-                            },
-                            style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 16,
-                                  horizontal: 32), // Adjust padding as needed
-                            ),
-                            child: const Text("Evaluate today's feelings",
-                              style: TextStyle(fontSize: 15, color: Colors.black87,),),
-                          ),
+                ElevatedButton(
+                  onPressed: () async {
+                    // Pass the list to the input screen
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SelfExaminationInputScreen(
+                          onDataChanged: saveData,
+                          existingItems: items,
                         ),
                       ),
+                    );
+
+                    // Reload the data after returning from the input screen
+                    await loadData();
+                    setState(() {});
+
+                    // Save the updated list to shared preferences
+                    await saveData();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 16, horizontal: 32),
+                  ),
+                  child: const Text(
+                    "Evaluate today's feelings",
+                    style: TextStyle(fontSize: 15, color: Colors.black87),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: showChartDialog,
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 16, horizontal: 32),
+                  ),
+                  child: const Text(
+                    'Show chart',
+                    style: TextStyle(fontSize: 15, color: Colors.black87),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Container(
+                color: Colors.white38,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                       const SizedBox(height: 20),
-                      ElevatedButton(
-                          onPressed: showChartDialog,
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 16,
-                                horizontal: 32), // Adjust padding as needed
-                          ),
-                          child: const Text('Show chart',style: TextStyle(fontSize:15, color: Colors.black87,),)),
+                      const Text(
+                        'Past self-evaluations: ',
+                        style: TextStyle(color: Colors.white70, fontSize: 24),
+                      ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.675,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: items.length,
+                          itemBuilder: (context, index) {
+                            final examinationItem = items[index];
+                            return Card(
+                              elevation: 5,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              color: Colors.greenAccent,
+                              child: ListTile(
+                                title: Text(
+                                  'Feeling: ${examinationItem.feeling}/10',
+                                  style: const TextStyle(color: Colors.black87),
+                                ),
+                                subtitle: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Goal: ${examinationItem.goals}',
+                                      style: const TextStyle(color: Colors.black87),
+                                    ),
+                                    Text(
+                                      'Work-related achievement: ${examinationItem.work}',
+                                      style: const TextStyle(color: Colors.black87),
+                                    ),
+                                    Text(
+                                      'Date: ${examinationItem.date}',
+                                      style: const TextStyle(color: Colors.black87),
+                                    ),
+                                  ],
+                                ),
+                                trailing: IconButton(
+                                  icon: const Icon(Icons.share, color: Colors.black87),
+                                  onPressed: () => shareItem(examinationItem),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
                     ],
                   ),
                 ),
-              ]
+              ),
+            ),
           ),
-        ),
-      ),
+        ],
+      )
     );
   }
 
