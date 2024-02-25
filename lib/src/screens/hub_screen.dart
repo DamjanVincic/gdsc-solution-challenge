@@ -25,68 +25,71 @@ class HubScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Padding(
-            padding: EdgeInsets.only(top: 35.0),
-            child: Center(
-                child: Text(
-                  'Mental Hub',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 30,
+      body: CustomScrollView(
+        slivers: <Widget>[
+          SliverAppBar(
+            title: const Text(
+              'Mental Hub',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 30,
+              ),
+            ),
+            backgroundColor: primaryColor,
+            pinned: true,
+          ),
+          SliverPadding(
+            padding: EdgeInsets.symmetric(vertical: 20.0),
+            sliver: SliverList(
+              delegate: SliverChildListDelegate(
+                [
+                  HubButton(
+                    onPressed: () => _navigateToQuoteListScreen(context),
+                    label: 'QUOTES',
+                    icon: Icons.format_quote,
+                    backgroundColor: Colors.purpleAccent.shade100,
+                    textColor: accentColor,
+                    description: 'Explore and discover meaningful quotes.',
                   ),
-                ))),
-        backgroundColor: primaryColor,
-      ),
-      body: Container(
-        color: primaryColor,
-        child: GridView.count(
-          scrollDirection: Axis.horizontal,
-          crossAxisCount: 1,
-          padding: const EdgeInsets.fromLTRB(20, 150, 20, 300),
-          children: [
-            HubButton(
-              onPressed: () => _navigateToQuoteListScreen(context),
-              label: 'QUOTES',
-              icon: Icons.format_quote,
-              backgroundColor: Colors.purpleAccent.shade100,
-              textColor: accentColor,
-              description: 'Explore and discover meaningful quotes.',
+                  HubButton(
+                    onPressed: () => _navigateToHabitListScreen(context),
+                    label: 'HABITS',
+                    icon: Icons.star,
+                    backgroundColor: Colors.lightBlueAccent,
+                    textColor: accentColor,
+                    description: 'Track and build healthy habits.',
+                  ),
+                  HubButton(
+                    onPressed: () => _navigateToEvaluationScreen(context),
+                    label: 'SELF EVALUATION',
+                    icon: Icons.check,
+                    backgroundColor: Colors.greenAccent,
+                    textColor: accentColor,
+                    description: 'Reflect and evaluate personal growth.',
+                  ),
+                  HubButton(
+                    onPressed: () => _navigateToMeditationScreen(context),
+                    label: 'MEDITATION',
+                    icon: Icons.spa,
+                    backgroundColor: Colors.redAccent,
+                    textColor: accentColor,
+                    description: 'Practice mindfulness and meditation.',
+                  ),
+                  HubButton(
+                    onPressed: () =>
+                        _navigateToGratitudeJournalScreen(context),
+                    label: 'GRATITUDE JOURNAL',
+                    icon: Icons.book,
+                    backgroundColor: Colors.yellowAccent,
+                    textColor: accentColor,
+                    description:
+                    'Write & read about things you are grateful for.',
+                  ),
+                ],
+              ),
             ),
-            HubButton(
-              onPressed: () => _navigateToHabitListScreen(context),
-              label: 'HABITS',
-              icon: Icons.star,
-              backgroundColor: Colors.lightBlueAccent,
-              textColor: accentColor,
-              description: 'Track and build healthy habits.',
-            ),
-            HubButton(
-              onPressed: () => _navigateToEvaluationScreen(context),
-              label: 'SELF EVALUATION',
-              icon: Icons.check,
-              backgroundColor: Colors.greenAccent,
-              textColor: accentColor,
-              description: 'Reflect and evaluate personal growth.',
-            ),
-            HubButton(
-              onPressed: () => _navigateToMeditationScreen(context),
-              label: 'MEDITATION',
-              icon: Icons.spa,
-              backgroundColor: Colors.redAccent,
-              textColor: accentColor,
-              description: 'Practice mindfulness and meditation.',
-            ),
-            HubButton(
-              onPressed: () => _navigateToGratitudeJournalScreen(context),
-              label: 'GRATITUDE JOURNAL',
-              icon: Icons.book,
-              backgroundColor: Colors.yellowAccent,
-              textColor: accentColor,
-              description: 'Write & read about things you are grateful for.',
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
